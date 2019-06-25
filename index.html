@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="scheduleApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tamnun Swimming Classes</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <!-- Angular dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
+    
+    <!-- Calendar dependencies -->
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
+    <script src="/assets/libs/moment.js"></script>
+    <script src="/assets/libs/fullcalendar.js"></script>
+    <script src="/assets/libs/gcal.js"></script>
+    <script src="/assets/libs/calendar.js"></script>
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css" crossorigin="anonymous">
+    <!-- Calendar CSS -->
+    <link rel="stylesheet" href="/assets/css/fullcalendar.css">
+    <!-- customized CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <script src="/app/app.js"></script>
+    <script src="/app/shared/calendar/calendarCtrl.js"></script>
+
+    
+    </head>
+    <body>
+        <ng-view></ng-view>
+
+
+    </body>
+</html>
