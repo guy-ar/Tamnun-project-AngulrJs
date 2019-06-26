@@ -20,14 +20,14 @@ scheduleApp.factory("userSrv", function($q, $http) {
 
     // login will check if the user and password exists. If so it will update the active user 
     // variable and will return it
-    function login(userId, pwd) {
+    function login(userIdOrEmail, pwd) {
         var async = $q.defer();
 
         activeUser = null;
         $http.get("app/shared/model/data/users.json").then(function(res) {
             var users = res.data;
             for (var i = 0; i < users.length && !activeUser; i++) {
-                if (userId === users[i].userId && pwd === users[i].pwd) {
+                if (((userIdOrEmail === users[i].userId) || (userIdOrEmail === users[i].email)) && (pwd === users[i].pwd)) {
                     activeUser = new User(users[i]);
                     async.resolve(activeUser);
                 } 

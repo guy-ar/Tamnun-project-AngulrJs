@@ -6,8 +6,9 @@
     </div>
     <form>
         <div class="form-group">
-            <label for="userId">User Id:</label>
-            <input type="text" class="form-control" id="userId" ng-model="userId" placeholder="Enter user ID">
+            <label for="userId-email">User Id:</label>
+            <input type="text" class="form-control" id="userId-email" ng-model="userIdOrEmail" aria-describedby="userIdOrEmailHelp" placeholder="Enter user ID/Email">
+            <small id="userIdOrEmailHelp" class="form-text text-muted">Compersion of given value based on Email (if exist), or User Id</small>
         </div>
         <div class="form-group">
             <label for="pwd">Password:</label>
