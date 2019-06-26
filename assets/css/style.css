@@ -1,11 +1,5 @@
 
-/** ********* Related to Login Page ************************* */
 
-.login {
-    max-width: 50%;
-    margin: auto;
-    margin-top: 50px;
-}
 /************* Related to Landing Page - General **********************/
 :root {
 --lightblue: #F6F9FC;
@@ -106,7 +100,27 @@ padding: 15px;
   }
    
   @media screen and (max-width: 767px) {
-	.page-footer .footer-child {
+	  .page-footer .footer-child {
 	  text-align: center;
-	}
+	  }
   }
+
+  /** ********* Related to Login Page ************************* */
+
+.login {
+  max-width: 500px;
+  margin: 0 auto;
+  display:flex;
+  align-items: stretch;  
+  padding-right: 30px;
+  padding-left: 30px;
+  /*padding-top:300px;*/
+  background: white;
+}
+
+.login-wrapper{
+  background: var(--lightblue);
+  /*padding: 50px;*/
+  /*margin-bottom:50px;*/
+  min-height: 100vh;
+}

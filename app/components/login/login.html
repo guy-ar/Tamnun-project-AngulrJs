@@ -1,19 +1,23 @@
-<div class="login">
-    <h1>Login to Recipe Book</h1>
-    <p>or <a href="#!/signup">create an account</a></p>
-    <div class="alert alert-danger" role="alert" ng-show="invalidLogin">
-        <strong>Invalid Login!</strong> incorrect user ID or password
+<div class="login-wrapper">
+    <div class="login row">
+        <div class="col vh-100">
+            <h1 class="text-red">Login</h1>
+            <p>or <a href="#!/signup">create an account</a></p>
+            <div class="alert alert-danger" role="alert" ng-show="invalidLogin">
+                <strong>Invalid Login!</strong> incorrect user ID or password
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="userId-email">User Id:</label>
+                    <input type="text" class="form-control" id="userId-email" ng-model="userIdOrEmail" aria-describedby="userIdOrEmailHelp" placeholder="Enter user ID/Email">
+                    <small id="userIdOrEmailHelp" class="form-text text-muted">Compersion of given value based on Email (if exist), or User Id</small>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Password:</label>
+                    <input type="password" class="form-control" id="pwd" ng-model="pwd" placeholder="Enter password">
+                </div>
+                <button type="button" class="btn btn-success btn-block" ng-click="login()">Login</button>
+            </form>
+        </div>
     </div>
-    <form>
-        <div class="form-group">
-            <label for="userId-email">User Id:</label>
-            <input type="text" class="form-control" id="userId-email" ng-model="userIdOrEmail" aria-describedby="userIdOrEmailHelp" placeholder="Enter user ID/Email">
-            <small id="userIdOrEmailHelp" class="form-text text-muted">Compersion of given value based on Email (if exist), or User Id</small>
-        </div>
-        <div class="form-group">
-            <label for="pwd">Password:</label>
-            <input type="password" class="form-control" id="pwd" ng-model="pwd" placeholder="Enter password">
-        </div>
-        <button type="button" class="btn btn-success btn-block" ng-click="login()">Login</button>
-    </form>
 </div>
