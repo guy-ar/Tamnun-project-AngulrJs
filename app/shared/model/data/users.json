@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "userId": "admin",
+        "fname": "admin",
+        "lname": "admin",
+        "email": "admin@dototreply.com",
+        "pwd": "12345",
+        "phone": "0521111111",
+        "role": "admin"
+    },
+    {
+        "id": 2,
+        "userId": "trainer",
+        "fname": "John",
+        "lname": "Doe",
+        "email": "john@dototreply.com",
+        "pwd": "12345",
+        "phone": "0500000000",
+        "role": "trainer"
+    }
+]

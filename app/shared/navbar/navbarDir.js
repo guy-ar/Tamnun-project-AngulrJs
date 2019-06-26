@@ -1,8 +1,8 @@
 
-app.directive("recipeNavbar", function() {
+scheduleApp.directive("tamnunNavbar", function() {
 
     return {
-        templateUrl: "app/navbar/navbar.html",
+        templateUrl: "/app/shared/navbar/navbar.html",
         controller: "navbarCtrl"
     }
 

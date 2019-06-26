@@ -5,10 +5,12 @@ scheduleApp.config(function($routeProvider) {
     .when("/", {
         templateUrl: "app/components/home/home.html"
     }).when("/login", {
-        templateUrl: "app/components/login/login.html"//,
-        //controller: "loginCtrl"
+        templateUrl: "app/components/login/login.html",
+        controller: "loginCtrl"
     }).when("/signup", {
         
+    }).when("/dashboard/", {
+        templateUrl: "app/components/dashboard/dashboard.html"
     }).when("/events", {
         templateUrl: "app/components/events/events.html",
         //controller: "eventsCtrl"        
