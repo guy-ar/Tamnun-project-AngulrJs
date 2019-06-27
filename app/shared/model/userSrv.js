@@ -1,5 +1,5 @@
 
-scheduleApp.factory("userSrv", function($q, $http) {
+scheduleApp.factory("userSrv", function($q, $http, $log) {
 
     var activeUser = null; // new User({id: 1, fname: "Nir" ...})
     let isAdmin = false;
@@ -104,14 +104,16 @@ scheduleApp.factory("userSrv", function($q, $http) {
 
     // retreive list of trainers
     function getTrainers() {
-
+        var async = $q.defer();
         if (!getUserFromDb) {
-            getAllUsersFromDb.then(function(res) {
-                return usersPerRole[ROLE_RAINER];
+            getAllUsersFromDb().then(function(res) {
+                async.resolve(usersPerRole[ROLE_TRAINER]);
             });
         } else {
             return usersPerRole[ROLE_TRAINER];
         }
+        // in case no call was made before to get the trainers
+        return async.promise;
     }
 
     function isLoggedAdmion() {

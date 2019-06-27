@@ -53,7 +53,7 @@ padding: 15px;
   }
    
   .page-header .navbar {
-	padding: 1rem 0;
+	/*padding: 1rem 0;*/
   }
    
   .page-header .navbar-toggler {
@@ -123,4 +123,7 @@ padding: 15px;
   /*padding: 50px;*/
   /*margin-bottom:50px;*/
   min-height: 100vh;
+}
+.container-page {
+  margin-top: 90px;
 }
