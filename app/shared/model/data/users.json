@@ -11,12 +11,23 @@
     },
     {
         "id": 2,
-        "userId": "trainer",
+        "userId": "trainer1",
         "fname": "John",
         "lname": "Doe",
         "email": "john@dototreply.com",
         "pwd": "12345",
         "phone": "0500000000",
+        "role": "trainer",
+        "siteId": 1
+    },
+    {
+        "id": 3,
+        "userId": "guyp",
+        "fname": "Guy",
+        "lname": "Perlmutter",
+        "email": "guyp@dototreply.com",
+        "pwd": "12345",
+        "phone": "0500000001",
         "role": "trainer"
     }
 ]
