@@ -11,6 +11,8 @@ scheduleApp.config(function($routeProvider) {
         
     }).when("/dashboard/", {
         templateUrl: "app/components/dashboard/dashboard.html"
+    }).when("/trainers", {
+        templateUrl: "app/components/trainer/trainers.html"
     }).when("/events", {
         templateUrl: "app/components/events/events.html",
         //controller: "eventsCtrl"        
@@ -18,5 +20,9 @@ scheduleApp.config(function($routeProvider) {
         
     }).when("/events/:id", {
         
-    })
+    }).when("/error", {
+        templateUrl: "app/shared/navbar/error.html"
+    }).otherwise({
+        redirectTo: "/error" 
+    });
 })
