@@ -8,7 +8,8 @@
         "pwd": "12345",
         "phone": "0521111111",
         "role": "admin",
-        "state": 1
+        "state": "Active",
+        "isSigned": 1
     },
     {
         "id": 2,
@@ -20,7 +21,8 @@
         "phone": "0500000000",
         "role": "trainer",
         "siteId": 1,
-        "state": 1
+        "state": "Active",
+        "isSigned": 1
     },
     {
         "id": 3,
@@ -31,7 +33,8 @@
         "pwd": "12345",
         "phone": "0500000001",
         "role": "trainer",
-        "state": 0
+        "state": "Active",
+        "isSigned": 0
     },
     {
         "id": 4,
@@ -42,6 +45,7 @@
         "pwd": "12345",
         "phone": "0500550001",
         "role": "trainer",
-        "state": 0
+        "state": "Active",
+        "isSigned": 0
     }
 ]

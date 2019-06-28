@@ -127,3 +127,9 @@ padding: 15px;
 .container-page {
   margin-top: 90px;
 }
+
+@media screen and (min-width: 767px) {
+  .work-hours {
+    width: 60%
+  }
+}

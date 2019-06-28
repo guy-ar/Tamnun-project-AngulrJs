@@ -1,5 +1,6 @@
-scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv) { 
+scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, $uibModal) { 
 
+  $scope.trainers = [];
   // get the trainers
   userSrv.getTrainers().then(function(users) {
     $scope.trainers = users;
@@ -16,5 +17,20 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv) {
     } else {
       return false;
     }
-  };
+  }
+
+  $scope.openNewTrainerModal = function() {
+    var modalInstance = $uibModal.open({
+        templateUrl: "app/components/trainer/newTrainer.html",
+        controller: "newTrainerCtrl"
+    });
+
+    modalInstance.result.then(function(newTrainer) {
+        // this will wake in case the user added a new trainer
+        $scope.trainers.push(newTrainer);
+    }, function() {
+        // this will wake up in case the user canceled the new trainer
+        console.log("user canceled new trainer");
+    })
+}
 })

@@ -5,23 +5,50 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     let isAdmin = false;
     let usersPerRole = {};
     let getUserFromDb = false;
+    let nextUserId = 0;
     const ROLE_TRAINER = "trainer";
     const ROLE_ADMIN = "admin";
-    const STATE_NEW = 0;
-    const STATE_REGISTERED = 1;
-    const STATE_CANCELLED = 2;
+    const STATE_ACTIVE = "Active";
+    
     const SITE_PARDESIA = 1;
     const SITE_YOQNEAM = 2;
 
-    function User(plainUser) {
-        this.id = plainUser.id;
-        this.userId = plainUser.userId;
-        this.fname = plainUser.fname;
-        this.lname = plainUser.lname;
-        this.email = plainUser.email;
-        this.phone = plainUser.phone;
-        this.role = plainUser.role;
-        this.workHours = plainUser.workHours;
+    function User(plainUserOrId, userId, fname, lname, email, phone, role, state, siteId, isSigned, workHours) {
+        if (arguments.length > 1) {
+            this.id = plainUserOrId;
+            this.userId = userId;
+            this.fname = fname;
+            this.lname = lname;
+            this.email = email;
+            this.phone = phone;
+            this.role = role;
+            this.state = state;
+            if (SITE_PARDESIA == siteId)
+            {
+                this.site = "Pardesia";
+            } else if (SITE_YOQNEAM == siteId){
+                this.site = "Yoqneam";
+            }
+            this.isSigned = isSigned;
+            this.workHours = workHours;
+        } else {
+            this.id = plainUserOrId.id;
+            this.userId = plainUserOrId.userId;
+            this.fname = plainUserOrId.fname;
+            this.lname = plainUserOrId.lname;
+            this.email = plainUserOrId.email;
+            this.phone = plainUserOrId.phone;
+            this.role = plainUserOrId.role;
+            this.state = plainUserOrId.state;
+            if (SITE_PARDESIA == plainUserOrId.siteId)
+            {
+                this.site = "Pardesia";
+            } else if (SITE_YOQNEAM == plainUserOrId.siteId){
+                this.site = "Yoqneam";
+            }
+            this.isSigned = plainUserOrId.isSigned;
+            this.workHours = plainUserOrId.workHours;
+        }
     }
 
     function WorkHours(plainWorkHours) {
@@ -170,13 +197,27 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     function isLoggedAdmion() {
         return isAdmin;
     }
+
+    function addTrainer(fname, lname, phone, email, siteId, userId){
+        var async = $q.defer();
+        // for now just write to log - as we do not have DB
+        $log.info("New Trainer call");
+        let newTrainer = new User(nextUserId, userId, fname, lname, email, phone, ROLE_TRAINER, STATE_ACTIVE, siteId, 0, []);
+        usersPerRole[ROLE_ADMIN].push(newTrainer);
+
+        // // preparing the id for the next addition
+        ++nextUserId;
+        async.resolve(newTrainer);
+        return async.promise;
+    }
     return {
         isLoggedIn: isLoggedIn,
         login: login,
         logout: logout,
         getActiveUser: getActiveUser,
         isLoggedAdmion: isLoggedAdmion,
-        getTrainers: getTrainers
+        getTrainers: getTrainers, 
+        addTrainer: addTrainer
     }
 
 });
