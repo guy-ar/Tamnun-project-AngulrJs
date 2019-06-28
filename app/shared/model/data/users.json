@@ -7,7 +7,8 @@
         "email": "admin@dototreply.com",
         "pwd": "12345",
         "phone": "0521111111",
-        "role": "admin"
+        "role": "admin",
+        "state": 1
     },
     {
         "id": 2,
@@ -18,7 +19,8 @@
         "pwd": "12345",
         "phone": "0500000000",
         "role": "trainer",
-        "siteId": 1
+        "siteId": 1,
+        "state": 1
     },
     {
         "id": 3,
@@ -28,6 +30,18 @@
         "email": "guyp@dototreply.com",
         "pwd": "12345",
         "phone": "0500000001",
-        "role": "trainer"
+        "role": "trainer",
+        "state": 0
+    },
+    {
+        "id": 4,
+        "userId": "morar",
+        "fname": "Mor",
+        "lname": "Arbily",
+        "email": "morar@dototreply.com",
+        "pwd": "12345",
+        "phone": "0500550001",
+        "role": "trainer",
+        "state": 0
     }
 ]

@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "userId": 2,
+        "day": "Sun",
+        "startHour": "14:00",
+        "endHour": "22:00"
+    },
+    {
+        "id": 2,
+        "userId": 2,
+        "day": "Mon",
+        "startHour": "16:00",
+        "endHour": "21:00"
+    },
+    {
+        "id": 3,
+        "userId": 2,
+        "day": "Wed",
+        "startHour": "15:00",
+        "endHour": "21:00"
+    },
+    {
+        "id": 4,
+        "userId": 3,
+        "day": "Thu",
+        "startHour": "12:00",
+        "endHour": "21:00"
+    }
+]
