@@ -1,5 +1,5 @@
 scheduleApp.controller("newTrainerCtrl", function($scope, userSrv, $log, $uibModalInstance) {
-
+    $scope.mode = "I";
     $scope.fname = "";
     $scope.lname = "";
     $scope.userId = "";
@@ -15,7 +15,7 @@ scheduleApp.controller("newTrainerCtrl", function($scope, userSrv, $log, $uibMod
        });
     }
 
-    $scope.cancelNewTrainer = function() {
+    $scope.cancelTrainerAction = function() {
         $scope.fname = "";
         $scope.lname = "";
         $scope.phone = "";

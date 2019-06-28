@@ -210,6 +210,57 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         async.resolve(newTrainer);
         return async.promise;
     }
+
+    function getUserById(id)
+    {
+        let  async = $q.defer();
+        // instead go to DB in async mode = get the data from client cache
+        // as we have a hack and not waorking with server
+
+        // go over usersPerRole and get the user detilas by Id
+        let roles = Object.keys(usersPerRole);
+        for (let role in roles) {
+            let users =  roles[role];
+            for (let i = 0, len = users.length; i<len; i++){
+                if (id == users[i])
+                {
+                    async.resolve(users[i])
+                }
+            }
+        }
+
+        // no user found
+        async.resolve({});
+        return async.promise;
+    }
+
+    function updateTrainer(id, fname, lname, phone, email, siteId, userId){
+        // this fucntion should go to DB and update trainer by his ID
+        //since we have hack with db on cache - we first need to find the user in the "DB"
+        // and then update it
+        // as this is not real async call with DB, it is not full simulation 
+        let  async = $q.defer();
+
+        // get the user entry - by ID - only relevant for "DB on client mode"
+        let users = usersPerRole[ROLE_TRAINER];
+        for (let i = 0, len = users.length; i<len; i++){
+            if (id == users[i].id)
+            {
+                //update all user details
+                users[i].fname = fname;
+                users[i].lname = lname;
+                users[i].phone = phone;
+                users[i].email = email;
+                users[i].siteId = siteId;
+                users[i].userId = userId;
+
+                async.resolve(users[i])
+            }
+        }
+
+        return async.promise;
+
+    }
     return {
         isLoggedIn: isLoggedIn,
         login: login,
@@ -217,7 +268,9 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         getActiveUser: getActiveUser,
         isLoggedAdmion: isLoggedAdmion,
         getTrainers: getTrainers, 
-        addTrainer: addTrainer
+        addTrainer: addTrainer,
+        getUserById: getUserById, 
+        updateTrainer: updateTrainer
     }
 
 });
