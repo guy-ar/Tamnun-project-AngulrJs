@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Cancel Trainer</h5>
+            <button type="button" class="close" aria-label="Close" ng-click="cancelTrainerAction()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+               
+            <div uib-alert ng-class="'alert-danger'">Please insure that  
+                    trainer is not linked to existing classes before cancel!</div>
+            
+            <form>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="switch1" name="isCancel" ng-model="isCancel">
+                    <label class="custom-control-label" for="switch1">Cancel Trainer?</label>
+                </div>
+            </form>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" ng-click="cancelTrainerAction()">Close</button>
+            <button type="button" class="btn btn-primary" ng-click="cancelTrainer()">Cancel Trainer</button>
+        </div>
+    </div>

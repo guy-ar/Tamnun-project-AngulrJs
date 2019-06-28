@@ -9,6 +9,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     const ROLE_TRAINER = "trainer";
     const ROLE_ADMIN = "admin";
     const STATE_ACTIVE = "Active";
+    const STATE_CANCEL = "Cancel"
     
     const SITE_PARDESIA = 1;
     const SITE_YOQNEAM = 2;
@@ -261,6 +262,27 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         return async.promise;
 
     }
+
+    function cancelTrainer(id){
+        // simualte  access to DB - therefore func is a-sync
+        //since we have DB on client - need to find the trainer and update his status
+        //Guy TODO - add verification that user have no linked events
+        let  async = $q.defer();
+
+        // get the user entry - by ID - only relevant for "DB on client mode"
+        let users = usersPerRole[ROLE_TRAINER];
+        for (let i = 0, len = users.length; i<len; i++){
+            if (id == users[i].id)
+            {
+                //update all user details
+                users[i].state = STATE_CANCEL;
+                async.resolve(users[i])
+            }
+        }
+
+        return async.promise;
+
+    }
     return {
         isLoggedIn: isLoggedIn,
         login: login,
@@ -270,7 +292,8 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         getTrainers: getTrainers, 
         addTrainer: addTrainer,
         getUserById: getUserById, 
-        updateTrainer: updateTrainer
+        updateTrainer: updateTrainer,
+        cancelTrainer: cancelTrainer
     }
 
 });

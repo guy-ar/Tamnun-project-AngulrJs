@@ -22,9 +22,9 @@
                 </div>
                 <div class="col col-sm-2">
                     <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEditTrainerModal(trainer)"><i class="fas fa-user-edit" 
-                        data-toggle="tooltip" data-placement="top" title="Edit Trainer"></i></a></span>
-                    <span class="icon text-danger"><a href="javascript:void(0)"><i class="fas fa-user-times"
-                        data-toggle="tooltip" data-placement="top" title="Cancel Trainer"></i></a></span>
+                        tooltip-placement="top" uib-tooltip="Edit Trainer"></i></a></span>
+                    <span class="icon text-danger"><a href="javascript:void(0)" ng-click="openCancelTrainerModal(trainer)"><i class="fas fa-user-times"
+                        tooltip-placement="top" uib-tooltip="Cancel Trainer"></i></a></span>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -58,7 +58,7 @@
                 <div class="col col-md-2" ng-class="{'text-success': trainer.state=='Active', 'text-danger': trainer.state=='Cancel'}">
                     {{trainer.state}}
                 </div>
-                <div class="col col-md-1" ng-show="trainer.isSigned">
+                <div class="col col-md-1" ng-show="trainer.isSigned" tooltip-placement="top" uib-tooltip="Trainer Signed-Up!">
                     <img src="/assets/img/iconfinder_User_Like_1084550_med.png" alt="">
                 </div>
                 
