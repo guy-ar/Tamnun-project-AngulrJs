@@ -128,8 +128,27 @@ padding: 15px;
   margin-top: 90px;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+} 
+.search-query {
+  width: 70%;
+}
+.search-button {
+  width: 10%;
+}
+
+.btn-add {
+  /*align-content: flex-end;*/
+}
+
 @media screen and (min-width: 767px) {
   .work-hours {
     width: 60%
   }
+}
+
+.icon {
+  font-size: 1.5rem;
 }
