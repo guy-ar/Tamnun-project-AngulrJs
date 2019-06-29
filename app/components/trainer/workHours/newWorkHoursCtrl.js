@@ -1,20 +1,36 @@
 scheduleApp.controller("newWorkHoursCtrl", function($scope, workHourSrv, $log, $uibModalInstance) {
 // guy TODO - might need new service for work hours instead userSrv
     let  params = $scope.$resolve.params;
-    $scope.mode = "I";
-    $scope.trainerId = params.id;
-    $scope.day = "";
-    $scope.startHour = new Date();
-    $scope.endHour = new Date();
+    $scope.mode = params.mode;
+    $scope.trainerId = params.uId;
+    if ( $scope.mode == "I") {
+        $scope.day = "";
+        $scope.startHour = new Date("01/01/1970");
+        $scope.endHour = new Date("01/01/1970");
+
+    } else if ($scope.mode == "U") {
+        $scope.id = params.wh.id;
+        $scope.day = params.wh.day;
+        // convert format of HH:MM to date that can work with TimePicker
+        let timeParts = params.wh.startHour.split(":");
+        $scope.startHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
+        timeParts = params.wh.endHour.split(":");
+        $scope.endHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
+    }
+    
    
     $scope.hstep = 1;
     $scope.mstep = 15;
-    $scope.ismeridian = true;
+    $scope.ismeridian = false;
 
     $scope.addWorkHours = function() {
-        workHourSrv.addWorkHours($scope.trainerId, $scope.day, $scope.startHour, $scope.endHour).then(function(newWorkHour) {
+        // we need only the hours and minutes
+
+        workHourSrv.addWorkHours($scope.trainerId, $scope.id, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
+                $scope.getTimeFromDate($scope.endHour)).then(function(newWorkHour) {
              $log.info("new work hours was added: " + JSON.stringify(newWorkHour));
              // Closing the modal
+
              $uibModalInstance.close(newWorkHour);
         });
      }
@@ -26,6 +42,33 @@ scheduleApp.controller("newWorkHoursCtrl", function($scope, workHourSrv, $log, $
         $uibModalInstance.dismiss();
     }
 
-    
+    // logic to insure that hours retrieved from date will be set on valid formet
+    $scope.addZero = function(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    // test fuction for setting the hours and minutes from date
+    $scope.getTimeFromDate  = function(dateObj) {
+        
+        var time = "";
+        var h = $scope.addZero(dateObj.getHours());
+        var m = $scope.addZero(dateObj.getMinutes());
+        time = h + ":" + m;
+        return time;
+    }
+
+    $scope.editWorkHours = function() {
+        // we need only the hours and minutes
+
+        workHourSrv.editWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
+                $scope.getTimeFromDate($scope.endHour)).then(function(editWorkHour) {
+             $log.info("new work hours was added: " + JSON.stringify(editWorkHour));
+             // Closing the modal
+
+             $uibModalInstance.close(newWorkHour);
+        });
+     }
 
 })

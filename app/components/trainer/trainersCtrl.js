@@ -1,7 +1,7 @@
 scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourSrv, $uibModal) { 
 
   $scope.trainers = [];
-  $scope.activeTrainers = null;
+  //$scope.activeTrainers = null;
   $scope.trainersWh = {};
 
   // get the trainers
@@ -47,6 +47,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
     modalInstance.result.then(function(newTrainer) {
         // this will wake in case the user added a new trainer
         $scope.trainers.push(newTrainer);
+        //$scope.activeTrainers = newTrainer;
     }, function() {
         // this will wake up in case the user canceled the new trainer
         console.log("user canceled new trainer");
@@ -54,7 +55,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
   }
 
   $scope.openEditTrainerModal = function(trainer) {
-    $scope.activeTrainers = trainer;
+    //$scope.activeTrainers = trainer;
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/trainerNewEdit.html",
         controller: "editTrainerCtrl",
@@ -70,7 +71,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
     modalInstance.result.then(function(editTrainer) {
         $log.info("need to update the current trainer");
         // this will wake in case the user added a new trainer
-        $scope.activeTrainers = editTrainer;
+        //$scope.activeTrainers = editTrainer;
     }, function() {
         // this will wake up in case the user canceled the new trainer
         console.log("user canceled edit trainer");
@@ -83,7 +84,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
       return
     }
       
-    $scope.activeTrainers = trainer;
+    //$scope.activeTrainers = trainer;
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/trainerCancel.html",
         controller: "cancelTrainerCtrl",
@@ -103,7 +104,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
       } else {
         $log.info("need to update the current trainer state to cancel");
         // this will wake in case the user added a new trainer
-        $scope.activeTrainers.state = editTrainer.state;
+        //$scope.activeTrainers.state = editTrainer.state;
       }
     }, function() {
         // this will wake up in case the user canceled the new trainer
@@ -112,26 +113,57 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
   }
 
   $scope.addTrainerWorkHoursModal = function(trainer) {
-    $scope.activeTrainers = trainer;
+    //$scope.activeTrainers = trainer;
+    $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
         controller: "newWorkHoursCtrl",
         resolve: {
           params: function () {
-             return {
-              id: trainer.id
-             };
+            return {
+              mode: "I",
+              uId: trainer.id
+            };
           }
         }
     });
     
     modalInstance.result.then(function(newWorkHours) {
       $log.info("need to update the current trainer to include the new workHours");
-      $scope.activeTrainers.workHours.push(newWorkHours);
+      //$scope.activeTrainers.workHours.push(newWorkHours);
+      $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainersWh))
      
     }, function() {
         // this will wake up in case the user canceled the new work hours
         console.log("user canceled add work hours");
+    })
+  }
+
+
+  $scope.editTrainerWorkHoursModal = function(trainer, workHour) {
+    
+    var modalInstance = $uibModal.open({
+        templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
+        controller: "newWorkHoursCtrl",
+        resolve: {
+          params: function () {
+            return {
+              mode: "U",
+              uid: trainer.id,
+              wh: workHour
+            };
+          }
+        }
+    });
+    
+    modalInstance.result.then(function(editWorkHours) {
+      $log.info("need to update the current trainer to include the new workHours");
+      // This is needed when we will move to rela DB
+      // for now - update the memory will impact all parts
+     
+    }, function() {
+        // this will wake up in case the user canceled the new work hours
+        console.log("user canceled edit work hours");
     })
   
   

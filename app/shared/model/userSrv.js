@@ -14,7 +14,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     const SITE_PARDESIA = 1;
     const SITE_YOQNEAM = 2;
 
-    function User(plainUserOrId, userId, fname, lname, email, phone, role, state, siteId, isSigned, workHours) {
+    function User(plainUserOrId, userId, fname, lname, email, phone, role, state, siteId, isSigned) {
         if (arguments.length > 1) {
             this.id = plainUserOrId;
             this.userId = userId;
@@ -31,7 +31,6 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                 this.site = "Yoqneam";
             }
             this.isSigned = isSigned;
-            this.workHours = workHours;
         } else {
             this.id = plainUserOrId.id;
             this.userId = plainUserOrId.userId;
@@ -48,7 +47,6 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                 this.site = "Yoqneam";
             }
             this.isSigned = plainUserOrId.isSigned;
-            this.workHours = plainUserOrId.workHours;
         }
     }
 
@@ -126,18 +124,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                 let user = new User(users[i]);
                 //Json file include user id - need to incremenet it
                 nextUserId++;
-                /* WORK HOURS PER USER ARE MOVED TO WORK HOURS SRV
-                if (role == ROLE_TRAINER) {
-                    user.workHours = [];
-                    // get the work hours
-                    workHourSrv.getWorkHoursForUserFromDb(users[i].id).then
-                    (function(workHours) {
-                        user.workHours = workHours;
-                      }, function(err) {
-                        $log.error(err);
-                      })
-                }
-                */
+                
 
                 // push the user under the specific role 
                 usersPerRole[role].push(user);
@@ -179,7 +166,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         var async = $q.defer();
         // for now just write to log - as we do not have DB
         $log.info("New Trainer call");
-        let newTrainer = new User(nextUserId, userId, fname, lname, email, phone, ROLE_TRAINER, STATE_ACTIVE, siteId, 0, []);
+        let newTrainer = new User(nextUserId, userId, fname, lname, email, phone, ROLE_TRAINER, STATE_ACTIVE, siteId, 0);
         usersPerRole[ROLE_ADMIN].push(newTrainer);
 
         // // preparing the id for the next addition

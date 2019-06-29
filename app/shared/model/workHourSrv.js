@@ -5,7 +5,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
     workHoursPerUser = {}; // hold userId: workHours[]
 
     function WorkHours(plainWorkHoursOrId, day, startHour, endHour) {
-        if (arguments > 1) {
+        if (arguments.length > 1) {
             this.id = plainWorkHoursOrId;
             this.day = day;
             this.startHour = startHour;
@@ -67,7 +67,9 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         $log.info("New work hour call");
         let newWorkHours = new WorkHours(nextWorkHour, day, startHour, endHour);
         // instead sending it to DB - locate the user and add the work hours on him
-        
+        if (!workHoursPerUser[trainerId]){
+            workHoursPerUser[trainerId] = [];
+        }
         workHoursPerUser[trainerId].push(newWorkHours);
         nextWorkHour++;
         async.resolve(newWorkHours)
@@ -87,12 +89,38 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         // in case no call was made before to get the trainers
         return async.promise;
     }
+
     
+    function editWorkHours(trainerId, id, day, startHour, endHour)
+    {
+        // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
+        var async = $q.defer();
+        $log.info("update work hour call");
+        
+        // instead sending it to DB - locate the user and update all the attributes
+        let userWorkHours = workHoursPerUser[trainerId];
+        for (let i = 0, len = userWorkHours.length; i<len; i++){
+            if (id == userWorkHours[i].id)
+            {
+                //update all user details
+                userWorkHours[i].day = day;
+                userWorkHours[i].startHour = startHour;
+                userWorkHours[i].endHour = endHour;
+                
+                async.resolve(userWorkHours[i])
+            }
+        }
+
+        return async.promise;
+    }
+
+
     return {
         getWorkHoursForUserFromDb: getWorkHoursForUserFromDb,
         getWorkHoursFromDb: getWorkHoursFromDb,
         addWorkHours: addWorkHours,
-        getTrainersWH: getTrainersWH
+        getTrainersWH: getTrainersWH, 
+        editWorkHours: editWorkHours
     }
 
 });
