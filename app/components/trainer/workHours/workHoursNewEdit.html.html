@@ -1,0 +1,64 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" ng-show="mode=='I'">Add Work Hours for Trainer</h5>
+        <h5 class="modal-title" ng-show="mode=='U'">Update Work Hours</h5>
+        <button type="button" class="close" aria-label="Close" ng-click="cancelWorkHourAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div uib-timepicker ng-model="startHour"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+            <div class="form-group row">
+                <label for="startHour" class="col-sm-3 col-form-label">From Hour</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="fname" value={{fname}} placeholder="Enter first name" ng-model="fname">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lname" class="col-sm-3 col-form-label">Last Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="lname" placeholder="Enter last name" ng-model="lname">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="phone" placeholder="Enter phone number" ng-model="phone">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="userId" class="col-sm-3 col-form-label">UserId</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="userId" placeholder="Enter Trainer User Id" ng-model="userId">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="email" placeholder="Enter your Email" ng-model="email">
+                </div>
+            </div>
+            
+
+            <div class="form-group row">
+                <label for="siteId" class="col-sm-3 col-form-label">Work in Site</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="siteId" name="selSiteId" ng-model="siteId">
+                        <option value="All">Both</option>
+                        <option value="1">Pardesia</option>
+                        <option value="2">Yoqneam</option>  
+                    </select>
+                </div>
+            </div>
+            
+        </form>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelWorkHourAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-show="mode=='I'" ng-click="addWorkHours()">Save</button>
+        <button type="button" class="btn btn-primary" ng-show="mode=='U'" ng-click="editWorkHours()">Update</button>
+    </div>
+</div>

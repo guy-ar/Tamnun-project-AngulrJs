@@ -52,13 +52,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         }
     }
 
-    function WorkHours(plainWorkHours) {
-        this.id = plainWorkHours.id;
-        this.userId = plainWorkHours.userId;
-        this.day = plainWorkHours.day;
-        this.startHour = plainWorkHours.startHour;
-        this.endHour = plainWorkHours.endHour;
-    }
+    
 
     function isLoggedIn() {
         return activeUser ? true : false;
@@ -130,16 +124,20 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                     users[i].siteId = "All";
                 }
                 let user = new User(users[i]);
+                //Json file include user id - need to incremenet it
+                nextUserId++;
+                /* WORK HOURS PER USER ARE MOVED TO WORK HOURS SRV
                 if (role == ROLE_TRAINER) {
                     user.workHours = [];
                     // get the work hours
-                    getWorkHoursForUserFromDb(users[i].id).then
+                    workHourSrv.getWorkHoursForUserFromDb(users[i].id).then
                     (function(workHours) {
                         user.workHours = workHours;
                       }, function(err) {
                         $log.error(err);
                       })
                 }
+                */
 
                 // push the user under the specific role 
                 usersPerRole[role].push(user);
@@ -164,35 +162,13 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                 async.resolve(usersPerRole[ROLE_TRAINER]);
             });
         } else {
-            return usersPerRole[ROLE_TRAINER];
+            async.resolve(usersPerRole[ROLE_TRAINER]);
         }
         // in case no call was made before to get the trainers
         return async.promise;
     }
 
-    function getWorkHoursForUserFromDb(userId){
-        // this method will load the users from DB  - they will be kept on the service as cache
-        var async = $q.defer();
-        let workHours = [];
-        let userWorkHours = [];
-        $http.get("app/shared/model/data/workHours.json").then(function(res) {
-            workHours = res.data;
-            // go over the users and keep them in object per role
-            for (var i = 0; i < workHours.length; i++) {   
-                if (userId == workHours[i].userId) {
-                    // send back the work hours
-                    $log.info("found work hours for user: " + userId);
-                    userWorkHours.push(workHours[i]); 
-                }
-            }
-            
-            // need to return empty array
-            async.resolve(userWorkHours);
-        }, function(err) {
-            async.reject(err);
-        })
-        return async.promise;
-    }
+    
 
 
     function isLoggedAdmion() {
@@ -283,6 +259,8 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         return async.promise;
 
     }
+
+    
     return {
         isLoggedIn: isLoggedIn,
         login: login,
