@@ -17,7 +17,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
             this.endHour = plainWorkHoursOrId.get("endHour");
         }
     }
-
+// test
     
     function getTrainersWH(){
         // this method will load the users from DB  - they will be kept on the service as cache
