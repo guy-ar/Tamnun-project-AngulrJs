@@ -126,7 +126,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     //$scope.activeTrainers = trainer;
     $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
     var modalInstance = $uibModal.open({
-        templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
+        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
         controller: "workHoursCtrl",
         resolve: {
           params: function () {
@@ -156,9 +156,9 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
 
 
   $scope.editTrainerWorkHoursModal = function(trainer, workHour) {
-    
+
     var modalInstance = $uibModal.open({
-        templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
+        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
         controller: "workHoursCtrl",
         resolve: {
           params: function () {
@@ -188,8 +188,46 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
         console.log("user canceled edit work hours");
     })
   
+  }
+  
+
+  $scope.deleteTrainerWorkHoursModal = function(trainer, workHour) {
+
+    var modalInstance = $uibModal.open({
+        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
+        controller: "workHoursCtrl",
+        resolve: {
+          params: function () {
+            return {
+              mode: "D",
+              uId: trainer.id,
+              wh: workHour
+            };
+          }
+        }
+    });
+    
+    modalInstance.result.then(function(deleteWorkHours) {
+      
+      $log.info("need to delete the current trainer not to include the workHours");
+      // look for the WH of the relevnt trainer
+      let trainerWh = [];
+      trainerWh = $scope.trainersWh[deleteWorkHours.trainerId];
+      for (let i=0; i< trainerWh.length; i++){
+        if (trainerWh[i].id == deleteWorkHours.id)
+        {
+          trainerWh.splice(i, 1);
+        }
+      }
+    
+     
+    }, function() {
+        // this will wake up in case the user canceled the delete work hours
+        console.log("user canceled delete work hours");
+    })
+  
   
   
   }
-  
+
 })

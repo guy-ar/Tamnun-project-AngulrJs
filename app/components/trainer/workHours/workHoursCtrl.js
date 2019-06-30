@@ -16,6 +16,11 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $uib
         $scope.startHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
         timeParts = params.wh.endHour.split(":");
         $scope.endHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
+    } else if ($scope.mode == "D") {
+        $scope.id = params.wh.id;
+        $scope.day = params.wh.day;
+        $scope.startHour = params.wh.startHour;
+        $scope.endHour =  params.wh.endHour;
     }
     
    
@@ -70,6 +75,17 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $uib
 
              $uibModalInstance.close(editWorkHour);
         });
-     }
+    }
 
+
+    $scope.deleteWorkHours = function() {
+        // delete the entry - need only whId
+
+        workHourSrv.deleteWorkHours($scope.id).then(function(deleteWorkHour) {
+             $log.info("work hours was deleted: " + JSON.stringify(deleteWorkHour));
+             // Closing the modal
+
+             $uibModalInstance.close(deleteWorkHour);
+        });
+    }
 })

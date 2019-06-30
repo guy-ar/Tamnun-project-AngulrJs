@@ -111,10 +111,31 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
     }
 
 
+    function deleteWorkHours(whId)
+    {
+        // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
+        var async = $q.defer();
+        $log.info("delete work hour call");
+        const workHoursObj = Parse.Object.extend('workHours');
+        const query = new Parse.Query(workHoursObj);
+        // here you put the objectId that you want to delete
+        query.get(whId).then((object) => {
+            object.destroy().then((response) => {
+                console.log('deleting  workHours', response);
+                async.resolve(new WorkHours(response))
+            }, (error) => {
+                console.error('Error while deleting workHours', error);
+            });
+        });
+
+        return async.promise;
+    }
+
     return {
         addWorkHours: addWorkHours,
         getTrainersWH: getTrainersWH, 
-        editWorkHours: editWorkHours
+        editWorkHours: editWorkHours,
+        deleteWorkHours: deleteWorkHours
     }
 
 });

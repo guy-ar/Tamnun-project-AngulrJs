@@ -3,12 +3,13 @@
     <div class="modal-header">
         <h5 class="modal-title" ng-show="mode=='I'">Add Work Hours for Trainer</h5>
         <h5 class="modal-title" ng-show="mode=='U'">Update Work Hours</h5>
+        <h5 class="modal-title" ng-show="mode=='D'">Delete Work Hours</h5>
         <button type="button" class="close" aria-label="Close" ng-click="cancelWorkHourAction()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <form>
+        <form ng-if="!mode=='D'">
             <div class="form-group row">
                 <label for="day" class="col-sm-3 col-form-label">Week Day</label>
                 <div class="col-sm-9">
@@ -37,11 +38,19 @@
             </div>
             
         </form>
-        
+        <div ng-show="mode=='D'">
+            <p>
+                Please confirm deleting the following Work Hours:
+            </p>
+            <p>Day: <strong>{{day}}</strong></p>
+            <p>From Hour: <strong>{{startHour}}</strong></p>
+            <p>Till Hour: <strong>{{endHour}}</strong></p>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" ng-click="cancelWorkHourAction()">Close</button>
         <button type="button" class="btn btn-primary" ng-show="mode=='I'" ng-click="addWorkHours()">Save</button>
         <button type="button" class="btn btn-primary" ng-show="mode=='U'" ng-click="editWorkHours()">Update</button>
+        <button type="button" class="btn btn-primary" ng-show="mode=='D'" ng-click="deleteWorkHours()">Delete</button>
     </div>
 </div>
