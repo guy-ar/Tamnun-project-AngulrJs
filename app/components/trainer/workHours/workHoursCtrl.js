@@ -1,4 +1,4 @@
-scheduleApp.controller("newWorkHoursCtrl", function($scope, workHourSrv, $log, $uibModalInstance) {
+scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $uibModalInstance) {
 // guy TODO - might need new service for work hours instead userSrv
     let  params = $scope.$resolve.params;
     $scope.mode = params.mode;
@@ -26,7 +26,7 @@ scheduleApp.controller("newWorkHoursCtrl", function($scope, workHourSrv, $log, $
     $scope.addWorkHours = function() {
         // we need only the hours and minutes
 
-        workHourSrv.addWorkHours($scope.trainerId, $scope.id, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
+        workHourSrv.addWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
                 $scope.getTimeFromDate($scope.endHour)).then(function(newWorkHour) {
              $log.info("new work hours was added: " + JSON.stringify(newWorkHour));
              // Closing the modal
@@ -62,12 +62,12 @@ scheduleApp.controller("newWorkHoursCtrl", function($scope, workHourSrv, $log, $
     $scope.editWorkHours = function() {
         // we need only the hours and minutes
 
-        workHourSrv.editWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
+        workHourSrv.editWorkHours($scope.trainerId, $scope.id, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
                 $scope.getTimeFromDate($scope.endHour)).then(function(editWorkHour) {
              $log.info("new work hours was added: " + JSON.stringify(editWorkHour));
              // Closing the modal
 
-             $uibModalInstance.close(newWorkHour);
+             $uibModalInstance.close(editWorkHour);
         });
      }
 

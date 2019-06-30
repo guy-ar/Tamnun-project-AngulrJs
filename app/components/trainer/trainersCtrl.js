@@ -117,7 +117,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
     $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
-        controller: "newWorkHoursCtrl",
+        controller: "workHoursCtrl",
         resolve: {
           params: function () {
             return {
@@ -144,12 +144,12 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
     
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursNewEdit.html",
-        controller: "newWorkHoursCtrl",
+        controller: "workHoursCtrl",
         resolve: {
           params: function () {
             return {
               mode: "U",
-              uid: trainer.id,
+              uId: trainer.id,
               wh: workHour
             };
           }
