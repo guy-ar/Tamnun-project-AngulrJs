@@ -136,7 +136,8 @@ padding: 15px;
   width: 70%;
 }
 .search-button {
-  width: 10%;
+  width: 20%;
+  margin-left:  10px;
 }
 
 .btn-add {

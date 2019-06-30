@@ -25,6 +25,11 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     // converting to lower case to do a case insensitive comparison
     if (trainer.fname.toLowerCase().includes($scope.query.toLowerCase()) || 
         trainer.lname.toLowerCase().includes($scope.query.toLowerCase())) {
+          // check if need to present cancel
+          if (($scope.isCancel) && (trainer.state=="Cancel")){
+            // check the state
+            return false;
+          }
       return true;
     } else {
       return false;
@@ -41,7 +46,14 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
   $scope.openNewTrainerModal = function() {
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/trainerNewEdit.html",
-        controller: "newTrainerCtrl"
+        controller: "newEditTrainerCtrl",
+        resolve: {
+          params: function () {
+            return {
+              mode: "I"
+            };
+          }
+        }
     });
 
     modalInstance.result.then(function(newTrainer) {
@@ -58,12 +70,13 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/trainerNewEdit.html",
-        controller: "editTrainerCtrl",
+        controller: "newEditTrainerCtrl",
         resolve: {
           params: function () {
-             return {
+            return {
+              mode: "U",
               trainer: trainer
-             };
+            };
           }
         }
     });

@@ -23,7 +23,7 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
             this.email = plainTrainOrId.get("e_mail");
             this.phone = plainTrainOrId.get("phone");
             this.state = plainTrainOrId.get("state");
-            this.site = plainTrainOrId.get("siteId");
+            this.siteId = plainTrainOrId.get("siteId");
             this.isSigned = plainTrainOrId.get("isSigned");
         }
     }
