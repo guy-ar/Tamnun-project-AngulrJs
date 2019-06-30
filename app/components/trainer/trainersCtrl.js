@@ -55,7 +55,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
   }
 
   $scope.openEditTrainerModal = function(trainer) {
-    //$scope.activeTrainers = trainer;
+    
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/trainerNewEdit.html",
         controller: "editTrainerCtrl",
@@ -70,8 +70,14 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
 
     modalInstance.result.then(function(editTrainer) {
         $log.info("need to update the current trainer");
-        // this will wake in case the user added a new trainer
-        //$scope.activeTrainers = editTrainer;
+        // this will wake in case the user updated a trainer
+        for (let i = 0; i < $scope.trainers.length; i++)
+        {
+          if ($scope.trainers[i].id == trainer.id) {
+            $scope.trainers[i] = editTrainer;
+          }
+        }
+        
     }, function() {
         // this will wake up in case the user canceled the new trainer
         console.log("user canceled edit trainer");

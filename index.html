@@ -17,7 +17,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
     
-    
+    <!-- Parse (Back4App) -->
+    <script src="/assets/libs/parse.js"></script>
+    <script>
+        Parse.serverURL = 'https://parseapi.back4app.com'; // This is your Server URL
+        Parse.initialize(
+            'Tys1wq7yGKlY3C6K5e0vLFbaqTNCYq2OrB85IPlF', // This is your Application ID
+            'vCesbOkdyQkEYXqn1aZoJtwKUk7lEpQm7NHBZuIj' // This is your Javascript key
+        );
+    </script>
+
+
     <!-- Calendar dependencies -->
     <script src="/assets/libs/ui-bootstrap-tpls.js"></script>
     <script src="/assets/libs/moment.js"></script>

@@ -14,6 +14,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     const SITE_PARDESIA = 1;
     const SITE_YOQNEAM = 2;
 
+
     function User(plainUserOrId, userId, fname, lname, email, phone, role, state, siteId, isSigned) {
         if (arguments.length > 1) {
             this.id = plainUserOrId;
@@ -34,19 +35,19 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         } else {
             this.id = plainUserOrId.id;
             this.userId = plainUserOrId.userId;
-            this.fname = plainUserOrId.fname;
-            this.lname = plainUserOrId.lname;
-            this.email = plainUserOrId.email;
-            this.phone = plainUserOrId.phone;
-            this.role = plainUserOrId.role;
-            this.state = plainUserOrId.state;
-            if (SITE_PARDESIA == plainUserOrId.siteId)
+            this.fname = plainUserOrId.get("fname");
+            this.lname = plainUserOrId.get("lname");
+            this.email = plainUserOrId.get("email");
+            this.phone = plainUserOrId.get("phone");
+            this.role = plainUserOrId.get("role");
+            this.state = plainUserOrId.get("state");
+            if (SITE_PARDESIA == plainUserOrId.get("siteId"))
             {
                 this.site = "Pardesia";
-            } else if (SITE_YOQNEAM == plainUserOrId.siteId){
+            } else if (SITE_YOQNEAM == plainUserOrId.get("siteId")){
                 this.site = "Yoqneam";
             }
-            this.isSigned = plainUserOrId.isSigned;
+            this.isSigned = plainUserOrId.get("isSigned");
         }
     }
 
@@ -63,7 +64,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
 
         activeUser = null;
         isAdmin = false;
-        $http.get("app/shared/model/data/users.json").then(function(res) {
+        /*$http.get("app/shared/model/data/users.json").then(function(res) {
             var users = res.data;
             for (var i = 0; i < users.length && !activeUser; i++) {
                 if (((userIdOrEmail === users[i].userId) || (userIdOrEmail === users[i].email)) && (pwd === users[i].pwd)) {
@@ -80,14 +81,23 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
             }
         }, function(err) {
             async.reject(err);
-        })
+        })*/
 
-        // if (email === "nir@nir.com" && pwd === "123") {
-        //     activeUser = new User({ id: 1, fname:"Nir", lname: "Channes", email: "nir@nir.com" });
-        //     async.resolve(activeUser);
-        // } else {
-        //     async.reject(401);
-        // }
+        // to ask Nir how to check if this is user or email
+        Parse.User.logIn(userIdOrEmail, pwd).then(function (user) {
+            // Do stuff after successful login
+            console.log('Logged in user', user);
+            activeUser = new User(user);
+            if (ROLE_ADMIN == activeUser.role) {
+                isAdmin = true;
+            }
+            async.resolve(activeUser);
+        }).catch(error => {
+            console.error('Error while logging in user', error);
+            async.reject(error);
+        });
+
+
 
         return async.promise;
     }
@@ -102,8 +112,11 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     }
 
     function getAllUsersFromDb(){
+        // THIS LOGIC IS NOT IN USE ANYMORE
+        // it is for getting the data from the cahce - not relelvant 
         // this method will load the users from DB  - they will be kept on the service as cache
         var async = $q.defer();
+
         $http.get("app/shared/model/data/users.json").then(function(res) {
             var users = res.data;
             // go over the users and keep them in object per role
@@ -137,6 +150,8 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         }, function(err) {
             async.reject(err);
         })
+        
+       
 
         return async.promise;
     }
@@ -144,68 +159,96 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     // retreive list of trainers
     function getTrainers() {
         var async = $q.defer();
-        if (!getUserFromDb) {
-            getAllUsersFromDb().then(function(res) {
-                async.resolve(usersPerRole[ROLE_TRAINER]);
-            });
-        } else {
-            async.resolve(usersPerRole[ROLE_TRAINER]);
-        }
-        // in case no call was made before to get the trainers
+        
+        // Building a query
+       let trainers = [];
+       const UserObj = new Parse.User();
+       const query = new Parse.Query(UserObj);
+       query.equalTo("role", ROLE_TRAINER);
+
+       // Executing the query
+       query.find().then((results) => {
+         console.log('Trainers found', results);
+         for (let index = 0; index < results.length; index++) {
+             trainers.push(new User(results[index]));
+         }
+         async.resolve(trainers);
+       }, (error) => {
+         console.error('Error while fetching Trainer', error);
+         async.reject(error);
+       });
+
+
         return async.promise;
-    }
-
-    
-
+    }  
 
     function isLoggedAdmion() {
         return isAdmin;
     }
 
     function addTrainer(fname, lname, phone, email, siteId, userId){
+        // GUY NEED TO SWITCH TO HAVE IT AS NEW USER AND NOT ONLY NEW TRAINER
         var async = $q.defer();
         // for now just write to log - as we do not have DB
         $log.info("New Trainer call");
-        let newTrainer = new User(nextUserId, userId, fname, lname, email, phone, ROLE_TRAINER, STATE_ACTIVE, siteId, 0);
+
+        // Preparing the new parse trainer object to save
+        const user = new Parse.User()
+        user.set('username', userId);
+        user.set('email', email);
+        user.set('fname', fname);
+        user.set('lname', lname);
+        user.set('phone', phone);
+        user.set('isSigned', false);
+        user.set('state', STATE_ACTIVE);
+        user.set('role', ROLE_TRAINER);
+        user.set('siteId', siteId);
+        user.set('password', '#Password123');
+        
+        user.signUp().then((result) => {
+            async.resolve(new User(result));
+            console.log('User signed up', result);
+        }).catch(error => {
+            console.error('Error while signing up user', error);
+        });
+
+        /*let newTrainer = new User(nextUserId, userId, fname, lname, email, phone, ROLE_TRAINER, STATE_ACTIVE, siteId, 0);
         usersPerRole[ROLE_ADMIN].push(newTrainer);
 
         // // preparing the id for the next addition
         ++nextUserId;
-        async.resolve(newTrainer);
+        async.resolve(newTrainer);*/
+        
         return async.promise;
     }
+
+     
+
+     
 
     function getUserById(id)
-    {
+    { // NOT IN USE FOR NOW
         let  async = $q.defer();
-        // instead go to DB in async mode = get the data from client cache
-        // as we have a hack and not waorking with server
-
-        // go over usersPerRole and get the user detilas by Id
-        let roles = Object.keys(usersPerRole);
-        for (let role in roles) {
-            let users =  roles[role];
-            for (let i = 0, len = users.length; i<len; i++){
-                if (id == users[i])
-                {
-                    async.resolve(users[i])
-                }
-            }
-        }
-
-        // no user found
-        async.resolve({});
+        const User = new Parse.User();
+        const query = new Parse.Query(User);
+        
+        query.get(id).then((user) => {
+          console.log('User found', user);
+          async.resolve(new User(user));
+        }, (error) => {
+          console.error('Error while fetching user', error);
+        });
         return async.promise;
     }
 
-    function updateTrainer(id, fname, lname, phone, email, siteId, userId){
+    function updateTrainer(id, fname, lname, phone, email, siteId, userName){
         // this fucntion should go to DB and update trainer by his ID
         //since we have hack with db on cache - we first need to find the user in the "DB"
         // and then update it
         // as this is not real async call with DB, it is not full simulation 
         let  async = $q.defer();
 
-        // get the user entry - by ID - only relevant for "DB on client mode"
+       /* // get the user entry - by ID - only relevant for "DB on client mode"
         let users = usersPerRole[ROLE_TRAINER];
         for (let i = 0, len = users.length; i<len; i++){
             if (id == users[i].id)
@@ -216,15 +259,42 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
                 users[i].phone = phone;
                 users[i].email = email;
                 users[i].siteId = siteId;
-                users[i].userId = userId;
+                users[i].userId = userName;
 
                 async.resolve(users[i])
             }
-        }
+        }*/
+        const UserObj = new Parse.User();
+        const query = new Parse.Query(UserObj);
+        // Finds the user by its ID
+        query.get(id).then((user) => {
+            // Updates the data we want
+            user.set('username', userName);
+            user.set('email', email);
+            user.set('fname', fname);
+            user.set('lname', lname);
+            user.set('phone', phone);
+            user.set('siteId', siteId);
+
+            // Saves the user with the updated data
+            user.save().then((response) => {
+                console.log('Updated user', response);
+                async.resolve(new User(response));
+            }).catch((error) => {
+                console.error('Error while updating user', error);
+            });
+        });
 
         return async.promise;
 
     }
+
+
+    
+
+
+  
+
 
     function cancelTrainer(id){
         // simualte  access to DB - therefore func is a-sync
