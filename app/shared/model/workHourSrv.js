@@ -4,17 +4,19 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
     var getWorkFromDb = false;
     // hold userId: workHours[]
 
-    function WorkHours(plainWorkHoursOrId, day, startHour, endHour) {
+    function WorkHours(plainWorkHoursOrId, day, startHour, endHour, trainerId) {
         if (arguments.length > 1) {
             this.id = plainWorkHoursOrId;
             this.day = day;
             this.startHour = startHour;
             this.endHour = endHour;
+            this.trainerId = trainerId;
         } else {
             this.id = plainWorkHoursOrId.id;
             this.day = plainWorkHoursOrId.get("day");
             this.startHour = plainWorkHoursOrId.get("startHour");
             this.endHour = plainWorkHoursOrId.get("endHour");
+            this.trainerId = plainWorkHoursOrId.get("trainerId").id;
         }
     }
 // test
@@ -34,7 +36,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
             // Ex: response.get("<ATTRIBUTE_NAME>")
             console.log('workHours found', results);
             for (let index = 0; index < results.length; index++) {
-                let userId = results[index].get("trainerId");
+                let userId = results[index].get("trainerId").id;
                 if (!workHoursPerUser[userId]) {
                     // first create entry for the user
                     workHoursPerUser[userId] = [];
@@ -62,7 +64,9 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         myNewObject.set('startHour', startHour);
         myNewObject.set('endHour', endHour);
         let trainer = new Parse.Object("Trainer");
-        trainer.objectId = trainerId;
+        //trainer.objectId = trainerId;
+        trainer.id =  trainerId;
+        
         myNewObject.set('trainerId', trainer);
         myNewObject.save().then(
             (result) => {
@@ -86,20 +90,22 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
         var async = $q.defer();
         $log.info("update work hour call");
+
+        const workHoursObj = Parse.Object.extend('workHours');
+        const query = new Parse.Query(workHoursObj);
         
-        // instead sending it to DB - locate the user and update all the attributes
-        let userWorkHours = workHoursPerUser[trainerId];
-        for (let i = 0, len = userWorkHours.length; i<len; i++){
-            if (id == userWorkHours[i].id)
-            {
-                //update all user details
-                userWorkHours[i].day = day;
-                userWorkHours[i].startHour = startHour;
-                userWorkHours[i].endHour = endHour;
-                
-                async.resolve(userWorkHours[i])
-            }
-        }
+        query.get(id).then((object) => {
+            object.set('day', day);
+            object.set('startHour', startHour);
+            object.set('endHour', endHour);
+
+            object.save().then((response) => {
+                console.log('Updated workHours', response);
+                async.resolve(new WorkHours(response))
+            }, (error) => {
+                console.error('Error while updating workHours', error);
+            });
+        });
 
         return async.promise;
     }

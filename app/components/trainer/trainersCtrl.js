@@ -142,6 +142,10 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
       $log.info("need to update the current trainer to include the new workHours");
       //$scope.activeTrainers.workHours.push(newWorkHours);
       $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainersWh))
+      if (!$scope.trainersWh[trainer.id]){
+        // trainer did not had former workhours
+        $scope.trainersWh[trainer.id] = [];
+      }
       $scope.trainersWh[trainer.id].push(newWorkHours);
       
     }, function() {
@@ -169,8 +173,15 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     
     modalInstance.result.then(function(editWorkHours) {
       $log.info("need to update the current trainer to include the new workHours");
-      // This is needed when we will move to rela DB
-      // for now - update the memory will impact all parts
+      // look for the WH of the relevnt trainer
+      let trainerWh = [];
+      trainerWh = $scope.trainersWh[editWorkHours.trainerId];
+      for (let i=0; i< trainerWh.length; i++){
+        if (trainerWh[i].id == editWorkHours.id)
+        {
+          trainerWh[i] = editWorkHours;
+        }
+      }
      
     }, function() {
         // this will wake up in case the user canceled the new work hours
