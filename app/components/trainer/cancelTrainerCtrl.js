@@ -1,6 +1,6 @@
 
 
-scheduleApp.controller("cancelTrainerCtrl", function($scope, userSrv, $log, $uibModalInstance) {
+scheduleApp.controller("cancelTrainerCtrl", function($scope, trainerSrv, $log, $uibModalInstance) {
 
     let  params = $scope.$resolve.params;
     $scope.id = params.id;
@@ -10,7 +10,7 @@ scheduleApp.controller("cancelTrainerCtrl", function($scope, userSrv, $log, $uib
 
     $scope.cancelTrainer = function() {
         if ($scope.isCancel){       
-            userSrv.cancelTrainer($scope.id).then(function(cancelTrainer) {
+            trainerSrv.cancelTrainer($scope.id).then(function(cancelTrainer) {
                 $log.info("Trainer was cancelled: " + JSON.stringify(cancelTrainer));
             
                 // Closing the modal

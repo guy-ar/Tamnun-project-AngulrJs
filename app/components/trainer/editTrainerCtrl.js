@@ -1,4 +1,4 @@
-scheduleApp.controller("editTrainerCtrl", function($scope, userSrv, $log, $uibModalInstance) {
+scheduleApp.controller("editTrainerCtrl", function($scope, trainerSrv, $log, $uibModalInstance) {
 
     let  params = $scope.$resolve.params;
     $scope.mode = "U";
@@ -8,13 +8,13 @@ scheduleApp.controller("editTrainerCtrl", function($scope, userSrv, $log, $uibMo
     $scope.phone = params.trainer.phone;
     $scope.email = params.trainer.email;
     $scope.siteId = params.trainer.siteId;
-    $scope.userId = params.trainer.userId;
+    $scope.userName = params.trainer.userName;
 
    
 
     $scope.editTrainer = function() {
 
-        userSrv.updateTrainer($scope.id, $scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userId).then(function(updateTrainer) {
+        trainerSrv.updateTrainer($scope.id, $scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userName).then(function(updateTrainer) {
             $log.info("Trainer was updated: " + JSON.stringify(updateTrainer));
             
             // Closing the modal
@@ -23,12 +23,13 @@ scheduleApp.controller("editTrainerCtrl", function($scope, userSrv, $log, $uibMo
     }
 
     $scope.cancelTrainerAction = function() {
+        $scope.id = "";
         $scope.fname = "";
         $scope.lname = "";
         $scope.phone = "";
         $scope.email = "";
         $scope.siteId = "";
-        $scope.userId = "";
+        $scope.userName = "";
         $uibModalInstance.dismiss();
     }
 

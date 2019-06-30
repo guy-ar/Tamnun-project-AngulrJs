@@ -26,8 +26,9 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $uib
     $scope.addWorkHours = function() {
         // we need only the hours and minutes
 
+        //workHourSrv.addWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
         workHourSrv.addWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
-                $scope.getTimeFromDate($scope.endHour)).then(function(newWorkHour) {
+            $scope.getTimeFromDate($scope.endHour)).then(function(newWorkHour) {
              $log.info("new work hours was added: " + JSON.stringify(newWorkHour));
              // Closing the modal
 

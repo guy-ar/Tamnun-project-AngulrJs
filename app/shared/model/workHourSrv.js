@@ -2,7 +2,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
 
     var nextWorkHour = 100;
     var getWorkFromDb = false;
-    workHoursPerUser = {}; // hold userId: workHours[]
+    // hold userId: workHours[]
 
     function WorkHours(plainWorkHoursOrId, day, startHour, endHour) {
         if (arguments.length > 1) {
@@ -12,52 +12,42 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
             this.endHour = endHour;
         } else {
             this.id = plainWorkHoursOrId.id;
-            this.day = plainWorkHoursOrId.day;
-            this.startHour = plainWorkHoursOrId.startHour;
-            this.endHour = plainWorkHoursOrId.endHour;
+            this.day = plainWorkHoursOrId.get("day");
+            this.startHour = plainWorkHoursOrId.get("startHour");
+            this.endHour = plainWorkHoursOrId.get("endHour");
         }
     }
 
-    function getWorkHoursForUserFromDb(userId){
-        // simulate method load the specific user work hours from DB  
-        // temporary- they will be kept on the service as cache
-        var async = $q.defer();
-        
-        let userWorkHours = [];
-        userWorkHours = workHoursPerUser[userId];
-        // need to return empty array
-        async.resolve(userWorkHours);
-       
-        return async.promise;
-    }
-
-    function getWorkHoursFromDb(){
+    
+    function getTrainersWH(){
         // this method will load the users from DB  - they will be kept on the service as cache
         var async = $q.defer();
         let workHours = [];
+     
+        const workHoursObj = Parse.Object.extend('workHours');
+        const query = new Parse.Query(workHoursObj);
+        var workHoursPerUser = {};
         
-        $http.get("app/shared/model/data/workHours.json").then(function(res) {
-            let workHoursRow = res.data;
-            // go over the users and keep them in object per role
-            for (var i = 0; i < workHoursRow.length; i++) {
-                let userId = workHoursRow[i].userId;
+    
+        query.find().then((results) => {
+            // You can use the "get" method to get the value of an attribute
+            // Ex: response.get("<ATTRIBUTE_NAME>")
+            console.log('workHours found', results);
+            for (let index = 0; index < results.length; index++) {
+                let userId = results[index].get("trainerId");
                 if (!workHoursPerUser[userId]) {
                     // first create entry for the user
                     workHoursPerUser[userId] = [];
                 }
-                workHours = new WorkHours(workHoursRow[i]);
-                
+                workHours = new WorkHours(results[index]);
                 $log.info("found work hours for user: " + JSON.stringify(workHours));
                 workHoursPerUser[userId].push(workHours); 
-                
             }
-            // WH need to ve retrieved from DB only once - due to hack of DB on client
-            getWorkFromDb = true;
-            // need to return the "DB" object
             async.resolve(workHoursPerUser);
-        }, function(err) {
-            async.reject(err);
-        })
+        }, (error) => {
+
+            console.error('Error while fetching workHours', error);
+        });
         return async.promise;
     }
     function addWorkHours(trainerId, day, startHour, endHour)
@@ -65,30 +55,30 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
         var async = $q.defer();
         $log.info("New work hour call");
-        let newWorkHours = new WorkHours(nextWorkHour, day, startHour, endHour);
-        // instead sending it to DB - locate the user and add the work hours on him
-        if (!workHoursPerUser[trainerId]){
-            workHoursPerUser[trainerId] = [];
-        }
-        workHoursPerUser[trainerId].push(newWorkHours);
-        nextWorkHour++;
-        async.resolve(newWorkHours)
+        const workHoursObj = Parse.Object.extend('workHours');
+        const myNewObject = new workHoursObj();
+
+        myNewObject.set('day', day);
+        myNewObject.set('startHour', startHour);
+        myNewObject.set('endHour', endHour);
+        let trainer = new Parse.Object("Trainer");
+        trainer.objectId = trainerId;
+        myNewObject.set('trainerId', trainer);
+        myNewObject.save().then(
+            (result) => {
+                console.log('workHours created', result);
+                async.resolve(new WorkHours(result));
+            },
+            (error) => {
+                console.error('Error while creating workHours: ', error);
+            }
+        );
 
         return async.promise;
     }
 
-    function getTrainersWH() {
-        var async = $q.defer();
-        if (!getWorkFromDb) {
-            getWorkHoursFromDb().then(function(res) {
-                async.resolve(workHoursPerUser);
-            });
-        } else {
-            async.resolve(workHoursPerUser);
-        }
-        // in case no call was made before to get the trainers
-        return async.promise;
-    }
+    
+
 
     
     function editWorkHours(trainerId, id, day, startHour, endHour)
@@ -116,8 +106,6 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
 
 
     return {
-        getWorkHoursForUserFromDb: getWorkHoursForUserFromDb,
-        getWorkHoursFromDb: getWorkHoursFromDb,
         addWorkHours: addWorkHours,
         getTrainersWH: getTrainersWH, 
         editWorkHours: editWorkHours

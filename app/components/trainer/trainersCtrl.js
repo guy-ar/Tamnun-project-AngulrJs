@@ -1,11 +1,11 @@
-scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourSrv, $uibModal) { 
+scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSrv, workHourSrv, $uibModal) { 
 
   $scope.trainers = [];
   //$scope.activeTrainers = null;
   $scope.trainersWh = {};
 
   // get the trainers
-  userSrv.getTrainers().then(function(users) {
+  trainerSrv.getTrainers().then(function(users) {
     $scope.trainers = users;
   }, function(err) {
     $log.error(err);
@@ -109,8 +109,12 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
         $log.info("trainer was not cancelled");
       } else {
         $log.info("need to update the current trainer state to cancel");
-        // this will wake in case the user added a new trainer
-        //$scope.activeTrainers.state = editTrainer.state;
+        for (let i = 0; i < $scope.trainers.length; i++)
+        {
+          if ($scope.trainers[i].id == trainer.id) {
+            $scope.trainers[i] = editTrainer;
+          }
+        }
       }
     }, function() {
         // this will wake up in case the user canceled the new trainer
@@ -138,7 +142,8 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, workHourS
       $log.info("need to update the current trainer to include the new workHours");
       //$scope.activeTrainers.workHours.push(newWorkHours);
       $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainersWh))
-     
+      $scope.trainersWh[trainer.id].push(newWorkHours);
+      
     }, function() {
         // this will wake up in case the user canceled the new work hours
         console.log("user canceled add work hours");
