@@ -85,6 +85,4 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, trainerSrv, eventSrv
     })
   }
 
-
-  
 })

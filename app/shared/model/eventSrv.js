@@ -4,7 +4,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
     const STATE_CANCEL = "Cancel";
     const STATE_TENTATIVE = "Tentative";
 
-    function Event(plainTrainOrId, name, day, type, startTime, duration, state, siteId, isRepeat, trainerId, activityNum) {
+    function Event(plainTrainOrId, name, day, type, startTime, duration, state, siteId, isRepeat, trainerId, activityNum, startDate) {
         if (arguments.length > 1) {
             this.id = plainEventOrId;
             this.name = name;
@@ -17,6 +17,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             this.isRepeat = isRepeat;
             this.trainerId = trainerId;
             this.activityNum = activityNum;
+            this.startDate = startDate;
         } else {
             this.id = plainTrainOrId.id;
             
@@ -30,6 +31,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             this.isRepeat = plainTrainOrId.get("isRepeat");
             this.trainerId = plainTrainOrId.get("trainerId");
             this.activityNum = plainTrainOrId.get("activityNum");
+            this.startDate = plainTrainOrId.get("startDate");
         }
     }
 
@@ -57,7 +59,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             return async.promise;
     } 
 
-    function addEvent(name, day, type, startTime, duration, siteId, isRepeat, trainerId, activityNum){
+    function addEvent(name, day, type, startTime, duration, siteId, isRepeat, trainerId, activityNum, startDate){
         
         var async = $q.defer();
         // for now just write to log - as we do not have DB
@@ -81,6 +83,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             myNewObject.set('trainerId', trainer);
         }
         myNewObject.set('activityNum', activityNum);
+        myNewObject.set('startDate', startDate); 
 
         myNewObject.save().then(
             (result) => {
@@ -117,7 +120,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
         return async.promise;
     }
 
-    function updateEventDtls(id, name, day, type, startTime, duration, siteId, isRepeat, activityNum){
+    function updateEventDtls(id, name, day, type, startTime, duration, siteId, isRepeat, activityNum, startDate){
         
         let  async = $q.defer();
         const EventObj = Parse.Object.extend('Event');
@@ -134,7 +137,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             myNewObject.set('siteId', siteId);
             myNewObject.set('isRepeat', isRepeat);
             myNewObject.set('activityNum', activityNum);
-
+            myNewObject.set('startDate', startDate);
             // Saves the event with the updated data
             object.save().then((response) => {
                 console.log('Updated event details', response);
@@ -170,8 +173,6 @@ scheduleApp.factory("eventSrv", function($q, $log) {
         return async.promise;
 
     }
-
-       
 
     return {
         getEvents: getEvents,
