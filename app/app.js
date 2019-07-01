@@ -18,9 +18,11 @@ scheduleApp.config(function($routeProvider) {
         templateUrl: "app/components/event/events.html",
         controller: "eventsCtrl"        
     }).when("/events/new", {
-        
+        templateUrl: "app/components/event/newEvent.html",
+        controller: "newEventCtrl" 
     }).when("/events/:id", {
-        
+        templateUrl: "app/components/event/eventDtls.html",
+        controller: "eventDtlsCtrl" 
     }).when("/error", {
         templateUrl: "app/shared/navbar/error.html"
     }).otherwise({

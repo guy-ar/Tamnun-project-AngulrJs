@@ -174,12 +174,29 @@ scheduleApp.factory("eventSrv", function($q, $log) {
 
     }
 
+    
+    function getEventById(id)
+    { 
+        let  async = $q.defer();
+        const EventObj = Parse.Object.extend('Event');
+        const query = new Parse.Query(EventObj);
+        
+        query.get(id).then((result) => {
+          console.log('Event found', result);
+          async.resolve(new Event(result));
+        }, (error) => {
+          console.error('Error while fetching event', error);
+        });
+        return async.promise;
+    }
+
     return {
         getEvents: getEvents,
         addEvent: addEvent,
         updateEventTrainer: updateEventTrainer,
         updateEventState: updateEventState,
-        updateEventDtls: updateEventDtls
+        updateEventDtls: updateEventDtls,
+        getEventById: getEventById
         
     }
 

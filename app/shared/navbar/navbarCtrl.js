@@ -11,6 +11,9 @@ scheduleApp.controller("navbarCtrl", function($scope, userSrv, $location, $log) 
         return userSrv.isLoggedAdmion();
     }
 
+    $scope.isLoggedTrainer = function() {
+        return userSrv.isLoggedTrainer();
+    }
     $scope.logout = function() {
         userSrv.logout();
         $location.path("/");

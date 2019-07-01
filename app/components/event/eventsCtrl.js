@@ -30,7 +30,13 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, trainerSrv, eventSrv
     }
   }
 
-  
+  $scope.openEvent = function(event) {
+    $location.path("/cars/" + event.id);
+    
+  }
+  //  will not be in use - switch to full screen mode
+
+  /*
   $scope.openNewEventModal = function() {
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/event/eventNewEdit.html",
@@ -83,6 +89,6 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, trainerSrv, eventSrv
         // this will wake up in case the user canceled the new event
         console.log("user canceled edit event");
     })
-  }
+  }*/
 
 })

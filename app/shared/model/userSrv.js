@@ -3,6 +3,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
 
     var activeUser = null; // new User({id: 1, fname: "Nir" ...})
     let isAdmin = false;
+    let isTrainer = false;
     let usersPerRole = {};
     let getUserFromDb = false;
     let nextUserId = 0;
@@ -72,7 +73,10 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
             activeUser = new User(user);
             if (ROLE_ADMIN == activeUser.role) {
                 isAdmin = true;
+            } else if (ROLE_TRAINER == activeUser.role) {
+                isTrainer = true;
             }
+
             async.resolve(activeUser);
         }).catch(error => {
             console.error('Error while logging in user', error);
@@ -87,6 +91,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     function logout() {
         activeUser = null;
         isAdmin = false;
+        isTrainer = false;
     }
 
     function getActiveUser() {
@@ -98,7 +103,9 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         return isAdmin;
     }
 
-       
+    function isLoggedTrainer() {
+        return isTrainer;
+    }
 
     function getUserById(id)
     { // NOT IN USE FOR NOW
@@ -124,7 +131,9 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         logout: logout,
         getActiveUser: getActiveUser,
         isLoggedAdmion: isLoggedAdmion,
-        getUserById: getUserById
+        getUserById: getUserById, 
+        isLoggedTrainer: isLoggedTrainer
+
     }
 
 });
