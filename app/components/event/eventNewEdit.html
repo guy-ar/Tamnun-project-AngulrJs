@@ -1,0 +1,39 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" ng-show="mode=='I'">Add New Event</h5>
+        <h5 class="modal-title" ng-show="mode=='U'">Update Event</h5>
+        <button type="button" class="close" aria-label="Close" ng-click="cancelEventAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group row">
+                <label for="name" class="col-sm-3 col-form-label">Event Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="name" value={{name}} placeholder="Enter Event Name" ng-model="name">
+                </div>
+            </div>
+            
+            
+
+            <div class="form-group row">
+                <label for="siteId" class="col-sm-3 col-form-label">Event in Site</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="siteId" name="selSiteId" ng-model="siteId">
+                        <option value="1">Pardesia</option>
+                        <option value="2">Yoqneam</option>  
+                    </select>
+                </div>
+            </div>
+            
+        </form>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelEventAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-show="mode=='I'" ng-click="addEvent()">Save</button>
+        <button type="button" class="btn btn-primary" ng-show="mode=='U'" ng-click="editEvent()">Update</button>
+    </div>
+</div>
