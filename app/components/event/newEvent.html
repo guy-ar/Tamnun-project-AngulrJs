@@ -57,25 +57,24 @@
                     <option value="Fri">Friday</option>  
                 </select>
             </div> -->
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4">
                 <div uib-timepicker ng-model="startHourDt"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
             </div>
-                
-        </div>
-        <div class="row">
-            <div class="form-group col-md-2">
-                <button type="button" class="btn btn-primary" ng-click="openCalendar()">Existing Events</button>
-            </div>
-        </div>
-        <div class="row">
-            <div id="calendar-result">
-                Div to show calendar
-
-                <ng-include
-                    src="app/shared/calendar/weeklyCalendar.html">
-                </ng-include>
-            </div>
-        </div>
+            <!-- <div class="form-row"> -->
+                    <div class="form-group col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="event.isRepeat">
+                            <label class="custom-control-label" for="customCheck">Renewal?</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="activityNum">Quantity:</label>
+                        <input type="number" name="quantity" min="0" max="50" class="form-control" id="activityNum"  placeholder="Enter number of lessons" 
+                        ng-model="event.activityNum">
+                    </div>
+                    
+                <!-- </div>    -->
+        </div>      
         
         <div class="form-row">
             <label for="trainerSearch">search for Trainer</label>
@@ -99,7 +98,7 @@
                     class="list-group-item list-group-item-action" ng-click="setTrainerForEvent(result)">{{result.fname + " " + result.lname}}</a>
                 </ul>
             </div>
-        <div class="form-row">
+        <!-- <div class="form-row">
             <div class="form-group col-md-2">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="event.isRepeat">
@@ -112,20 +111,14 @@
                 ng-model="event.activityNum">
             </div>
             
-        </div>
+        </div> -->
         <div class="row justify-content-end">
+            <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="openCalendar()">Existing Events</button>
+            <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="showCalendar()">Show Calendar</button>
+            
             <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="addEvent()">Save as Draft</button>
             <button type="button" class="btn btn-primary mb-2">Final Save</button>
         </div>
-        
-            
-            
-               
-       
-        
-        
-
-
-        
     </form>
+    <tamnun-calendar ng-if="showCal"></tamnun-calendar>
 </div>

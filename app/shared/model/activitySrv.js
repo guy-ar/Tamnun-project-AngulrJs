@@ -97,14 +97,40 @@ scheduleApp.factory("activitySrv", function($q, $log) {
                 console.log('Activity was added', result);
             }).catch(error => {
                 console.error('Error while create activity', error);
+                async.reject(error);
             });
         
         return async.promise;
     }
 
+    function getActivitiesByDateRange(minDate, maxDate) {
+        let activities = [];
+        let async = $q.defer(); 
+        const Activity = Parse.Object.extend('Activity');
+        const query = new Parse.Query(Activity);
+
+        query.greaterThanOrEqualTo("activityDate", minDate);
+        query.lessThanOrEqualTo("activityDate", maxDate);
+        query.find().then(function(results) {
+            console.log('Activity found', results);
+            for (let index = 0; index < results.length; index++) {
+                activities.push(new Activity(results[index].toJSON()));
+            }
+            async.resolve(activities);
+        }, function(error) {
+            console.error('Error while fetching Activity', error);
+            async.reject(error);
+        
+        });
+        return async.promise;
+
+    }
+
     return {
         createActivityforEvent: createActivityforEvent,
-        createAllActivityforEvent: createAllActivityforEvent
+        createAllActivityforEvent: createAllActivityforEvent, 
+        getActivitiesByDateRange: getActivitiesByDateRange
+
 
     }
 });

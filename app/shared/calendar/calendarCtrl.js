@@ -3,7 +3,7 @@
 
 
 scheduleApp.controller('calendarCtrl',
-function($scope, $compile, $timeout, uiCalendarConfig) {
+function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
   var date = new Date();
   var d = date.getDate();
   var m = date.getMonth();
@@ -25,26 +25,33 @@ function($scope, $compile, $timeout, uiCalendarConfig) {
     // the below was example for all day event - and with URL that was removed
     //{title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
   ];
-  /* event source that calls a function on every view switch */
-  // Guy try to hide
-  // $scope.eventsF = function (start, end, timezone, callback) {
-  //   var s = new Date(start).getTime() / 1000;
-  //   var e = new Date(end).getTime() / 1000;
-  //   var m = new Date(start).getMonth();
-  //   var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
-  //   callback(events);
-  // };
+  
+// Guy - take big date range - as temp soluition
+  $scope.getActivitiesFromDb = function(){
+    var current = new Date();
+    var nextyear = new Date();
+    nextyear.setDate(current.getDate()+365);
 
-  // guy try to remove the scope of events
-  // $scope.calEventsExt = {
-  //    color: '#f00',
-  //    textColor: 'yellow',
-  //    events: [
-  //       {type:'party',title: 'Lunch',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-  //       {type:'party',title: 'Lunch 2',start: new Date(y, m, d, 12, 0),end: new Date(y, m, d, 14, 0),allDay: false},
-  //       {type:'party',title: 'test',start: new Date(y, m, 28),end: new Date(y, m, 29)}
-  //     ]
-  // };
+
+    activitySrv.getActivitiesByDateRange(current, nextyear).then( function(activities) {
+      $log.info("Following activiites retireved per date rnage: " + JSON.stringify(activities));
+      // process the activities and push them to events scope
+      $scope.populateEvents(activities);
+    }, function(error){
+
+    });
+  }
+
+  $scope.populateEvents = function(activities) {
+    for (i=0; i< activities.length; i++) {
+       
+      let startDate = constructDate(activities[i].activityDate, activities[i].activityTime );
+      let endDate = constructDate(activities[i].activityDate, activities[i].activityTime, 45 );
+      // GUY Need to bring the event attributes as well...id, name, duration
+      $scope.addEvent("1111", "Event Title", startDate, endDate, false);
+    }
+  }
+
   /* alert on eventClick */
   $scope.alertOnEventClick = function( date, jsEvent, view){
       $scope.alertMessage = (date.title + ' was clicked ');
@@ -70,15 +77,38 @@ function($scope, $compile, $timeout, uiCalendarConfig) {
       sources.push(source);
     }
   };
-  /* add custom event*/
-  $scope.addEvent = function() {
+
+  $scope.constructDate = function(dateVal, timeVal, delta){
+    let d = dateVal.getDate();
+    let m = dateVal.getMonth();
+    let y = dateVal.getFullYear();
+    let timeArr = timeVal.split(":");
+    if (arguments.length > 2)
+    {
+      // Guy for now just full hour and do not refer to delta
+      return new Date(y, m, d, timeArr[0] + 1, timeArr[1]); 
+
+    } else {
+      return new Date(y, m, d, timeArr[0], timeArr[1]);
+    }
+  }
+
+  $scope.prepareDate = function(year, month, day, hour, min){
+    return new Date(year, month, day, hour, min);
+  }
+
+  /* add event*/
+  $scope.addEvent = function(idNum, titleSrc, startDate, endDate, allDayInd) {
     $scope.events.push({
-      title: 'Open Sesame',
-      start: new Date(y, m, 28),
-      end: new Date(y, m, 29),
-      className: ['openSesame']
+      id: idNum,
+      title: titleSrc,
+      start: startDate,
+      end: endDate,
+      allDay: allDayInd
     });
   };
+// Guy call events from DB
+  $scope.getActivitiesFromDb();
   /* remove event */
   $scope.remove = function(index) {
     $scope.events.splice(index,1);

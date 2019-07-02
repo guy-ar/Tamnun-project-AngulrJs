@@ -16,6 +16,11 @@ scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $locatio
     $scope.queryTrainer = "";
     $scope.searchTrainerResults = [];
 
+    $scope.showCal = false;
+    $scope.showCalendar = function(){
+        $scope.showCal = true;
+    }
+
     $scope.addEvent = function() {
         // note - stop sending the day - day will be taken from the event date
         // validate mandatory
