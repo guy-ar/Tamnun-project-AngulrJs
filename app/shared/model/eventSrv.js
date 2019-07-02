@@ -1,4 +1,4 @@
-scheduleApp.factory("eventSrv", function($q, $log) {
+scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
     
     const STATE_ACTIVE = "Active";
     const STATE_CANCEL = "Cancel";
@@ -29,7 +29,7 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             this.state = plainTrainOrId.get("state");
             this.siteId = plainTrainOrId.get("siteId");
             this.isRepeat = plainTrainOrId.get("isRepeat");
-            this.trainerId = plainTrainOrId.get("trainerId");
+            this.trainerId = plainTrainOrId.get("trainerId").id;
             this.activityNum = plainTrainOrId.get("activityNum");
             this.startDate = plainTrainOrId.get("startDate");
         }
@@ -59,7 +59,8 @@ scheduleApp.factory("eventSrv", function($q, $log) {
             return async.promise;
     } 
 
-    function addEvent(name, day, type, startTime, duration, siteId, isRepeat, trainerId, activityNum, startDate){
+    //function addEvent(name, day, type, startTime, duration, siteId, isRepeat, trainerId, activityNum, startDate){
+        function addEvent(eventInputObj){
         
         var async = $q.defer();
         // for now just write to log - as we do not have DB
@@ -69,28 +70,41 @@ scheduleApp.factory("eventSrv", function($q, $log) {
         const EventObj = Parse.Object.extend('Event');
         const myNewObject = new EventObj();
 
-        myNewObject.set('name', name);
-        myNewObject.set('day', day);
-        myNewObject.set('type', type);
-        myNewObject.set('startTime', startTime);
-        myNewObject.set('duration', duration);
-        myNewObject.set('siteId', siteId);
-        myNewObject.set('isRepeat', isRepeat);
+        myNewObject.set('name', eventInputObj.name);
+        // need to ge the date from the date - it is less important for the event - but may be needed to the activity
+        //myNewObject.set('day', eventInputObj.day);
+        myNewObject.set('type', eventInputObj.type);
+        myNewObject.set('startTime', eventInputObj.startTime);
+        myNewObject.set('duration', eventInputObj.duration);
+        myNewObject.set('siteId', eventInputObj.siteId);
+        myNewObject.set('isRepeat', eventInputObj.isRepeat);
         myNewObject.set('state', STATE_TENTATIVE);
-        if (trainerId != undefined) {
+        if (eventInputObj.trainerId != undefined) {
             let trainer = new Parse.Object("Trainer");
-            trainer.id =  trainerId;
+            trainer.id =  eventInputObj.trainerId;
             myNewObject.set('trainerId', trainer);
         }
-        myNewObject.set('activityNum', activityNum);
-        myNewObject.set('startDate', startDate); 
+        myNewObject.set('activityNum', eventInputObj.activityNum);
+        myNewObject.set('startDate', eventInputObj.startDate); 
 
         myNewObject.save().then(
-            (result) => {
-                async.resolve(new Event(result));
-                console.log('Event was added', result);
+            (result) => {;
+                let event = new Event(result);
+                $log.info('Event was added', result);
+                async.resolve(event);
+                // call to activitySrv in order to create the instances per event
+                activitySrv.createAllActivityforEvent(event).then(function (actResult){
+
+                
+                    // meanwhile create the activities for the event - assume no error will be done
+                    $log.info('activity was added', JSON.stringify(actResult));
+                }, 
+                function (error) {
+                  console.error('Error while creating activity: ', error);
+                  async.reject(error);
+                });
             }).catch(error => {
-                console.error('Error while signing up user', error);
+                console.error('Error creating Event', error);
             });
         
         return async.promise;

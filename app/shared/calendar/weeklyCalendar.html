@@ -1,0 +1,38 @@
+
+        <div class="container">
+            <!-- <section id="directives-calendar" ng-controller="CalendarCtrl"> -->
+                <section id="directives-calendar">
+                
+                <div class="row-fluid">
+                    
+    
+                  <div class="span8">
+                      <tabset>
+                        <!-- used for multiple calendars - each one will be3 presented on different tab-->
+                          <tab select="renderCalendar('myCalendar1');">
+                            <tab-heading>
+                              <i class="glyphicon glyphicon-bell"></i> Calendar One
+                            </tab-heading>
+                            <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
+                              <h4>{{alertMessage}}</h4>
+                            </div>
+                            <div class="btn-toolbar">
+                              <p class="pull-right lead">Calendar One View Options</p>
+                              <div class="btn-group">
+                                  <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
+                                  <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
+                                  <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month</button>
+                              </div>
+                            </div>
+                          <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
+                          </tab>
+
+                          
+                      </tabset>
+                  </div>
+              </div>
+              
+            </section>
+            
+        </div>
+    

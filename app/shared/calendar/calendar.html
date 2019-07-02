@@ -1,66 +1,15 @@
-
-<div class="container">
-    <section id="directives-calendar" ng-controller="calendarCtrl">
-        <div class="page-header">
-            <h1>UI-Calendar</h1>
+<section id="directives-calendar" class="container container-page">                                        
+    <div class="btn-toolbar">
+    
+        <div class="btn-group">
+            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar')">AgendaDay</button>
+            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">AgendaWeek</button>
+            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
         </div>
-        
-        <div class="row-fluid">
-            <ul class="nav nav-tabs">
-                <li class="nav-item" ng-click="renderCalendar('myCalendar1');">
-                    <a class="nav-link active" data-toggle="tab" href="#calendar1">Calendar 1</a>
-                </li>
-                <li class="nav-item" ng-click="renderCalendar('myCalendar2');">
-                    <a class="nav-link" data-toggle="tab" href="#calendar2">Calendar 2</a>
-                </li>
-                <li class="nav-item" ng-click="renderCalendar('myCalendar3');">
-                    <a class="nav-link" data-toggle="tab" href="#calendar3">Calendar 3</a>
-                </li>
-            </ul>
+    </div>
+    <div class="calendar" ng-model="eventSources" select="renderCalendar()" calendar="myCalendar" ui-calendar="uiConfig.calendar"></div>
+</section>
                     
-            <!-- Tab panes -->
-            <div class="tab-content">
-            <div class="tab-pane container active" id="calendar1">
-                <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-                    <h4>{{alertMessage}}</h4>
-                </div>
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
-                        <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
-                        <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month</button>
-                    </div>
-                </div>
-                <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
-            </div>
-            <div class="tab-pane container fade" id="calendar2">
-                <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-                    <h4>{{alertMessage}}</h4>
-                </div>
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar2')">AgendaDay</button>
-                        <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar2')">AgendaWeek</button>
-                        <button class="btn btn-success" ng-click="changeView('month', 'myCalendar2')">Month</button>
-                    </div>
-                </div>
-                <div class="calendar" ng-model="eventSources" calendar="myCalendar2" ui-calendar="uiConfig.calendar"></div>    
-            </div>
-            <div class="tab-pane container fade" id="calendar3">
-                <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-                    <h4>{{alertMessage}}</h4>
-                </div>
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar3')">AgendaDay</button>
-                        <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar3')">AgendaWeek</button>
-                        <button class="btn btn-success" ng-click="changeView('month', 'myCalendar3')">Month</button>
-                    </div>
-                </div>
-                <div class="calendar" ng-model="eventSources" calendar="myCalendar3" ui-calendar="uiConfig.calendar"></div>   
-            </div>
-        </div>
-    </section>   
-</div>
+
 
             

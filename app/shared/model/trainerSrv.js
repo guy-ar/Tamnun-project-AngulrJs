@@ -51,9 +51,35 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
             console.error('Error while fetching Trainer', error);
             async.reject(error);
         });
-            return async.promise;
-        } 
+        return async.promise;
+    } 
 
+    function getTrainersBySite(siteId)
+    {
+        var async = $q.defer();
+    
+        // Building a query
+        let trainers = [];
+        const TrainerObj = Parse.Object.extend('Trainer');           
+        const querySite = new Parse.Query(TrainerObj);
+        
+        querySite.equalTo("siteId", siteId);
+        
+
+        // Executing the query
+        querySite.find().then((results) => {
+            console.log('Trainers found', results);
+            for (let index = 0; index < results.length; index++) {
+                trainers.push(new Trainer(results[index]));
+            }
+            async.resolve(trainers);
+        }, (error) => {
+            console.error('Error while fetching Trainer', error);
+            async.reject(error);
+        });
+        return async.promise;
+    } 
+    
 
     function addTrainer(fname, lname, phone, email, siteId, userName){
         
@@ -144,7 +170,8 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
         getTrainers: getTrainers,
         addTrainer: addTrainer,
         updateTrainer: updateTrainer,
-        cancelTrainer: cancelTrainer
+        cancelTrainer: cancelTrainer,
+        getTrainersBySite: getTrainersBySite
         
     }
 

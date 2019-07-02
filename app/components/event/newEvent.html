@@ -1,35 +1,131 @@
 <div class="container container-page">
     <h1>New Event</h1>
 
-    <form>
+    <form name="eventForm"></form>
         <div class="form-group">
             <label for="eventName">Event Name:</label>
-            <input type="text" class="form-control" id="eventName" value={{name}} placeholder="Enter Event Name" ng-model="name">
+            <input type="text" class="form-control" id="eventName"  placeholder="Enter Event Name" ng-model="event.name" required>
         </div>
-        
-        <div class="form-group">
-            <label for="eventDate">Start Date</label>
-            <div class="col-md-6">
-                <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="eventDate" 
-                is-open="popup.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" 
-                alt-input-formats="altInputFormats" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="open()"><i class="far fa-calendar-alt"></i></button>
-                </span>
-                </p>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="type">Select Type</label>
+                <select class="form-control" id="classType" name="type" ng-model="event.type" required>
+                    <option value="1">Private Lesson</option>
+                    <option value="2">Group Class</option>  
+                </select>
+            </div>
+            
+            <div class="form-group col-md-4">
+                <label for="siteId">Select Site</label>
+                <select class="form-control" id="siteId" name="selSiteId" ng-model="event.siteId" required>
+                    <option value="1">Pardesia</option>
+                    <option value="2">Yoqneam</option>  
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="day">Duration</label>
+                <select class="form-control" id="day" name="day" ng-model="event.duration" required>
+                    <option value=30>30 Min.</option>
+                    <option value=45>45 Min.</option>
+                    <option value=60>1 Hour</option>
+                </select>
+            </div>        
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="eventDate">Effective Date</label>
+                <div class="col">
+                    <p class="input-group">
+                    <input type="text" class="form-control" ng-required="true" uib-datepicker-popup="{{format}}" ng-model="event.startDate" 
+                    is-open="popup.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" 
+                    alt-input-formats="altInputFormats" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open()"><i class="far fa-calendar-alt"></i></button>
+                    </span>
+                    </p>
+                </div>
+
+            </div>
+            <!-- <div class="form-group col-md-3">
+                <label for="day">Week Day and Time</label>
+                <select class="form-control" id="day" name="day" ng-model="day">
+                    <option value="Sun">Sunday</option>
+                    <option value="Mon">Monday</option>
+                    <option value="Tus">Tuesday</option>  
+                    <option value="Wed">Wednesday</option>  
+                    <option value="Thu">Thursday</option>  
+                    <option value="Fri">Friday</option>  
+                </select>
+            </div> -->
+            <div class="form-group col-md-2">
+                <div uib-timepicker ng-model="startHourDt"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+            </div>
+                
+        </div>
+        <div class="row">
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-primary" ng-click="openCalendar()">Existing Events</button>
             </div>
         </div>
-               
+        <div class="row">
+            <div id="calendar-result">
+                Div to show calendar
 
-        <div class="form-group">
-            <label for="siteId">Event in Site</label>
-            <select class="custom-select" id="siteId" name="selSiteId" ng-model="siteId">
-                <option value="1">Pardesia</option>
-                <option value="2">Yoqneam</option>  
-            </select>
+                <ng-include
+                    src="app/shared/calendar/weeklyCalendar.html">
+                </ng-include>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <label for="trainerSearch">search for Trainer</label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <input type="text" class="form-control search-box" id="trainerSearch"  placeholder="Filter by trainer name" ng-model="queryTrainer">
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-primary" ng-click="updateTrainerSearchResults(event.siteId)"><span><i class="fas fa-search"></i></span></button>
+            </div>
+            <div class="form-group col-md-4">
+                <input type="text" readonly class="form-control" id="trainer"  ng-value="selectedTrainer">
+            </div>
+        </div>
+        
+        <div class="search-results" ng-show="searchTrainerResults.length > 0">
+                <ul class="list-group">
+                    <!-- need to insure that we are not changing the url rom the list -->
+                    <a href="javascript:void(0)" ng-repeat="result in searchTrainerResults | filter : filterTrainer as filteredTrainers"
+                    class="list-group-item list-group-item-action" ng-click="setTrainerForEvent(result)">{{result.fname + " " + result.lname}}</a>
+                </ul>
+            </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="event.isRepeat">
+                    <label class="custom-control-label" for="customCheck">Renewal?</label>
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="activityNum">Quantity:</label>
+                <input type="number" name="quantity" min="0" max="50" class="form-control" id="activityNum"  placeholder="Enter number of lessons" 
+                ng-model="event.activityNum">
+            </div>
             
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="row justify-content-end">
+            <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="addEvent()">Save as Draft</button>
+            <button type="button" class="btn btn-primary mb-2">Final Save</button>
+        </div>
+        
+            
+            
+               
+       
+        
+        
+
+
+        
     </form>
 </div>

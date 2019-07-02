@@ -20,6 +20,9 @@ scheduleApp.config(function($routeProvider) {
     }).when("/events/new", {
         templateUrl: "app/components/event/newEvent.html",
         controller: "newEventCtrl" 
+    }).when("/events/new/map", {
+        templateUrl: "app/shared/calendar/calendar.html",
+        controller: "calendarCtrl" 
     }).when("/events/:id", {
         templateUrl: "app/components/event/eventDtls.html",
         controller: "eventDtlsCtrl" 
