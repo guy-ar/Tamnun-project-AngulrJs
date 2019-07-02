@@ -9,6 +9,9 @@
             </button>
             <div class="collapse navbar-collapse text-white" id="collapsibleNavId">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="javascript:void(0)" ng-show="isLoggedIn()">Dashboard</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" 
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="isLoggedIn()">
@@ -21,9 +24,7 @@
                             <a class="dropdown-item" href="#!/events/new" ng-show="isLoggedAdmin()">New Event</a>
                         </div>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="javascript:void(0)" ng-show="isLoggedIn()">Dashboard</a>
-                    </li>
+                    
                     <!-- Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" 
@@ -36,6 +37,19 @@
                             <a class="dropdown-item" href="#!/trainers" ng-show="isLoggedAdmin()">Trainer List</a>
                         </div>
                     </li>
+                    <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="isLoggedIn()">
+                            Alerts
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="javascript:void(0)">My Alerts</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0)" ng-show="isLoggedAdmin()">Alert List</a>
+                        </div>
+                    </li>
+
                     <!-- <li class="nav-item active"> -->
                         <!-- <a class="nav-link" href="#" ng-show="isLoggedIn()">Users</a> -->
                     <!-- </li> -->
