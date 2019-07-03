@@ -5,8 +5,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     let isAdmin = false;
     let isTrainer = false;
     let usersPerRole = {};
-    let getUserFromDb = false;
-    let nextUserId = 0;
+   
     const ROLE_TRAINER = "trainer";
     const ROLE_ADMIN = "admin";
     
@@ -15,39 +14,21 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
     const SITE_YOQNEAM = 2;
 
 
-    function User(plainUserOrId, userName, fname, lname, email, phone, role, state, siteId, isSigned) {
+    function User(plainUserOrId, userName, email, role, siteId) {
         if (arguments.length > 1) {
             this.id = plainUserOrId;
             this.userName = userName;
-            this.fname = fname;
-            this.lname = lname;
             this.email = email;
-            this.phone = phone;
             this.role = role;
-            this.state = state;
-            if (SITE_PARDESIA == siteId)
-            {
-                this.site = "Pardesia";
-            } else if (SITE_YOQNEAM == siteId){
-                this.site = "Yoqneam";
-            }
-            this.isSigned = isSigned;
+            // support 3 values -1 for all, 1 for pardesiya, 2 for yoqneam
+            this.siteId = siteId;
         } else {
             this.id = plainUserOrId.id;
             this.userName = plainUserOrId.get("username");
-            this.fname = plainUserOrId.get("fname");
-            this.lname = plainUserOrId.get("lname");
+           // need to check if to take the email from e_mail or from origianl email field
             this.email = plainUserOrId.get("e_mail");
-            this.phone = plainUserOrId.get("phone");
             this.role = plainUserOrId.get("role");
-            this.state = plainUserOrId.get("state");
-            if (SITE_PARDESIA == plainUserOrId.get("siteId"))
-            {
-                this.site = "Pardesia";
-            } else if (SITE_YOQNEAM == plainUserOrId.get("siteId")){
-                this.site = "Yoqneam";
-            }
-            this.isSigned = plainUserOrId.get("isSigned");
+            this.siteId = plainUserOrId.get("siteId");
         }
     }
 
@@ -88,6 +69,37 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         return async.promise;
     }
 
+    function signup(userName, email, role, siteId, password) {
+        var async = $q.defer();
+        // for now just write to log - as we do not have DB
+        $log.info("sign-up call");
+
+        const user = new Parse.User()
+        user.set('username', userName);
+        user.set('email', email);
+        user.set('role', role);
+        user.set('siteId', siteId);
+        user.set('e_mail', email);
+        //user.set('password', '#Password123');
+        user.set('password', password);
+        // GUY TODO
+        // need to add logic - if username already exist - throw an error
+        //if sign up as trainer - user must exist in trainer table
+        // if signup as admin - ??? for now not handled - may need also Admin table
+        // future release - support for manager role
+        
+        user.signUp().then((user) => {
+            console.log('User signed up', user);
+            async.resolve(new Trainer(user));
+        }).catch(error => {
+       
+            console.error('Error while signing up user', error);
+        });
+
+        return async.promise;
+    }
+
+    
     function logout() {
         activeUser = null;
         isAdmin = false;
@@ -132,7 +144,8 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         getActiveUser: getActiveUser,
         isLoggedAdmion: isLoggedAdmion,
         getUserById: getUserById, 
-        isLoggedTrainer: isLoggedTrainer
+        isLoggedTrainer: isLoggedTrainer, 
+        signup: signup
 
     }
 

@@ -1,7 +1,7 @@
 
 scheduleApp.controller("navbarCtrl", function($scope, userSrv, $location, $log) {
 
-    $scope.preventMenu = ["/login", "/error"];
+    $scope.preventMenu = ["/login", "/error", "/signup"];
 
     $scope.isLoggedIn = function() {
         return userSrv.isLoggedIn();

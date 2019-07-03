@@ -102,8 +102,9 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
 
         myNewObject.save().then(
             (result) => {
-                async.resolve(new Trainer(result));
                 console.log('Trainer was added', result);
+                async.resolve(new Trainer(result));
+                
             }).catch(error => {
                 console.error('Error while signing up user', error);
             });

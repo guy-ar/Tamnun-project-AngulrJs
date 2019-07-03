@@ -8,7 +8,8 @@ scheduleApp.config(function($routeProvider) {
         templateUrl: "app/components/login/login.html",
         controller: "loginCtrl"
     }).when("/signup", {
-        
+        templateUrl: "app/components/signup/signup.html",
+        controller: "signupCtrl"
     }).when("/dashboard/", {
         templateUrl: "app/components/dashboard/dashboard.html"
     }).when("/trainers", {
