@@ -29,7 +29,12 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
             this.state = plainTrainOrId.get("state");
             this.siteId = plainTrainOrId.get("siteId");
             this.isRepeat = plainTrainOrId.get("isRepeat");
-            this.trainerId = plainTrainOrId.get("trainerId").id;
+            // if trainer was set
+            if (plainTrainOrId.get("trainerId") != null || 
+                    plainTrainOrId.get("trainerId")!=undefined) {
+                this.trainerId = plainTrainOrId.get("trainerId").id;
+            }
+            
             this.activityNum = plainTrainOrId.get("activityNum");
             this.startDate = plainTrainOrId.get("startDate");
         }
