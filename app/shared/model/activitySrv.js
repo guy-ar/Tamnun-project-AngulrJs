@@ -106,15 +106,15 @@ scheduleApp.factory("activitySrv", function($q, $log) {
     function getActivitiesByDateRange(minDate, maxDate) {
         let activities = [];
         let async = $q.defer(); 
-        const Activity = Parse.Object.extend('Activity');
-        const query = new Parse.Query(Activity);
-
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
+        
         query.greaterThanOrEqualTo("activityDate", minDate);
         query.lessThanOrEqualTo("activityDate", maxDate);
         query.find().then(function(results) {
             console.log('Activity found', results);
             for (let index = 0; index < results.length; index++) {
-                activities.push(new Activity(results[index].toJSON()));
+                activities.push(new Activity(results[index]));
             }
             async.resolve(activities);
         }, function(error) {
