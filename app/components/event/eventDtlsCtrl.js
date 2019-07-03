@@ -1,4 +1,4 @@
-scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv, $routeParams) {
+scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv, $routeParams, $location) {
   
   // if user is not logged in - go to home
   if (!userSrv.isLoggedIn()) {
