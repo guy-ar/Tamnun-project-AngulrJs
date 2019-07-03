@@ -1,7 +1,12 @@
-scheduleApp.controller("eventsCtrl", function($scope, $log, trainerSrv, eventSrv, $uibModal) { 
+scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv,  eventSrv, $uibModal) { 
 
   $scope.events = [];
   
+  // if user is not logged in - go to home
+  if (!userSrv.isLoggedIn()) {
+    $location.path("/");
+    return;
+}
 
   // get the trainers
   eventSrv.getEvents().then(function(events) {
@@ -31,7 +36,7 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, trainerSrv, eventSrv
   }
 
   $scope.openEvent = function(event) {
-    $location.path("/cars/" + event.id);
+    $location.path("/events/" + event.id);
     
   }
   //  will not be in use - switch to full screen mode
