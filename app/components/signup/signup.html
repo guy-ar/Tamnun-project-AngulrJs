@@ -4,49 +4,78 @@
             <h1 class="text-red">Sign-Up</h1>
             <p>or <a href="#!/login">Login</a></p>
             <div class="alert alert-danger" role="alert" ng-show="invalidSignup">
-                <strong>Invalid Signup!</strong> failed to Sign Up
+                <strong>{{errorType}}</strong>{{errorMsg}}
             </div>
             <form>
                 <div class="form-group">
                     <label for="userName">User Name:</label>
-                    <input type="text" class="form-control" id="userName" ng-model="username" aria-describedby="userNameHelp" placeholder="Enter user name">
+                    <input type="text" class="form-control" id="userName" ng-model="username" aria-describedby="userNameHelp" 
+                        ng-class="{'is-invalid':invalidFld=='username'}" placeholder="Enter user name">
                     <small id="userNameHelp" class="form-text text-muted">User name for trainers must exist prior to Sign-Up</small>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="text" class="form-control" id="email" ng-model="email" aria-describedby="emailHelp" placeholder="Enter Email">
+                    <input type="text" class="form-control" id="email" ng-model="email" aria-describedby="emailHelp" 
+                        ng-class="{'is-invalid':invalidFld=='email'}" placeholder="Enter Email">
                     <small id="emailHelp" class="form-text text-muted">Valid email will will be verified at later stage</small>
                 </div>
                 <div class="form-group">
                     <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" ng-model="pwd" aria-describedby="pwdHelp" placeholder="Enter password">
+                    <input type="password" class="form-control" id="pwd" ng-model="pwd" aria-describedby="pwdHelp" 
+                        ng-class="{'is-invalid':invalidFld=='pwd'}" placeholder="Enter password">
                     <small id="pwdHelp" class="form-text text-muted">Password must contain a capital letter, lowercase letter, 
-                                                                        a number and be at least 8 characters long</small>
+                                                                        a number and be at least 8 characters long, up to 15</small>
                 </div>
                 <div class="form-group">
-                    <label for="siteId">Work in Site</label>
-                    <select class="form-control" id="siteId" name="selSiteId" ng-model="siteId">
-                        <option value="-1">Both</option>
-                        <option value="1">Pardesia</option>
-                        <option value="2">Yoqneam</option>  
-                    </select>
-                </div>
-                <div class="form-group">
+                    <div>
+                        <Span>
+                        Select Site for User:
+                        </Span>
+                    </div>
                     <div class="form-check-inline">
                         <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="trainer" ng-model="role">Trainer
+                            <input type="radio" class="form-check-input" name="siteradio" ng-value="'-1'" ng-model="siteId">Both
                         </label>
                     </div>
                     <div class="form-check-inline">
                         <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="admin" ng-model="role">Admin
+                            <input type="radio" class="form-check-input" name="siteradio" ng-value="'1'" ng-model="siteId">Pardesia
                         </label>
                     </div>
+                    
                     <div class="form-check-inline disabled">
                         <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="manager" ng-model="role" disabled>Manager
+                            <input type="radio" class="form-check-input" name="siteradio" ng-value="'2'" ng-model="siteId">Yoqneam
                         </label>
                     </div>
+                    <div>
+                        <small>
+                            Trainer must be linked to one site
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div>
+                        Select Role for User:
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <!-- <input type="radio" class="form-check-input disabled" name="roleradio" ng-value="'admin'" ng-model="role" disabled>Admin -->
+                            <input type="radio" class="form-check-input disabled" name="roleradio" ng-value="'admin'" ng-model="role">Admin
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="roleradio" ng-value="'trainer'" ng-model="role">Trainer
+                        </label>
+                    </div>
+                    
+                    <!-- <div class="form-check-inline disabled">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="roleradio" ng-value="manager" ng-model="role" disabled>Manager
+                        </label>
+                    </div> -->
                 </div>
                 <button type="button" class="btn btn-success btn-block" ng-click="signup()">Sign Up</button>
             </form>

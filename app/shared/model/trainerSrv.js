@@ -167,12 +167,69 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
 
     }
 
+    function getTrainersByUserName(userName)
+    {
+        var async = $q.defer();
+    
+        // Building a query
+        let trainers = [];
+        const trainerObj1 = Parse.Object.extend('Trainer'); 
+        const query = new Parse.Query(trainerObj1);
+        query.equalTo("userName", userName);
+        
+        // Executing the query
+        query.find().then((result) => {
+            console.log('Trainer found by Name', result);
+            // assume only one trainer by this user name
+            for (let index = 0; index < result.length; index++) {
+                trainers.push(new Trainer(result[index]));
+            }
+            async.resolve(trainers);
+        }, (error) => {
+            console.error('Error while fetching Trainer', error);
+            async.reject(error);
+        });
+        return async.promise;
+    } 
+
+    // fucntion will update the trainer with user id link and register indication
+    function updateRegisterUser(id, userId, email){
+        
+        let  async = $q.defer();
+        const TrainerObj = Parse.Object.extend('Trainer');
+        const query = new Parse.Query(TrainerObj);
+
+        // Finds the trainer by its ID
+        query.get(id).then((object) => {
+            // Updates the data we what
+            object.set('isSigned', true);
+            object.set('e_mail', email);
+            // set relation to user
+
+            const UserObj = new Parse.User();
+            UserObj.id = userId;
+            object.set('userId', UserObj);
+            
+            // Saves the trainer with the updated data
+            object.save().then((response) => {
+                console.log('Updated trainer', response);
+                async.resolve(new Trainer(response));
+            }).catch((error) => {
+                console.error('Error while updating trainer', error);
+            });
+        });
+
+        return async.promise;
+    }
     return {
         getTrainers: getTrainers,
         addTrainer: addTrainer,
         updateTrainer: updateTrainer,
         cancelTrainer: cancelTrainer,
-        getTrainersBySite: getTrainersBySite
+        getTrainersBySite: getTrainersBySite,
+        getTrainersByUserName: getTrainersByUserName, 
+        updateRegisterUser: updateRegisterUser
+
         
     }
 

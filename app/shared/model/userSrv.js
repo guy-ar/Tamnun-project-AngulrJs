@@ -1,5 +1,5 @@
 
-scheduleApp.factory("userSrv", function($q, $http, $log) {
+scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
 
     var activeUser = null; // new User({id: 1, fname: "Nir" ...})
     let isAdmin = false;
@@ -45,6 +45,7 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
 
         activeUser = null;
         isAdmin = false;
+        isTrainer = false;
         
 
         // to ask Nir how to check if this is user or email
@@ -69,36 +70,115 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         return async.promise;
     }
 
-    function signup(userName, email, role, siteId, password) {
-        var async = $q.defer();
+    function signupAndValidate(userName, email, role, siteId, password) {
+        
+        
         // for now just write to log - as we do not have DB
-        $log.info("sign-up call");
-
-        const user = new Parse.User()
-        user.set('username', userName);
-        user.set('email', email);
-        user.set('role', role);
-        user.set('siteId', siteId);
-        user.set('e_mail', email);
-        //user.set('password', '#Password123');
-        user.set('password', password);
-        // GUY TODO
-        // need to add logic - if username already exist - throw an error
+        $log.info("signupAndValidate call");
+                
+       
+        // need to add logic - if username already exist  and if the email is in use is verified by Parse
         //if sign up as trainer - user must exist in trainer table
         // if signup as admin - ??? for now not handled - may need also Admin table
         // future release - support for manager role
-        
-        user.signUp().then((user) => {
-            console.log('User signed up', user);
-            async.resolve(new Trainer(user));
-        }).catch(error => {
-       
-            console.error('Error while signing up user', error);
-        });
+        if (role == ROLE_TRAINER) {
+            var asyncTrianer = $q.defer();
 
-        return async.promise;
+            trainerSrv.getTrainersByUserName(userName).then(function (result){
+            // check if trainer was found by this name
+                if (result.length == 1) {
+                    // can continue
+                    $log.info("trainer was found with userName - can continue with create user");
+                    
+                    var async = $q.defer();
+                    signup(userName, email, role, siteId, password).then(function(user){
+                        // after sign up - need to update the trainer with the user ID and registered indication
+                        //call to update trainer...
+                        // return the user
+                        async.resolve(user);
+
+
+                    }, function(err){
+                        console.error('Error while calling to sign up user', err);
+                        async.reject(err);
+
+                    });
+                    return async.promise;
+                    
+
+                } else {
+                    // no trainers or more then one
+                    let error = {};
+                    error.code = "C100";
+                    error.message = "No trainer exist with given user name";
+                    asyncTrianer.reject(error);
+                }
+
+               
+
+                
+
+            }, function(err){
+                $log.error('Error while signing up user and validate trainer', err);
+                asyncTrianer.reject(error);
+            });
+            return asyncTrianer.promise;
+        
+        } else {
+            // Role is not trainer - just need to sign up
+            var async = $q.defer();
+            userObj.signUp().then((user) => {
+                console.log('User signed up', user);
+                activeUser = new User(user);
+                if (ROLE_ADMIN == activeUser.role) {
+                    isAdmin = true;
+                } else if (ROLE_TRAINER == activeUser.role) {
+                    isTrainer = true;
+                }
+                async.resolve(activeUser);
+            }).catch(error => {
+        
+                console.error('Error while signing up user', error);
+                async.reject(error);
+            });
+            return async.promise;
+
+        }
     }
 
+    function signup(userName, email, role, siteId, password){
+
+        $log.info("sign-up call");
+        activeUser = null;
+        isAdmin = false;
+        isTrainer = false;
+
+        const userObj = new Parse.User()
+        userObj.set('username', userName);
+        userObj.set('email', email);
+        userObj.set('role', role);
+        userObj.set('siteId', siteId);
+        userObj.set('e_mail', email);
+        //user.set('password', '#Password123');
+        userObj.set('password', password);
+        
+        var async = $q.defer();
+        userObj.signUp().then((user) => {
+            console.log('User signed up', user);
+            activeUser = new User(user);
+            if (ROLE_ADMIN == activeUser.role) {
+                isAdmin = true;
+            } else if (ROLE_TRAINER == activeUser.role) {
+                isTrainer = true;
+            }
+            async.resolve(activeUser);
+        }).catch(error => {
+    
+            console.error('Error while signing up user', error);
+            async.reject(error);
+        });
+        return async.promise;
+    }
     
     function logout() {
         activeUser = null;
@@ -145,7 +225,8 @@ scheduleApp.factory("userSrv", function($q, $http, $log) {
         isLoggedAdmion: isLoggedAdmion,
         getUserById: getUserById, 
         isLoggedTrainer: isLoggedTrainer, 
-        signup: signup
+        signup: signup,
+        signupAndValidate: signupAndValidate
 
     }
 
