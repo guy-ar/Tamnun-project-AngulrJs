@@ -2,7 +2,11 @@
     <div class="login row">
         <div class="col vh-100">
             <h1 class="text-red">Login</h1>
-            <p>or <a href="#!/signup">create an account</a></p>
+            <!-- <p>or                 
+                <a href="#!/signup">
+                    <button type="button" class="btn btn-link">create an account</button>
+                </a>
+            </p> -->
             <div class="alert alert-danger" role="alert" ng-show="invalidLogin">
                 <strong>Invalid Login!</strong> incorrect user ID or password
             </div>
@@ -17,6 +21,17 @@
                     <input type="password" class="form-control" id="pwd" ng-model="pwd" placeholder="Enter password">
                 </div>
                 <button type="button" class="btn btn-success btn-block" ng-click="login()">Login</button>
+                <p>                 
+                    <a href="#!/signup">
+                        <button type="button" class="btn btn-link">create an account</button>
+                    </a>
+                        
+                    <span>or</span>
+                    <a href="#!/resetPass">
+                        <button type="button" class="btn btn-link">Forgot Password</button>
+                    </a>
+                </p>
+                
             </form>
         </div>
     </div>

@@ -19,6 +19,9 @@ scheduleApp.controller("loginCtrl", function($scope, $location, userSrv, $log /*
             $scope.invalidLogin = true;
         });
 
+        
     }
+
+    
 
 })

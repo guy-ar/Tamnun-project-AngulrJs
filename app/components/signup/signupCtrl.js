@@ -1,6 +1,6 @@
 
 
-scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, $log ) {
+scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, trainerSrv, $log ) {
 
     $scope.invalidSignup = false;
     // temporary hard code data
@@ -15,7 +15,7 @@ scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, $log )
     $scope.invalidFld = "";
     
 
-    $scope.signup = function() {
+    $scope.signupUser = function() {
         //mandatory fields - check required user and password
         // validate password - must contain a capital letter, lowercase letter, a number and be at least 8 characters long
         if (!$scope.clientInputValidation()) 
@@ -23,10 +23,9 @@ scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, $log )
         
         userSrv.signupAndValidate($scope.username, $scope.email, $scope.role, $scope.siteId, $scope.pwd).then(function(activeUser) {
             $log.info("Successful login with: " + JSON.stringify(activeUser));
-            /*********************************** */
-           /* var asyncTriaUpdate = $q.defer();
+            
             //call to update trainer...
-            trainerSrv.updateRegisterUser(trainerId, user.userId, user.email).then(function(trainer){
+            trainerSrv.updateRegisterUser(userSrv.getSignupTrainer().id, activeUser.id, activeUser.email).then(function(trainer){
                 //nothing to do besides log
                 console.info('Trainer was updated with user details', trainer);
             }, function(error){
@@ -35,7 +34,7 @@ scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, $log )
 
             });
             // return the user
-            asyncTriaUpdate
+            
              /*********************************** */
             // GUY TODO - will we have one type of dashboard or sevelral based on role???
             // for now - keep one dashbaord
