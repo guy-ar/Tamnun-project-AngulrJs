@@ -5,6 +5,7 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
     let isAdmin = false;
     let isTrainer = false;
     let usersPerRole = {};
+    var signupTrainer = null;
    
     const ROLE_TRAINER = "trainer";
     const ROLE_ADMIN = "admin";
@@ -72,7 +73,8 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
 
     function signupAndValidate(userName, email, role, siteId, password) {
         
-        
+        signupTrainer = null;
+
         // for now just write to log - as we do not have DB
         $log.info("signupAndValidate call");
                 
@@ -89,9 +91,10 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
                 if (result.length == 1) {
                     // can continue
                     $log.info("trainer was found with userName - can continue with create user");
-                    
-                    var async = $q.defer();
-                    signup(userName, email, role, siteId, password).then(function(user){
+                    signupTrainer = result[0];
+
+                   
+                    signup(userName, email, role, siteId, password, result[0].id).then(function(user){
                         // after sign up - need to update the trainer with the user ID and registered indication
                         //call to update trainer...
                         // return the user
@@ -127,19 +130,13 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
         } else {
             // Role is not trainer - just need to sign up
             var async = $q.defer();
-            userObj.signUp().then((user) => {
-                console.log('User signed up', user);
-                activeUser = new User(user);
-                if (ROLE_ADMIN == activeUser.role) {
-                    isAdmin = true;
-                } else if (ROLE_TRAINER == activeUser.role) {
-                    isTrainer = true;
-                }
-                async.resolve(activeUser);
-            }).catch(error => {
-        
-                console.error('Error while signing up user', error);
-                async.reject(error);
+            signup(userName, email, role, siteId, password).then(function(user){
+                $log.info("sucessful signup of user - Admin or manager");
+                // return the user
+                async.resolve(user);
+            }, function(err){
+                console.error('Error while calling to sign up user', err);
+                async.reject(err);
             });
             return async.promise;
 

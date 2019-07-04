@@ -23,6 +23,20 @@ scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, $log )
         
         userSrv.signupAndValidate($scope.username, $scope.email, $scope.role, $scope.siteId, $scope.pwd).then(function(activeUser) {
             $log.info("Successful login with: " + JSON.stringify(activeUser));
+            /*********************************** */
+           /* var asyncTriaUpdate = $q.defer();
+            //call to update trainer...
+            trainerSrv.updateRegisterUser(trainerId, user.userId, user.email).then(function(trainer){
+                //nothing to do besides log
+                console.info('Trainer was updated with user details', trainer);
+            }, function(error){
+                //nothing to do besides log
+                console.error('Error while updating the trainer with user details', err);
+
+            });
+            // return the user
+            asyncTriaUpdate
+             /*********************************** */
             // GUY TODO - will we have one type of dashboard or sevelral based on role???
             // for now - keep one dashbaord
             $location.path("/dashboard");
