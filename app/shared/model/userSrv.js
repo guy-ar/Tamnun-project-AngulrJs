@@ -1,5 +1,5 @@
 
-scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
+scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
 
     var activeUser = null; // new User({id: 1, fname: "Nir" ...})
     let isAdmin = false;
@@ -93,20 +93,22 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
                     $log.info("trainer was found with userName - can continue with create user");
                     signupTrainer = result[0];
 
-                   
+                    var asyncSign = $q.defer();
                     signup(userName, email, role, siteId, password, result[0].id).then(function(user){
                         // after sign up - need to update the trainer with the user ID and registered indication
                         //call to update trainer...
                         // return the user
-                        async.resolve(user);
+                        asyncTrianer.resolve(user);
+                        asyncSign.resolve(user);
 
 
                     }, function(err){
                         console.error('Error while calling to sign up user', err);
-                        async.reject(err);
+                        asyncTrianer.reject(err);
+                        asyncSign.reject(err);
 
                     });
-                    return async.promise;
+                    return asyncSign.promise;
                     
 
                 } else {
@@ -168,6 +170,8 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
             } else if (ROLE_TRAINER == activeUser.role) {
                 isTrainer = true;
             }
+            resetPass(email);
+ //           sendEmailVerReq(email);
             async.resolve(activeUser);
         }).catch(error => {
     
@@ -211,7 +215,66 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
         return async.promise;
     }
 
-    
+    function getSignupTrainer()
+    {
+        return signupTrainer; 
+    }
+
+    function resetPass(userEmail){
+        let  async = $q.defer();
+        // Pass the username and password to logIn function
+        Parse.User.requestPasswordReset(userEmail).then(() => {
+            // Password reset request was sent successfully
+            async.resolve();
+            console.log('Reset password email sent successfully');
+        }).catch((error) => {
+            console.error(error)
+            async.reject(error);
+        });
+        return async.promise;
+    }
+
+
+
+    // not working - https required ??? --> need to move to angular using $http
+    function sendEmailVerReq(userEmail) {
+        const https = require('https');
+
+        const params = '{"email": userEmail"}';
+
+        const options = {
+            hostname: 'https://parseapi.back4app.com',
+            path: '/verificationEmailRequest',
+            method: 'POST',
+            headers: {
+                'X-Parse-Application-Id': 'Tys1wq7yGKlY3C6K5e0vLFbaqTNCYq2OrB85IPlF',
+                'X-Parse-REST-API-Key': 'T4jKgzlZYhKFnD4GG5AufebcoMd6rtOLRTpyr9iF',
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const req = https.request(options, (res) => {
+            console.log(`STATUS: ${res.statusCode}`);
+            // if (typeof document !== 'undefined') document.write(`STATUS: ${res.statusCode}<br />`);
+            // res.setEncoding('utf8');
+            // res.on('data', (chunk) => {
+            //     if (typeof document !== 'undefined') document.write(`BODY: ${chunk}<br />`);
+            //     console.log(`BODY: ${chunk}`);
+            // });
+            // res.on('end', () => {
+            //     if (typeof document !== 'undefined') document.write('No more data in response.<br />');
+            //     console.log('No more data in response.');
+            // });
+            });
+        req.on('error', (e) => {
+  
+            console.error(`Problem with request: ${e.message}`);
+        });
+
+        // write data to request body
+        // req.write(params);
+        // req.end();
+    }
 
     
     return {
@@ -223,7 +286,9 @@ scheduleApp.factory("userSrv", function($q, $log, trainerSrv) {
         getUserById: getUserById, 
         isLoggedTrainer: isLoggedTrainer, 
         signup: signup,
-        signupAndValidate: signupAndValidate
+        signupAndValidate: signupAndValidate,
+        getSignupTrainer: getSignupTrainer,
+        resetPass: resetPass
 
     }
 
