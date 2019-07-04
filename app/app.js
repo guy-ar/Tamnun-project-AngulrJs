@@ -10,6 +10,9 @@ scheduleApp.config(function($routeProvider) {
     }).when("/signup", {
         templateUrl: "app/components/signup/signup.html",
         controller: "signupCtrl"
+    }).when("/resetPass", {
+        templateUrl: "app/components/resetPass/resetPass.html",
+        controller: "resetPassCtrl"
     }).when("/dashboard/", {
         templateUrl: "app/components/dashboard/dashboard.html"
     }).when("/trainers", {

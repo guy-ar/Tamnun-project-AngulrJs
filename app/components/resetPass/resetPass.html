@@ -1,0 +1,19 @@
+<div class="login-wrapper">
+        <div class="login row">
+            <div class="col vh-100">
+                <h1 class="text-red">Reset Password</h1>
+                <div class="alert alert-danger" role="alert" ng-show="invalidReset">
+                    <strong>{{errorType + " "}}</strong>{{errorMsg}}
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" class="form-control" id="email" ng-model="email" aria-describedby="emailHelp" placeholder="Enter your Email">
+                        <small id="emailHelp" class="form-text text-muted">Type in your email to receive link for Reset Password via email</small>
+                    </div>
+                   
+                    <button type="button" class="btn btn-success btn-block" ng-click="resetPass(email)">Reset Password</button>                    
+                </form>
+            </div>
+        </div>
+    </div>
