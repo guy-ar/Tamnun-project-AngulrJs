@@ -131,11 +131,47 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         return async.promise;
     }
 
+    function getWHForTrainer(trainerId){
+        // this method will load the users from DB  - they will be kept on the service as cache
+        var async = $q.defer();
+        let workHours = [];
+     
+        const workHoursObj = Parse.Object.extend('workHours');
+        const query = new Parse.Query(workHoursObj);
+        let trainerObj = new Parse.Object("Trainer");
+        trainerObj.id = trainerId;
+        query.equalTo("trainerId", trainerObj);
+
+        
+    
+        query.find().then((results) => {
+            // You can use the "get" method to get the value of an attribute
+            // Ex: response.get("<ATTRIBUTE_NAME>")
+            console.log('workHours found', results);
+            for (let index = 0; index < results.length; index++) {
+                let userId = results[index].get("trainerId").id;
+                if (!workHoursPerUser[userId]) {
+                    // first create entry for the user
+                    workHoursPerUser[userId] = [];
+                }
+                workHours = new WorkHours(results[index]);
+                $log.info("found work hours for user: " + JSON.stringify(workHours));
+                workHoursPerUser[userId].push(workHours); 
+            }
+            async.resolve(workHoursPerUser);
+        }, (error) => {
+
+            console.error('Error while fetching workHours', error);
+        });
+        return async.promise;
+    }
+
     return {
         addWorkHours: addWorkHours,
         getTrainersWH: getTrainersWH, 
         editWorkHours: editWorkHours,
-        deleteWorkHours: deleteWorkHours
+        deleteWorkHours: deleteWorkHours,
+        getWHForTrainer: getWHForTrainer
     }
 
 });

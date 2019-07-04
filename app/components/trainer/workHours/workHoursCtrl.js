@@ -1,91 +1,125 @@
-scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $uibModalInstance) {
-// guy TODO - might need new service for work hours instead userSrv
-    let  params = $scope.$resolve.params;
-    $scope.mode = params.mode;
-    $scope.trainerId = params.uId;
-    if ( $scope.mode == "I") {
-        $scope.day = "";
-        $scope.startHour = new Date("01/01/1970");
-        $scope.endHour = new Date("01/01/1970");
+scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log) {
 
-    } else if ($scope.mode == "U") {
-        $scope.id = params.wh.id;
-        $scope.day = params.wh.day;
-        // convert format of HH:MM to date that can work with TimePicker
-        let timeParts = params.wh.startHour.split(":");
-        $scope.startHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
-        timeParts = params.wh.endHour.split(":");
-        $scope.endHour = new Date(1970, 0, 1, timeParts[0], timeParts[1], 0, 0);
-    } else if ($scope.mode == "D") {
-        $scope.id = params.wh.id;
-        $scope.day = params.wh.day;
-        $scope.startHour = params.wh.startHour;
-        $scope.endHour =  params.wh.endHour;
-    }
-    
-   
-    $scope.hstep = 1;
-    $scope.mstep = 15;
-    $scope.ismeridian = false;
 
-    $scope.addWorkHours = function() {
-        // we need only the hours and minutes
+    $scope.trainersWh = {};
+    // keep alsp the trainer work hours on the Ctrl
+    workHourSrv.getTrainersWH().then(function(usersWorkHours) {
+        $scope.trainersWh = usersWorkHours;
+        $log.info(JSON.stringify($scope.trainersWh));
 
-        //workHourSrv.addWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
-        workHourSrv.addWorkHours($scope.trainerId, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
-            $scope.getTimeFromDate($scope.endHour)).then(function(newWorkHour) {
-             $log.info("new work hours was added: " + JSON.stringify(newWorkHour));
-             // Closing the modal
+    }, function(err) {
+        $log.error(err);
+    })
 
-             $uibModalInstance.close(newWorkHour);
-        });
-     }
-
-    $scope.cancelWorkHourAction = function() {
-        $scope.day = "";
-        $scope.startHour = "";
-        $scope.endHour = "";
-        $uibModalInstance.dismiss();
+    $scope.getTrainerWH = function(id) { 
+    // return the work hours of the specific trainer
+    let currentWhs = [];
+    currentWhs = $scope.trainersWh[id];
+    return currentWhs;
     }
 
-    // logic to insure that hours retrieved from date will be set on valid formet
-    $scope.addZero = function(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
-    // test fuction for setting the hours and minutes from date
-    $scope.getTimeFromDate  = function(dateObj) {
+    $scope.addTrainerWorkHoursModal = function(trainer) {
         
-        var time = "";
-        var h = $scope.addZero(dateObj.getHours());
-        var m = $scope.addZero(dateObj.getMinutes());
-        time = h + ":" + m;
-        return time;
-    }
-
-    $scope.editWorkHours = function() {
-        // we need only the hours and minutes
-
-        workHourSrv.editWorkHours($scope.trainerId, $scope.id, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
-                $scope.getTimeFromDate($scope.endHour)).then(function(editWorkHour) {
-             $log.info("new work hours was added: " + JSON.stringify(editWorkHour));
-             // Closing the modal
-
-             $uibModalInstance.close(editWorkHour);
+        $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
+        var modalInstance = $uibModal.open({
+            templateUrl: "app/components/trainer/workHours/workHoursActions.html",
+            controller: "workHoursCtrlAction",
+            resolve: {
+              params: function () {
+                return {
+                  mode: "I",
+                  uId: trainer.id
+                };
+              }
+            }
         });
-    }
+        
+        modalInstance.result.then(function(newWorkHours) {
+          $log.info("need to update the current trainer to include the new workHours");
+          
+          $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainersWh))
+          if (!$scope.trainersWh[trainer.id]){
+            // trainer did not had former workhours
+            $scope.trainersWh[trainer.id] = [];
+          }
+          $scope.trainersWh[trainer.id].push(newWorkHours);
+          
+        }, function() {
+            // this will wake up in case the user canceled the new work hours
+            console.log("user canceled add work hours");
+        })
+      }
 
+      $scope.editTrainerWorkHoursModal = function(trainer, workHour) {
 
-    $scope.deleteWorkHours = function() {
-        // delete the entry - need only whId
-
-        workHourSrv.deleteWorkHours($scope.id).then(function(deleteWorkHour) {
-             $log.info("work hours was deleted: " + JSON.stringify(deleteWorkHour));
-             // Closing the modal
-
-             $uibModalInstance.close(deleteWorkHour);
+        var modalInstance = $uibModal.open({
+            templateUrl: "app/components/trainer/workHours/workHoursActions.html",
+            controller: "workHoursActionCtrl",
+            resolve: {
+              params: function () {
+                return {
+                  mode: "U",
+                  uId: trainer.id,
+                  wh: workHour
+                };
+              }
+            }
         });
-    }
+        
+        modalInstance.result.then(function(editWorkHours) {
+          $log.info("need to update the current trainer to include the new workHours");
+          // look for the WH of the relevnt trainer
+          let trainerWh = [];
+          trainerWh = $scope.trainersWh[editWorkHours.trainerId];
+          for (let i=0; i< trainerWh.length; i++){
+            if (trainerWh[i].id == editWorkHours.id)
+            {
+              trainerWh[i] = editWorkHours;
+            }
+          }
+         
+        }, function() {
+            // this will wake up in case the user canceled the new work hours
+            console.log("user canceled edit work hours");
+        })
+      
+      }
+      
+    
+      $scope.deleteTrainerWorkHoursModal = function(trainer, workHour) {
+    
+        var modalInstance = $uibModal.open({
+            templateUrl: "app/components/trainer/workHours/workHoursActions.html",
+            controller: "workHoursActionCtrl",
+            resolve: {
+              params: function () {
+                return {
+                  mode: "D",
+                  uId: trainer.id,
+                  wh: workHour
+                };
+              }
+            }
+        });
+        
+        modalInstance.result.then(function(deleteWorkHours) {
+          
+          $log.info("need to delete the current trainer not to include the workHours");
+          // look for the WH of the relevnt trainer
+          let trainerWh = [];
+          trainerWh = $scope.trainersWh[deleteWorkHours.trainerId];
+          for (let i=0; i< trainerWh.length; i++){
+            if (trainerWh[i].id == deleteWorkHours.id)
+            {
+              trainerWh.splice(i, 1);
+            }
+          }
+         
+        }, function() {
+            // this will wake up in case the user canceled the delete work hours
+            console.log("user canceled delete work hours");
+        })
+      }
+
 })
+

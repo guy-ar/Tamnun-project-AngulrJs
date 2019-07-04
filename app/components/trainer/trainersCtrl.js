@@ -2,6 +2,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
 
   $scope.trainers = [];
   //$scope.activeTrainers = null;
+  
   $scope.trainersWh = {};
 
   // get the trainers
@@ -10,6 +11,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
   }, function(err) {
     $log.error(err);
   })
+
 
   // keep alsp the trainer work hours on the Ctrl
   workHourSrv.getTrainersWH().then(function(usersWorkHours) {
@@ -36,7 +38,8 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     }
   }
 
-  $scope.geTrainerWH = function(id) { 
+
+  $scope.getTrainerWH = function(id) { 
     // return the work hours of the specific trainer
     let currentWhs = [];
     currentWhs = $scope.trainersWh[id];
@@ -135,12 +138,13 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
     })
   }
 
+  
   $scope.addTrainerWorkHoursModal = function(trainer) {
     //$scope.activeTrainers = trainer;
     $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursCtrl",
+        controller: "workHoursActionCtrl",
         resolve: {
           params: function () {
             return {
@@ -172,7 +176,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
 
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursCtrl",
+        controller: "workHoursActionCtrl",
         resolve: {
           params: function () {
             return {
@@ -208,7 +212,7 @@ scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSr
 
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursCtrl",
+        controller: "workHoursActionCtrl",
         resolve: {
           params: function () {
             return {

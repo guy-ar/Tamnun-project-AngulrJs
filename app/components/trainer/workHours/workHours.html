@@ -1,0 +1,37 @@
+<div>
+    <div class="row justify-content-around">
+        <div class="col col-md-7">
+            <h4><small>Available Working Hours:</small></h4>
+        </div>
+        <div class="col col-md-5">
+            <div class="btn-add ">
+                <button type="button" class="btn btn-link" ng-click="addTrainerWorkHoursModal(trainer)">
+                    <i class="far fa-clock"></i> + Work Hours</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="work-hours table table-hover table-info" ng-show="getTrainerWH(trainer.id).length">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Work Day</th>
+                    <th>Start Hour</th>
+                    <th>Till</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="workHour in geTrainerWH(trainer.id)">
+                        
+                    <td>{{workHour.day}}</td>
+                    <td>{{workHour.startHour}}</td>
+                    <td>{{workHour.endHour}}</td>
+                    <td><span class="text-success"><a href="javascript:void(0)" ng-click="editTrainerWorkHoursModal(trainer, workHour)"><i class="fas fa-edit"></i></a></span>
+                        <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteTrainerWorkHoursModal(trainer, workHour)"><i class="far fa-times-circle"></i></a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <Small ng-hide="getTrainerWH(trainer.id).length">No Data found.</small>
+    </div>
+</div>
