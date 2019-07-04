@@ -14,7 +14,8 @@ scheduleApp.config(function($routeProvider) {
         templateUrl: "app/components/resetPass/resetPass.html",
         controller: "resetPassCtrl"
     }).when("/dashboard/", {
-        templateUrl: "app/components/dashboard/dashboard.html"
+        templateUrl: "app/components/dashboard/dashboard.html",
+        controller: "dashCtrl"
     }).when("/trainers", {
         templateUrl: "app/components/trainer/trainers.html",
         controller: "trainersCtrl"

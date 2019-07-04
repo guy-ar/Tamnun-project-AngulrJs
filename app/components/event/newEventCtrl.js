@@ -18,7 +18,7 @@ scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $locatio
     $scope.event.isRepeat = false;
     // will we keep the trianer ID in insert???
     //$scope.trainerId = ??
-    $scope.event.activityNum = 0;
+    $scope.event.activityNum = 1;
     $scope.startHourDt = new Date("01/01/1970");
     
     $scope.queryTrainer = "";

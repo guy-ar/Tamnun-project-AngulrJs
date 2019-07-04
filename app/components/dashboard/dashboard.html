@@ -1,1 +1,10 @@
+<div class="container container-page">
 <h1>welcome to my dashbaord</h1>
+<ng-include ng-if="isTrainer"
+    src="'app/components/dashboard/trainerDashbord.html'">
+</ng-include>
+<ng-include ng-if="isAdmin"
+    src="'app/components/dashboard/adminDashbord.html'">
+</ng-include>
+
+</div>
