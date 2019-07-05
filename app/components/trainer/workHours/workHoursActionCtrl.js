@@ -68,12 +68,12 @@ scheduleApp.controller("workHoursActionCtrl", function($scope, workHourSrv, $log
     $scope.editWorkHours = function() {
         // we need only the hours and minutes
 
-        workHourSrv.editWorkHours($scope.trainerId, $scope.id, $scope.day,  $scope.getTimeFromDate($scope.startHour), 
-                $scope.getTimeFromDate($scope.endHour)).then(function(editWorkHour) {
-             $log.info("new work hours was added: " + JSON.stringify(editWorkHour));
+        workHourSrv.editWorkHours( $scope.day,  $scope.getTimeFromDate($scope.startHour), 
+                $scope.getTimeFromDate($scope.endHour)).then(function(updatedWH) {
+             $log.info("new work hours was added: " + JSON.stringify(updatedWH));
              // Closing the modal
 
-             $uibModalInstance.close(editWorkHour);
+             $uibModalInstance.close(updatedWH);
         });
     }
 

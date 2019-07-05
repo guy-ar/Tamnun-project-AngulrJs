@@ -87,7 +87,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
 
 
     
-    function editWorkHours(trainerId, id, day, startHour, endHour)
+    function editWorkHours(id, day, startHour, endHour)
     {
         // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
         var async = $q.defer();
@@ -164,12 +164,31 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         return async.promise;
     }
 
+    // Util functions to help with create work hour string
+    // logic to insure that hours retrieved from date will be set on valid formet
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    // test fuction for setting the hours and minutes from date
+    function getTimeFromDate(dateObj) {
+        
+        var time = "";
+        var h = addZero(dateObj.getHours());
+        var m = addZero(dateObj.getMinutes());
+        time = h + ":" + m;
+        return time;
+    }
     return {
         addWorkHours: addWorkHours,
         getTrainersWH: getTrainersWH, 
         editWorkHours: editWorkHours,
         deleteWorkHours: deleteWorkHours,
-        getWHForTrainer: getWHForTrainer
+        getWHForTrainer: getWHForTrainer, 
+        getTimeFromDate: getTimeFromDate
+
     }
 
 });

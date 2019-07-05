@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Add Work Hours for Trainer</h5>
+        
+        <button type="button" class="close" aria-label="Close" ng-click="cancelWorkHourAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group row">
+                <label for="day" class="col-sm-3 col-form-label">Week Day</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="day" name="day" ng-model="newDay">
+                        <option value="Sun">Sunday</option>
+                        <option value="Mon">Monday</option>
+                        <option value="Tus">Tuesday</option>  
+                        <option value="Wed">Wednesday</option>  
+                        <option value="Thu">Thursday</option>  
+                        <option value="Fri">Friday</option>  
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="startHour" class="col-sm-3 col-form-label">From Hour</label>
+                <div class="col-sm-9">
+                    <div uib-timepicker ng-model="newStart"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="endHour" class="col-sm-3 col-form-label">Till Hour</label>
+                <div class="col-sm-9">
+                    <div uib-timepicker ng-model="newEnd"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+                </div>
+            </div>
+            
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelWorkHourAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="addWorkHours()">Save</button>
+    </div>
+</div>
