@@ -1,0 +1,23 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Delete Work Hours</h5>
+        <button type="button" class="close" aria-label="Close" ng-click="cancelWorkHourAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div >
+            <p>
+                Please confirm deleting the following Work Hours:
+            </p>
+            <p>Day: <strong>{{cancelDay}}</strong></p>
+            <p>From Hour: <strong>{{cancelStart}}</strong></p>
+            <p>Till Hour: <strong>{{cancelEnd}}</strong></p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelWorkHourAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="deleteWorkHours()">Delete</button>
+    </div>
+</div>
