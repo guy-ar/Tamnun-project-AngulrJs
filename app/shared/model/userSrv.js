@@ -5,7 +5,8 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
     let isAdmin = false;
     let isTrainer = false;
     let usersPerRole = {};
-    var signupTrainer = null;
+    var loginTrainer = null;
+
    
     const ROLE_TRAINER = "trainer";
     const ROLE_ADMIN = "admin";
@@ -47,6 +48,7 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
         activeUser = null;
         isAdmin = false;
         isTrainer = false;
+        loginTrainer = null;
         
 
         // to ask Nir how to check if this is user or email
@@ -58,22 +60,41 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
                 isAdmin = true;
             } else if (ROLE_TRAINER == activeUser.role) {
                 isTrainer = true;
-            }
+                var asyncTrianer = $q.defer();
+                // get the trainer details 
+                trainerSrv.getTrainersByUserName(activeUser.userName).then(function (result){
+                // check if trainer was found by this name
+                    if (result.length == 1) {
+                        // can continue
+                        $log.info("trainer was found with userName - can continue with login user");
+                        loginTrainer = result[0];
+                    } else {
+                        // invalid use case
+                        //... TODO prepare error and reject it
+                    }
+                    async.resolve(activeUser);
+                    asyncTrianer.resolve(result);
+                }, function(err){
+                    console.error('Error while calling to get trainer during login', err);
+                    async.reject(err);
+                    asyncTrianer.reject(err);
+                    
+                });
 
+                return asyncTrianer.promise;
+            }
             async.resolve(activeUser);
         }).catch(error => {
             console.error('Error while logging in user', error);
             async.reject(error);
         });
 
-
-
         return async.promise;
     }
 
     function signupAndValidate(userName, email, role, siteId, password) {
         
-        signupTrainer = null;
+        loginTrainer = null;
 
         // for now just write to log - as we do not have DB
         $log.info("signupAndValidate call");
@@ -91,7 +112,7 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
                 if (result.length == 1) {
                     // can continue
                     $log.info("trainer was found with userName - can continue with create user");
-                    signupTrainer = result[0];
+                    loginTrainer = result[0];
 
                     var asyncSign = $q.defer();
                     signup(userName, email, role, siteId, password, result[0].id).then(function(user){
@@ -215,9 +236,9 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
         return async.promise;
     }
 
-    function getSignupTrainer()
+    function getLoginTrainer()
     {
-        return signupTrainer; 
+        return loginTrainer; 
     }
 
     function resetPass(userEmail){
@@ -287,7 +308,7 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
         isLoggedTrainer: isLoggedTrainer, 
         signup: signup,
         signupAndValidate: signupAndValidate,
-        getSignupTrainer: getSignupTrainer,
+        getLoginTrainer: getLoginTrainer,
         resetPass: resetPass
 
     }

@@ -25,7 +25,7 @@ scheduleApp.controller("signupCtrl", function($scope, $location, userSrv, traine
             $log.info("Successful login with: " + JSON.stringify(activeUser));
             
             //call to update trainer...
-            trainerSrv.updateRegisterUser(userSrv.getSignupTrainer().id, activeUser.id, activeUser.email).then(function(trainer){
+            trainerSrv.updateRegisterUser(userSrv.getLoginTrainer().id, activeUser.id, activeUser.email).then(function(trainer){
                 //nothing to do besides log
                 console.info('Trainer was updated with user details', trainer);
             }, function(error){

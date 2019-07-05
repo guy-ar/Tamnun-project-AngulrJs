@@ -52,6 +52,8 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         });
         return async.promise;
     }
+
+    
     function addWorkHours(trainerId, day, startHour, endHour)
     {
         // SIMULATE A-SYNC PROCESS - the cache is help on the userSrv - so need to call temp fucntion to store it 
@@ -135,6 +137,7 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
         // this method will load the users from DB  - they will be kept on the service as cache
         var async = $q.defer();
         let workHours = [];
+        let workHoursPerUser = [];
      
         const workHoursObj = Parse.Object.extend('workHours');
         const query = new Parse.Query(workHoursObj);
@@ -149,14 +152,9 @@ scheduleApp.factory("workHourSrv", function($q, $http, $log) {
             // Ex: response.get("<ATTRIBUTE_NAME>")
             console.log('workHours found', results);
             for (let index = 0; index < results.length; index++) {
-                let userId = results[index].get("trainerId").id;
-                if (!workHoursPerUser[userId]) {
-                    // first create entry for the user
-                    workHoursPerUser[userId] = [];
-                }
                 workHours = new WorkHours(results[index]);
                 $log.info("found work hours for user: " + JSON.stringify(workHours));
-                workHoursPerUser[userId].push(workHours); 
+                workHoursPerUser.push(workHours); 
             }
             async.resolve(workHoursPerUser);
         }, (error) => {
