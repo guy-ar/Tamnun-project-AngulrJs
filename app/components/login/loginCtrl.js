@@ -4,8 +4,10 @@ scheduleApp.controller("loginCtrl", function($scope, $location, userSrv, $log /*
 
     $scope.invalidLogin = false;
     // temporary hard code data
-    $scope.userIdOrEmail = "admin";
-    $scope.pwd = "12345";
+    //$scope.userIdOrEmail = "admin";
+    //$scope.pwd = "12345";
+    $scope.userIdOrEmail = "onetwo";
+    $scope.pwd = "#Password123";
 
     $scope.login = function() {
 

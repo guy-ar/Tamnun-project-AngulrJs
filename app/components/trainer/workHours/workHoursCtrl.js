@@ -17,15 +17,14 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
   }
 
   $scope.addTrainerWorkHoursModal = function(trainer) {
-    
+    //$scope.activeTrainers = trainer;
     $log.info("the content of WH on trainersCtrl before adding: " + JSON.stringify($scope.trainersWh))
     var modalInstance = $uibModal.open({
-        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursActionCtrl",
+        templateUrl: "app/components/trainer/workHours/workHoursNew.html",
+        controller: "workHoursNewCtrl",
         resolve: {
           params: function () {
             return {
-              mode: "I",
               uId: trainer.id
             };
           }
@@ -35,7 +34,8 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
     modalInstance.result.then(function(newWorkHours) {
       $log.info("need to update the current trainer to include the new workHours");
       
-      $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainerWh))
+      $log.info("the content of WH on trainersCtrl after adding: " + JSON.stringify($scope.trainersWh))
+      
       $scope.trainerWh.push(newWorkHours);
       
     }, function() {
@@ -44,51 +44,52 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
     })
   }
 
-  $scope.editTrainerWorkHoursModal = function(trainer, workHour) {
+  
+
+  $scope.editTrainerWorkHoursModal = function(editWorkHour) {
 
     var modalInstance = $uibModal.open({
-        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursActionCtrl",
+        templateUrl: "app/components/trainer/workHours/workHoursEdit.html",
+        controller: "workHoursEditCtrl",
         resolve: {
           params: function () {
             return {
-              mode: "U",
-              uId: trainer.id,
-              wh: workHour
+              wh: editWorkHour
             };
           }
         }
     });
     
-    modalInstance.result.then(function(editWorkHours) {
+    modalInstance.result.then(function(workHoursRes) {
       $log.info("need to update the current trainer to include the new workHours");
       // look for the WH of the relevnt trainer
       let trainerWh = [];
-      trainerWh = $scope.trainerWh;
+      trainerWh = $scope.trainerWh
       for (let i=0; i< trainerWh.length; i++){
-        if (trainerWh[i].id == editWorkHours.id)
+        if (trainerWh[i].id == workHoursRes.id)
         {
-          trainerWh[i] = editWorkHours;
+          trainerWh[i] = workHoursRes;
         }
       }
-      
+     
     }, function() {
         // this will wake up in case the user canceled the new work hours
         console.log("user canceled edit work hours");
     })
+  
   }
-      
-    
+  
+
+ 
+  
   $scope.deleteTrainerWorkHoursModal = function(trainer, workHour) {
 
     var modalInstance = $uibModal.open({
-        templateUrl: "app/components/trainer/workHours/workHoursActions.html",
-        controller: "workHoursActionCtrl",
+        templateUrl: "app/components/trainer/workHours/workHoursCancel.html",
+        controller: "workHoursCancelCtrl",
         resolve: {
           params: function () {
             return {
-              mode: "D",
-              uId: trainer.id,
               wh: workHour
             };
           }
@@ -100,18 +101,20 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
       $log.info("need to delete the current trainer not to include the workHours");
       // look for the WH of the relevnt trainer
       let trainerWh = [];
-      trainerWh = $scope.trainerWh;
+      trainerWh = $scope.trainerWh
       for (let i=0; i< trainerWh.length; i++){
         if (trainerWh[i].id == deleteWorkHours.id)
         {
           trainerWh.splice(i, 1);
         }
       }
-      
+    
+     
     }, function() {
         // this will wake up in case the user canceled the delete work hours
         console.log("user canceled delete work hours");
     })
+  
   }
 })
 

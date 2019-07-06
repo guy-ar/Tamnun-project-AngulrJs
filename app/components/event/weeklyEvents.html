@@ -1,0 +1,49 @@
+<div>
+    <div class="row justify-content-start">
+        <div class="col col-md-12">
+            <h4><small>My Weekly Events:</small></h4>
+        </div>
+        
+    </div>
+    <div class="row justify-content-around">    
+        <div class="col-md-1">
+            <span ng-click="showPrevWeek()"><i class="fas fa-arrow-circle-left"></i></span>
+        </div>
+        <div class="col-md-8">
+            Selected week: <strong>{{startDayStr}} - {{endDayStr}} </strong>
+        </div>
+        <div class="col-md-1">
+                <span ng-click="showNextWeek()"><i class="fas fa-arrow-circle-right"></i></span>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-link" ng-click="showEvents()">
+                <i class="far fa-clock"></i> Show</button>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="col-md-12 list-group list-group-flush">
+            <li class="list-group-item"ng-repeat="activity in weeklyEvents">
+                <div class="row justify-content-around">
+                    
+                    <div class="col-md-9">
+                        <p>
+                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> 
+                        </p>
+                        <p>
+                            Date: <strong> {{formatDate(activity.activityDate)}}</strong>, Time: <strong>{{activity.activityTime}}</strong>
+                        </p>
+                        <p>
+                            Duration: <strong>{{activity.eventDtls.eventDuration}} Min'</strong>, State: <strong>{{activity.state}}</strong>
+                        </p>
+
+                    </div>
+                    <div class="col-md-3">
+                            <button type="button" class="btn btn-link" ng-click="createAlert()">
+                            New <i class="fas fa-exclamation-triangle"></i></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <Small ng-hide="weeklyEvents.length">No Data found.</small>
+    </div>
+</div>

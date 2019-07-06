@@ -4,7 +4,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
     const STATE_CANCEL = "Cancel";
     const STATE_TENTATIVE = "Tentative";
 
-    function Activity(plainActivityOrId, eventId, comments, activityDate, state, trainerId) {
+    function Activity(plainActivityOrId, eventId, comments, activityDate, state, trainerId, eventDtls) {
         if (arguments.length > 1) {
             this.id = plainActivityOrId;            
             this.eventId = eventId;
@@ -13,6 +13,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
             this.trainerId = trainerId;
             this.activityDate = activityDate;
             this.activityTime = activityTime
+            
         } else {
             this.id = plainActivityOrId.id;
             
@@ -24,6 +25,13 @@ scheduleApp.factory("activitySrv", function($q, $log) {
             }
             this.activityDate = plainActivityOrId.get("activityDate");
             this.activityTime = plainActivityOrId.get("activityTime");
+            if (plainActivityOrId.get("eventId") != null){
+                this.eventDtls = {};
+                this.eventDtls.eventName = plainActivityOrId.get("eventId").get("name");
+                this.eventDtls.eventDuration = plainActivityOrId.get("eventId").get("duration");
+                this.eventDtls.eventState = plainActivityOrId.get("eventId").get("state");
+            }
+
         }
     }
 
@@ -126,11 +134,45 @@ scheduleApp.factory("activitySrv", function($q, $log) {
 
     }
 
+    function getActivitiesAndEventByTrainer(trainerId, effDate, expDate) {
+        let eventActivities = [];
+        let async = $q.defer(); 
+        
+        const ActivityObj = new Parse.Object("Activity");
+        const queryActByTrainer = new Parse.Query(ActivityObj);
+
+
+        const TrainerObj = new Parse.Object("Trainer");
+        TrainerObj.id = trainerId;
+        queryActByTrainer.equalTo("trainerId", TrainerObj);
+        queryActByTrainer.greaterThanOrEqualTo("activityDate", effDate);
+        queryActByTrainer.lessThanOrEqualTo("activityDate", expDate);
+       
+        queryActByTrainer.include("eventId");
+
+        
+        queryActByTrainer.find().then(function(results) {
+            // build activity entity + related linked event
+            for (let index = 0; index < results.length; index++) {
+                eventActivities.push(new Activity(results[index]));
+            }
+            async.resolve(eventActivities);
+
+        
+        }, function(error){
+            console.error('Error while fetching Activity', error);
+            async.reject(error);
+        });
+
+        return async.promise;
+
+    }
+
+
     return {
         createActivityforEvent: createActivityforEvent,
         createAllActivityforEvent: createAllActivityforEvent, 
-        getActivitiesByDateRange: getActivitiesByDateRange
-
-
+        getActivitiesByDateRange: getActivitiesByDateRange,
+        getActivitiesAndEventByTrainer: getActivitiesAndEventByTrainer
     }
 });

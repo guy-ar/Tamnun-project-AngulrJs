@@ -126,7 +126,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
             // Updates the trainer ID
             let trainer = new Parse.Object("Trainer");
             trainer.id =  trainerId;
-            myNewObject.set('trainerId', trainer);
+            object.set('trainerId', trainer);
 
             // Saves the event with the updated data
             object.save().then((response) => {
@@ -148,15 +148,15 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
         // Finds the Event by its ID
         query.get(id).then((object) => {
             // Updates the event dtls
-            myNewObject.set('name', name);
-            myNewObject.set('day', day);
-            myNewObject.set('type', type);
-            myNewObject.set('startTime', startTime);
-            myNewObject.set('duration', duration);
-            myNewObject.set('siteId', siteId);
-            myNewObject.set('isRepeat', isRepeat);
-            myNewObject.set('activityNum', activityNum);
-            myNewObject.set('startDate', startDate);
+            object.set('name', name);
+            object.set('day', day);
+            object.set('type', type);
+            object.set('startTime', startTime);
+            object.set('duration', duration);
+            object.set('siteId', siteId);
+            object.set('isRepeat', isRepeat);
+            object.set('activityNum', activityNum);
+            object.set('startDate', startDate);
             // Saves the event with the updated data
             object.save().then((response) => {
                 console.log('Updated event details', response);
