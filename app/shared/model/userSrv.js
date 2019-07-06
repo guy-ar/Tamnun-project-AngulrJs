@@ -117,7 +117,7 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
                     var asyncSign = $q.defer();
                     signup(userName, email, role, siteId, password, result[0].id).then(function(user){
                         // after sign up - need to update the trainer with the user ID and registered indication
-                        //call to update trainer...
+                        
                         // return the user
                         asyncTrianer.resolve(user);
                         asyncSign.resolve(user);
@@ -191,8 +191,7 @@ scheduleApp.factory("userSrv", function($q, $log, $http, trainerSrv) {
             } else if (ROLE_TRAINER == activeUser.role) {
                 isTrainer = true;
             }
-            resetPass(email);
- //           sendEmailVerReq(email);
+ 
             async.resolve(activeUser);
         }).catch(error => {
     
