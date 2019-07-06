@@ -1,0 +1,45 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">New Alert for Event</h5>
+        
+        <button type="button" class="close" aria-label="Close" ng-click="cancelAlertAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <small>Event Details:</small><br>
+        <p>
+            Event Name: <strong>{{eventName}}</strong>
+        </p>
+        <p>
+            Activity Date: <strong>{{formatDate(activityDate)}}</strong>
+        </p>
+        <p>
+            Activity Time: <strong>{{activityTime}}</strong>
+        </p>
+        
+        <br>
+        <small>Alert Details:</small><br>
+        <form>
+            <div class="form-group row">
+                <label for="day" class="col-sm-3 col-form-label">Title:</label>
+                <div class="col-sm-9">
+                    <input type="text" name="alertName" ng-model="alertName">
+                </div>
+                
+            </div>
+            <div class="form-group row">
+                <label for="comment" class="col-sm-3 col-form-label">Comment:</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" id="comment" ng-model="description"></textarea>
+                </div>          
+            </div>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelAlertAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="addAlert()">Save</button>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, $uibModal) {
+scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, utilSrv, $uibModal) {
   
     $scope.weeklyEvents = [];
     $scope.trainer = userSrv.getLoginTrainer();
@@ -46,15 +46,12 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     $scope.startDay = $scope.getSunday(new Date());
     $scope.startDayStr = moment($scope.startDay).format('DD-MM-YYYY');
     $scope.endDay = $scope.getSuturday(new Date());
-    $scope.endDayStr = moment($scope.endDay).format('DD-MM-YYYY');
+    $scope.endDayStr = utilSrv.formatDate($scope.endDay);
 
     $scope.formatDate = function(date){
-        return moment(date).format('DD-MM-YYYY')
+        return utilSrv.formatDate(date);
     }
-    //$scope.week = new Date().moment().format('W');
-
-    //2019-W28
-
+    
     
 
     $scope.showEvents = function(){
@@ -75,6 +72,32 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     }
 
     $scope.showEvents();
+
+    $scope.addAlertModal = function(activity) {
+        
+        var modalInstance = $uibModal.open({
+            templateUrl: "app/components/alert/alertNew.html",
+            controller: "alertNewCtrl",
+            resolve: {
+              params: function () {
+                return {
+                  uId: $scope.trainer.id,
+                  activity: activity
+                };
+              }
+            }
+        });
+        
+        modalInstance.result.then(function(newAlert) {
+          $log.info("need to send the new alert to the dashboard - HOW???");
+          // Guy to ask how to do it - send messages between controllers
+          
+          
+        }, function() {
+            // this will wake up in case the user canceled the new work hours
+            console.log("user canceled add alert");
+        })
+      }
 
     
 })
