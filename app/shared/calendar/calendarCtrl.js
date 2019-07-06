@@ -18,10 +18,10 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
   /* event source that contains custom events on the scope */
   $scope.events = [
     // Guy put in comments all hard code data
-    {id: 0, title: 'All Day Event',start: new Date(y, m, 1)},
-    {id: 1, title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-    {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-    {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
+    // {id: 0, title: 'All Day Event',start: new Date(y, m, 1)},
+    // {id: 1, title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
+    // {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
+    // {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
     {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false}//,
     // the below was example for all day event - and with URL that was removed
     //{title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
@@ -39,6 +39,7 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
       // process the activities and push them to events scope
       $scope.populateEvents(activities);
       console.log(uiCalendarConfig.calendars);
+      //$scope.renderCalendar();
     }, function(error){
 
     });
@@ -52,6 +53,7 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
       // GUY Need to bring the event attributes as well...id, name, duration
       $timeout(function() {
         $scope.addEvent1(1111, "Event Title", startDate, endDate, false);
+       
       }, 1000);
     
     }
@@ -130,9 +132,15 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
   $timeout(function() {
     $scope.addEvent1();
   }, 5000);
+
+  $timeout(function() {
+    $scope.renderCalendar();
+  }, 7000);
  
-// Guy call events from DB
-  $scope.getActivitiesFromDb();
+  $timeout(function() {
+    // Guy call events from DB
+    $scope.getActivitiesFromDb();
+  }, 5000);
   /* remove event */
   $scope.remove = function(index) {
     $scope.events.splice(index,1);
