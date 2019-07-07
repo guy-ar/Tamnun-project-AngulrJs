@@ -1,0 +1,22 @@
+<!-- Modal -->
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Delete Alert</h5>
+        <button type="button" class="close" aria-label="Close" ng-click="cancelAlertAction()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div >
+            <p>
+                Please confirm deleting the following Alert:
+            </p>
+            <p>Name: <strong>{{alertName}}</strong></p>
+            <p>Description: <strong>{{description}}</strong></p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-click="cancelAlertAction()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="deleteAlert()">Delete</button>
+    </div>
+</div>

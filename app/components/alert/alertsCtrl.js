@@ -1,9 +1,9 @@
-scheduleApp.controller("alertsCtrl", function($scope, workHourSrv, $log, userSrv, alertsSrv, $uibModal) {
+scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, utilSrv, $uibModal) {
   $scope.trainer = userSrv.getLoginTrainer();
 
   $scope.alerts = [];
   // keep alsp the trainer work hours on the Ctrl
-  alertsSrv.getAlertsForTrainer($scope.trainer.id).then(function(trainerAlerts) {
+  alertSrv.getAlertsForTrainer($scope.trainer.id).then(function(trainerAlerts) {
       $scope.alerts = trainerAlerts;
       $log.info(JSON.stringify($scope.alerts));
 
@@ -14,7 +14,7 @@ scheduleApp.controller("alertsCtrl", function($scope, workHourSrv, $log, userSrv
   
   
 
-  $scope.editAlertsModal = function(editAlert) {
+  $scope.editAlertModal = function(editAlert) {
 
     var modalInstance = $uibModal.open({
         templateUrl: "app/components/alert/alertEdit.html",
@@ -31,10 +31,11 @@ scheduleApp.controller("alertsCtrl", function($scope, workHourSrv, $log, userSrv
     modalInstance.result.then(function(alertRes) {
       
       // look for the Alert 
-      for (let i=0; i< alerts.length; i++){
-        if (alerts[i].id == alertRes.id)
+      for (let i=0; i< $scope.alerts.length; i++){
+        if ($scope.alerts[i].id == alertRes.id)
         {
-          alerts[i] = alertRes;
+          $scope.alerts[i] = alertRes;
+          break;
         }
       }
      
@@ -64,13 +65,14 @@ scheduleApp.controller("alertsCtrl", function($scope, workHourSrv, $log, userSrv
     
     modalInstance.result.then(function(deleteAlert) {
       
-      $log.info("need to delete the current trainer not to include the workHours");
+      $log.info("need to delete the current alert");
       // look for the WH of the relevnt trainer
       
-      for (let i=0; i< alerts.length; i++){
-        if (alerts[i].id == deleteAlert.id)
+      for (let i=0; i< $scope.alerts.length; i++){
+        if ($scope.alerts[i].id == deleteAlert.id)
         {
-          alerts.splice(i, 1);
+          $scope.alerts.splice(i, 1);
+          break;
         }
       }
     
@@ -80,6 +82,10 @@ scheduleApp.controller("alertsCtrl", function($scope, workHourSrv, $log, userSrv
         console.log("user canceled delete alert");
     })
   
+  }
+
+  $scope.formatDate = function(date){
+    return utilSrv.formatDate(date);
   }
 })
 

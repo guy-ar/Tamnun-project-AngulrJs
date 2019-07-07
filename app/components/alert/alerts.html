@@ -1,43 +1,81 @@
-<div class="container container-page">
+<div>
     <uib-accordion close-others="true"> 
         <div uib-accordion-group class="mt-1" heading="{{alert.name}}" ng-repeat="alert in alerts">          
-            <div class="row justify-content-around">
-                <div class="col">
-                    <h4><small>Alert Inforamtion:</small></h4>
+            <div class="row justify-content-start">
+                <div class="col col-md-6">
+                    <div class="row justify-content-start">
+                        <div class="col col-md-6">
+                            <h4><small>Event Inforamtion:</small></h4>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col col-md-6">
+                            Event Name:
+                            <span class="font-weight-bold">
+                                {{alert.activityDtls.activityName}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col col-md-6">
+                            Event Date and Time:
+                            
+                            <span class="font-weight-bold">
+                                {{formatDate(alert.activityDtls.activityDate)}}
+                            </span>
+                        
+                            <span class="font-weight-bold">
+                                {{alert.activityDtls.activityTime}}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="col col-sm-2">
-                    <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-user-edit" 
-                        tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
+                <div class="col col-md-6">
+                    <div class="row justify-content-between">
+
+                        <div class="col">
+                            <h4><small>Alert Inforamtion:</small></h4>
+                            
+                            
+                        </div>
+                        <div class="col">
+                            {{alert.state}}
+                        </div>
+                        
+                        <div class="col col-sm-2">
+                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-user-edit" 
+                                tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
+                            <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteAlertModal(alert)"><i class="far fa-times-circle"
+                                tooltip-placement="top" uib-tooltip="Delete Alert"></i></a></span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col col-md-12">
+                            Description:
+                            <br>
+                            <span class="font-weight-bold">
+                                {{alert.description}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col col-md-6">
+                            Resolution:
+                            
+                            <span class="font-italic font-weight-bold">
+                                {{alert.resolutionType}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col col-md-6">
+                            Comments:
+                            <span class="font-weight-bold">
+                                {{alert.resolution}}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-between">
-                <div class="col col-md-3">
-                    <span class="text-info">
-                        Description:
-                    </span>
-                    <span class="font-weight-bold">
-                        {{alert.description}}
-                    </span>
-                </div>
-                <div class="col col-md-3">
-                    <span class="text-info">
-                        Resolution:
-                    </span>
-                    <span class="font-italic font-weight-bold">
-                        {{alert.resolutionType}}
-                    </span>
-                </div>
-                <div class="col col-md-3">
-                    <span class="text-info">
-                        Comments:
-                    </span>
-                    <span class="font-weight-bold">
-                        {{alert.resolution}}
-                    </span>
-                </div>
-                <div class="col col-md-2" ng-class="{'text-danger': alert.state=='Active', 'text-warnning': event.state=='Cancel', 'text-success': event.state=='Handled'}">
-                    {{alert.state}}
-                </div>                
             </div>
         </div>
     </uib-accordion>

@@ -25,6 +25,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
             }
             this.activityDate = plainActivityOrId.get("activityDate");
             this.activityTime = plainActivityOrId.get("activityTime");
+            this.activityName = plainActivityOrId.get("name");
             if (plainActivityOrId.get("eventId") != null){
                 this.eventDtls = {};
                 this.eventDtls.eventName = plainActivityOrId.get("eventId").get("name");
@@ -90,7 +91,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         }
         
         myNewObject.set('state', STATE_ACTIVE);
-        
+        myNewObject.set('name', eventInputObj.name);
         
         myNewObject.set('activityTime', eventInputObj.startTime);
         myNewObject.set('activityDate', targetDate);
