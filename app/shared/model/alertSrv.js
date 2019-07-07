@@ -75,8 +75,12 @@ scheduleApp.factory("alertSrv", function($q, $log) {
     
 
     }
+    function getAlertsForTrainer(trainerId){
+
+    }
 
     return {
-        createAlert: createAlert
+        createAlert: createAlert,
+        getAlertsForTrainer: getAlertsForTrainer
     }
 });

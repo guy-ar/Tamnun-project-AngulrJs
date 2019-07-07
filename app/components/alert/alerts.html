@@ -1,0 +1,45 @@
+<div class="container container-page">
+    <uib-accordion close-others="true"> 
+        <div uib-accordion-group class="mt-1" heading="{{alert.name}}" ng-repeat="alert in alerts">          
+            <div class="row justify-content-around">
+                <div class="col">
+                    <h4><small>Alert Inforamtion:</small></h4>
+                </div>
+                <div class="col col-sm-2">
+                    <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-user-edit" 
+                        tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col col-md-3">
+                    <span class="text-info">
+                        Description:
+                    </span>
+                    <span class="font-weight-bold">
+                        {{alert.description}}
+                    </span>
+                </div>
+                <div class="col col-md-3">
+                    <span class="text-info">
+                        Resolution:
+                    </span>
+                    <span class="font-italic font-weight-bold">
+                        {{alert.resolutionType}}
+                    </span>
+                </div>
+                <div class="col col-md-3">
+                    <span class="text-info">
+                        Comments:
+                    </span>
+                    <span class="font-weight-bold">
+                        {{alert.resolution}}
+                    </span>
+                </div>
+                <div class="col col-md-2" ng-class="{'text-danger': alert.state=='Active', 'text-warnning': event.state=='Cancel', 'text-success': event.state=='Handled'}">
+                    {{alert.state}}
+                </div>                
+            </div>
+        </div>
+    </uib-accordion>
+    <small ng-hide="alerts.length">No Data Found</small>
+</div>
