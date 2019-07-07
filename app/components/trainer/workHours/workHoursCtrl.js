@@ -1,7 +1,13 @@
-scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, userSrv, $uibModal) {
+scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $location, userSrv, $uibModal) {
   $scope.trainer = userSrv.getLoginTrainer();
 
   $scope.trainerWh = [];
+
+  if (!userSrv.isLoggedIn()) {
+    $location.path("/");
+    return;
+  }
+
   // keep alsp the trainer work hours on the Ctrl
   workHourSrv.getWHForTrainer($scope.trainer.id).then(function(WorkHours) {
       $scope.trainerWh = WorkHours;
@@ -69,6 +75,7 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
         if (trainerWh[i].id == workHoursRes.id)
         {
           trainerWh[i] = workHoursRes;
+          break;
         }
       }
      
@@ -106,6 +113,7 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, user
         if (trainerWh[i].id == deleteWorkHours.id)
         {
           trainerWh.splice(i, 1);
+          break;
         }
       }
     

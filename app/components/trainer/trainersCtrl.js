@@ -1,9 +1,15 @@
-scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSrv, workHourSrv, $uibModal) { 
+scheduleApp.controller("trainersCtrl", function($scope, $log, userSrv, trainerSrv, $location, workHourSrv, $uibModal) { 
 
   $scope.trainers = [];
   //$scope.activeTrainers = null;
   
   $scope.trainersWh = {};
+
+  if (!userSrv.isLoggedIn()) {
+    $location.path("/");
+    return;
+  }
+  
 
   // get the trainers
   trainerSrv.getTrainers().then(function(users) {

@@ -1,7 +1,14 @@
-scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, utilSrv, $uibModal) {
+scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, utilSrv, $location, $uibModal) {
   $scope.trainer = userSrv.getLoginTrainer();
 
   $scope.alerts = [];
+
+  // if user is not logged in - go to home
+  if (!userSrv.isLoggedIn()) {
+    $location.path("/");
+    return;
+  }
+
   // keep alsp the trainer work hours on the Ctrl
   alertSrv.getAlertsForTrainer($scope.trainer.id).then(function(trainerAlerts) {
       $scope.alerts = trainerAlerts;
