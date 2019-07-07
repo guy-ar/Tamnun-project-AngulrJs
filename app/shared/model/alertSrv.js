@@ -1,5 +1,6 @@
 scheduleApp.factory("alertSrv", function($q, $log) {
     const STATE_ACTIVE = "Active";
+    const STATE_HANDLED = "Handled";
     
     function Alert(plainActivityOrId, trainerId, activityId, name, description, state, resolutionDtls, resolutionType) {
         if (arguments.length > 1) {
@@ -16,6 +17,10 @@ scheduleApp.factory("alertSrv", function($q, $log) {
             this.id = plainActivityOrId.id;
             if (plainActivityOrId.get("trainerId") != null){
                 this.trainerId = plainActivityOrId.get("trainerId").id;
+                this.trainerDtls = {};
+                this.trainerDtls.userName = plainActivityOrId.get("trainerId").get("userName");
+                this.trainerDtls.fname = plainActivityOrId.get("trainerId").get("fname");
+                this.trainerDtls.lname = plainActivityOrId.get("trainerId").get("lname");
             }
             if (plainActivityOrId.get("activityId") != null){
                 this.activityId = plainActivityOrId.get("activityId").id;
@@ -135,6 +140,7 @@ scheduleApp.factory("alertSrv", function($q, $log) {
         query.equalTo("state", STATE_ACTIVE);
 
         query.include("activityId");
+        query.include("trainerId");
 
         query.find().then((results) => {
             console.log('Alerts found for trainer', results);
@@ -175,6 +181,32 @@ scheduleApp.factory("alertSrv", function($q, $log) {
 
     }
 
+    function editAlertByAdmin(id, resolutionType, resolution, isHandled) {
+        let  async = $q.defer();
+        const AlertObj = Parse.Object.extend('Alert');
+        const query = new Parse.Query(AlertObj);
+        query.include("activityId");
+
+        // Finds the Event by its ID
+        query.get(id).then((object) => {
+            // Updates the event dtls
+            object.set('resolutionType', resolutionType);
+            object.set('resolutionDtls', resolution);
+            if (isHandled) {
+                object.set('state', STATE_HANDLED);
+            }
+            
+            // Saves the alert with the updated data
+            object.save().then((response) => {
+                console.log('Updated alert details', response);
+                async.resolve(new Alert(response));
+            }).catch((error) => {
+                console.error('Error while updating alert details', error);
+            });
+        });
+        return async.promise;
+    }
+
     function deleteAlert(id) {
         let  async = $q.defer();
         const AlertObj = Parse.Object.extend('Alert');
@@ -199,6 +231,7 @@ scheduleApp.factory("alertSrv", function($q, $log) {
         getAlertsForTrainer: getAlertsForTrainer, 
         editAlertByTrainer: editAlertByTrainer,
         deleteAlert: deleteAlert,
-        getOpenAlertsForAll: getOpenAlertsForAll
+        getOpenAlertsForAll: getOpenAlertsForAll,
+        editAlertByAdmin: editAlertByAdmin
     }
 });

@@ -4,7 +4,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
     const STATE_CANCEL = "Cancel";
     const STATE_TENTATIVE = "Tentative";
 
-    function Event(plainTrainOrId, name, day, type, startTime, duration, state, siteId, isRepeat, trainerId, activityNum, startDate) {
+    function Event(plainEventOrId, name, day, type, startTime, duration, state, siteId, isRepeat, trainerId, activityNum, startDate) {
         if (arguments.length > 1) {
             this.id = plainEventOrId;
             this.name = name;
@@ -19,24 +19,28 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
             this.activityNum = activityNum;
             this.startDate = startDate;
         } else {
-            this.id = plainTrainOrId.id;
+            this.id = plainEventOrId.id;
             
-            this.name = plainTrainOrId.get("name");
-            this.day = plainTrainOrId.get("day");
-            this.type = plainTrainOrId.get("type");
-            this.startTime = plainTrainOrId.get("startTime");
-            this.duration = plainTrainOrId.get("duration");
-            this.state = plainTrainOrId.get("state");
-            this.siteId = plainTrainOrId.get("siteId");
-            this.isRepeat = plainTrainOrId.get("isRepeat");
+            this.name = plainEventOrId.get("name");
+            this.day = plainEventOrId.get("day");
+            this.type = plainEventOrId.get("type");
+            this.startTime = plainEventOrId.get("startTime");
+            this.duration = plainEventOrId.get("duration");
+            this.state = plainEventOrId.get("state");
+            this.siteId = plainEventOrId.get("siteId");
+            this.isRepeat = plainEventOrId.get("isRepeat");
             // if trainer was set
-            if (plainTrainOrId.get("trainerId") != null || 
-                    plainTrainOrId.get("trainerId")!=undefined) {
-                this.trainerId = plainTrainOrId.get("trainerId").id;
+            if (plainEventOrId.get("trainerId") != null || 
+                plainEventOrId.get("trainerId")!=undefined) {
+                this.trainerId = plainEventOrId.get("trainerId").id;
+                this.trainerDtls = {};
+                this.trainerDtls.userName = plainEventOrId.get("trainerId").get("userName");
+                this.trainerDtls.fname = plainEventOrId.get("trainerId").get("fname");
+                this.trainerDtls.lname = plainEventOrId.get("trainerId").get("lname");
             }
             
-            this.activityNum = plainTrainOrId.get("activityNum");
-            this.startDate = plainTrainOrId.get("startDate");
+            this.activityNum = plainEventOrId.get("activityNum");
+            this.startDate = plainEventOrId.get("startDate");
         }
     }
 
@@ -48,6 +52,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
         let events = [];
         const EventObj = Parse.Object.extend('Event');
         const query = new Parse.Query(EventObj);
+        query.include("trainerId");
 
 
         // Executing the query
@@ -65,7 +70,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
     } 
 
     //function addEvent(name, day, type, startTime, duration, siteId, isRepeat, trainerId, activityNum, startDate){
-        function addEvent(eventInputObj){
+        function addEvent(eventInputObj, isCreateAct){
         
         var async = $q.defer();
         // for now just write to log - as we do not have DB
@@ -97,17 +102,19 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
                 let event = new Event(result);
                 $log.info('Event was added', result);
                 async.resolve(event);
-                // call to activitySrv in order to create the instances per event
-                activitySrv.createAllActivityforEvent(event).then(function (actResult){
+                if (isCreateAct) {
+                    // call to activitySrv in order to create the instances per event
+                    activitySrv.createAllActivityforEvent(event).then(function (actResult){
 
-                
-                    // meanwhile create the activities for the event - assume no error will be done
-                    $log.info('activity was added', JSON.stringify(actResult));
-                }, 
-                function (error) {
-                  console.error('Error while creating activity: ', error);
-                  async.reject(error);
-                });
+                    
+                        // meanwhile create the activities for the event - assume no error will be done
+                        $log.info('activity was added', JSON.stringify(actResult));
+                    }, 
+                    function (error) {
+                    console.error('Error while creating activity: ', error);
+                    async.reject(error);
+                    });
+                }
             }).catch(error => {
                 console.error('Error creating Event', error);
             });
@@ -139,24 +146,24 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
         return async.promise;
     }
 
-    function updateEventDtls(id, name, day, type, startTime, duration, siteId, isRepeat, activityNum, startDate){
+    function updateEventDtls(event){
         
         let  async = $q.defer();
         const EventObj = Parse.Object.extend('Event');
         const query = new Parse.Query(EventObj);
 
         // Finds the Event by its ID
-        query.get(id).then((object) => {
+        query.get(event.id).then((object) => {
             // Updates the event dtls
-            object.set('name', name);
-            object.set('day', day);
-            object.set('type', type);
-            object.set('startTime', startTime);
-            object.set('duration', duration);
-            object.set('siteId', siteId);
-            object.set('isRepeat', isRepeat);
-            object.set('activityNum', activityNum);
-            object.set('startDate', startDate);
+            object.set('name', event.name);
+            object.set('day', event.day);
+            object.set('type', event.type);
+            object.set('startTime', event.startTime);
+            object.set('duration', event.duration);
+            object.set('siteId', event.siteId);
+            object.set('isRepeat', event.isRepeat);
+            object.set('activityNum', event.activityNum);
+            object.set('startDate', event.startDate);
             // Saves the event with the updated data
             object.save().then((response) => {
                 console.log('Updated event details', response);
@@ -199,6 +206,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
         let  async = $q.defer();
         const EventObj = Parse.Object.extend('Event');
         const query = new Parse.Query(EventObj);
+        query.include("trainerId");
         
         query.get(id).then((result) => {
           console.log('Event found', result);

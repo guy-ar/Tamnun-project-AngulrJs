@@ -9,19 +9,50 @@
     </div>
     <div class="modal-body">
         <small>Alert Details:</small><br>
+        <div ng-show="isAdmin">
+            <p>Name: <strong>{{alertName}}</strong></p>
+            <p>Description: <strong>{{description}}</strong></p>
+        </div>
+        
         <form>
-            <div class="form-group row">
+            <div class="form-group row" ng-show="isTrainer">
                 <label for="day" class="col-sm-3 col-form-label">Title:</label>
                 <div class="col-sm-9">
                     <input type="text" name="alertName" ng-model="alertName">
                 </div>
                 
             </div>
-            <div class="form-group row">
+            <div class="form-group row" ng-show="isTrainer">
                 <label for="comment" class="col-sm-3 col-form-label">Comment:</label>
                 <div class="col-sm-9">
                     <textarea class="form-control" rows="3" id="comment" ng-model="description"></textarea>
                 </div>          
+            </div>
+
+            <div class="form-group row" ng-show="isAdmin">
+                <label class="col-sm-3 col-form-label">Resolution Type:</label>
+                                                       
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="roleradio" ng-value="1" ng-model="resolutionType">Cancel Event
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="roleradio" ng-value="2" ng-model="resolutionType">Replace Trainer
+                    </label>
+                </div>
+
+            </div>
+            <div class="form-group row" ng-show="isAdmin">
+                <label for="resolution" class="col-sm-3 col-form-label">Resolution:</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" id="resolution" ng-model="resolution"></textarea>
+                </div>          
+            </div>
+            <div class="custom-control custom-switch" ng-show="isAdmin">
+                <input type="checkbox" class="custom-control-input" id="switch1" name="isHandled" ng-model="isHandled">
+                <label class="custom-control-label" for="switch1">Close Alert?</label>
             </div>
         </form>
 

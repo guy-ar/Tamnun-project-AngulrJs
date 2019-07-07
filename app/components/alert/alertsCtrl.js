@@ -110,5 +110,15 @@ scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, u
   $scope.formatDate = function(date){
     return utilSrv.formatDate(date);
   }
+
+  $scope.formatResolution = function(res){ 
+    if (res == 1) {
+      return "Event cancelled";
+    } else if (res == 2) {
+      return "Trainer replaced";
+    } else {
+      return "";
+    }
+  }
 })
 

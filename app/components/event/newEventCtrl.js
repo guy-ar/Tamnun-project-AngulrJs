@@ -11,6 +11,7 @@ scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $locatio
     $scope.event.name = "";
     $scope.event.day = "";
     $scope.event.type = "";
+    $scope.finalSave = false;
     // need special handling 
     $scope.event.startTime = "";
     $scope.event.duration = 0;
@@ -29,17 +30,23 @@ scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $locatio
         $scope.showCal = true;
     }
 
-    $scope.addEvent = function() {
+    $scope.addEvent = function(isFinal) {
         // note - stop sending the day - day will be taken from the event date
         // validate mandatory
+        $scope.finalSave = isFinal;
         $scope.event.startTime = $scope.getTimeFromDate($scope.startHourDt);
         $scope.event.duration = parseInt($scope.event.duration);
         $scope.event.activityNum = parseInt($scope.event.activityNum);
-        // eventSrv.addEvent($scope.name, $scope.day, $scope.type, $scope.getTimeFromDate($scope.startHourDt), parseInt($scope.duration), $scope.siteId, 
-            // $scope.isRepeat, $scope.trainerId, parseInt($scope.activityNum)).then(function(newEvent) {
-        eventSrv.addEvent($scope.event).then(function(newEvent) {
+                eventSrv.addEvent($scope.event, isFinal).then(function(newEvent) {
                 $log.info("new Event was added: " + JSON.stringify(newEvent));
-                $location.path("/events/" + newEvent.id);
+                if ($scope.finalSave) {
+                    // go to event list
+                    $location.path("/events");
+                } else {
+                    // go to event details
+                    $location.path("/events/" + newEvent.id);
+                }
+                
         });
     }
 

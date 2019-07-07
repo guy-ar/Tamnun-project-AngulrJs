@@ -1,4 +1,4 @@
-scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv,  eventSrv, $uibModal) { 
+scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv,  eventSrv, utilSrv) { 
 
   $scope.events = [];
   
@@ -39,61 +39,20 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv, 
     $location.path("/events/" + event.id);
     
   }
+
+  $scope.formatDate = function(date) {
+    return utilSrv.formatDate(date);
+    
+  }
   //  will not be in use - switch to full screen mode
 
-  /*
-  $scope.openNewEventModal = function() {
-    var modalInstance = $uibModal.open({
-        templateUrl: "app/components/event/eventNewEdit.html",
-        controller: "newEditEventCtrl",
-        resolve: {
-          params: function () {
-            return {
-              mode: "I"
-            };
-          }
-        }
-    });
-
-    modalInstance.result.then(function(newEvent) {
-        // this will wake in case the user added a new event
-        $scope.events.push(newEvent);
-        
-    }, function() {
-        // this will wake up in case the user canceled the new event addition
-        console.log("user canceled add event");
-    })
-  }
-
-  $scope.openEditEventModal = function(event) {
+  $scope.formatEventType = function(type) {
+    if (type == "1") {
+      return "Private Lesson";
+    } else {
+      return "Group Class";
+    }
     
-    var modalInstance = $uibModal.open({
-        templateUrl: "app/components/event/eventNewEdit.html",
-        controller: "newEditEventCtrl",
-        resolve: {
-          params: function () {
-            return {
-              mode: "U",
-              event: event
-            };
-          }
-        }
-    });
-
-    modalInstance.result.then(function(editEvent) {
-        $log.info("need to update the current event");
-        // this will wake in case the user updated an event
-        for (let i = 0; i < $scope.events.length; i++)
-        {
-          if ($scope.events[i].id == editEvent.id) {
-            $scope.events[i] = editEvent;
-          }
-        }
-        
-    }, function() {
-        // this will wake up in case the user canceled the new event
-        console.log("user canceled edit event");
-    })
-  }*/
+  }
 
 })

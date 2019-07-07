@@ -11,12 +11,12 @@
             <div class="row justify-content-start">
                 <div class="col col-md-6">
                     <div class="row justify-content-start">
-                        <div class="col col-md-6">
+                        <div class="col col-md-12">
                             <h4><small>Event Inforamtion:</small></h4>
                         </div>
                     </div>
                     <div class="row justify-content-between">
-                        <div class="col col-md-6">
+                        <div class="col">
                             Event Name:
                             <span class="font-weight-bold">
                                 {{alert.activityDtls.activityName}}
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="row justify-content-between">
-                        <div class="col col-md-6">
+                        <div class="col">
                             Event Date and Time:
                             
                             <span class="font-weight-bold">
@@ -45,12 +45,12 @@
                             
                             
                         </div>
-                        <div class="col">
+                        <div class="col" ng-class="{'text-warnning': alert.state == 'Active','text-success': alert.state == 'Handled' }">
                             {{alert.state}}
                         </div>
                         
                         <div class="col col-sm-2">
-                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-user-edit" 
+                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-edit"
                                 tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
                             <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteAlertModal(alert)"><i class="far fa-times-circle"
                                 tooltip-placement="top" uib-tooltip="Delete Alert"></i></a></span>
@@ -65,20 +65,28 @@
                             </span>
                         </div>
                     </div>
-                    <div class="row justify-content-between">
+                    <div class="row justify-content-between" ng-show="isTrainer">
                         <div class="col col-md-6">
                             Resolution:
                             
                             <span class="font-italic font-weight-bold">
-                                {{alert.resolutionType}}
+                                {{formatResolution(alert.resolutionType)}}
                             </span>
                         </div>
                     </div>
-                    <div class="row justify-content-between">
-                        <div class="col col-md-6">
+                    <div class="row justify-content-between" ng-show="isTrainer">
+                        <div class="col">
                             Comments:
                             <span class="font-weight-bold">
-                                {{alert.resolution}}
+                                {{alert.resolutionDtls}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between" ng-show="isAdmin">
+                        <div class="col">
+                            Trainer Name:
+                            <span class="font-weight-bold">
+                                {{alert.trainerDtls.fname + " " + alert.trainerDtls.lname}} 
                             </span>
                         </div>
                     </div>

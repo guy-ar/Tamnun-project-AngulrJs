@@ -10,18 +10,21 @@
             <button type="button" class="btn btn-primary"><span><i class="fas fa-search"></i></span></button>
         </div>
         <div class="btn-add col-sm-3">
-            <button type="button" class="btn btn-link" ng-click="openNewEventModal()">
+            <a ng-href="#!/events/new">
+            <button type="button" class="btn btn-link">
                 <i class="fas fa-user-plus"></i> Add Event</button>
+            </a>
         </div>
     </div>
     <div class="form-group">
-        <div class="col">
+        <!-- Guy - Not Implemented yet -->
+        <!-- <div class="col">
             <p> @TODO need to have search by Date Range, search By Site and search by State</p>
         </div>
         <div class="custom-control custom-checkbox search-button">
             <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="isCancel">
             <label class="custom-control-label" for="customCheck">filter Cancel?</label>
-        </div>
+        </div> -->
     </div>
 
     
@@ -34,7 +37,7 @@
                     <h4><small>Event Inforamtion:</small></h4>
                 </div>
                 <div class="col col-sm-2">
-                    <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEvent(event)"><i class="fas fa-user-edit" 
+                    <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEvent(event)"><i class="fas fa-edit" 
                         tooltip-placement="top" uib-tooltip="Edit Event"></i></a></span>
                 </div>
             </div>
@@ -52,7 +55,7 @@
                         Start Date:
                     </span>
                     <span class="font-italic font-weight-bold">
-                        {{event.startDate}}
+                        {{formatDate(event.startDate)}}
                     </span>
                 </div>
                 <div class="col col-md-3">

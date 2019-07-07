@@ -28,15 +28,12 @@
                     
                     <div class="col-md-9">
                         <p>
-                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> 
+                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> State: <strong>{{activity.state}}</strong>
                         </p>
                         <p>
-                            Date: <strong> {{formatDate(activity.activityDate)}}</strong>, Time: <strong>{{activity.activityTime}}</strong>
+                            Date: <strong> {{formatDate(activity.activityDate)}}</strong>, Time: <strong>{{activity.activityTime}}</strong> 
+                            Duration: <strong>{{activity.eventDtls.eventDuration}} Min'</strong>
                         </p>
-                        <p>
-                            Duration: <strong>{{activity.eventDtls.eventDuration}} Min'</strong>, State: <strong>{{activity.state}}</strong>
-                        </p>
-
                     </div>
                     <div class="col-md-3">
                             <button type="button" class="btn btn-link text-danger" ng-click="addAlertModal(activity)">
