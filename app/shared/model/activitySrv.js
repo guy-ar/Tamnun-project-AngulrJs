@@ -22,6 +22,10 @@ scheduleApp.factory("activitySrv", function($q, $log) {
             this.state = plainActivityOrId.get("state");
             if (plainActivityOrId.get("trainerId") != null){
                 this.trainerId = plainActivityOrId.get("trainerId").id;
+                this.trainerDtls = {};
+                this.trainerDtls.userName = plainActivityOrId.get("trainerId").get("userName");
+                this.trainerDtls.fname = plainActivityOrId.get("trainerId").get("fname");
+                this.trainerDtls.lname = plainActivityOrId.get("trainerId").get("lname");
             }
             this.activityDate = plainActivityOrId.get("activityDate");
             this.activityTime = plainActivityOrId.get("activityTime");
@@ -199,13 +203,76 @@ scheduleApp.factory("activitySrv", function($q, $log) {
 
     }
     
+    function cancelActivity() {
+        let  async = $q.defer();
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
 
+        // Finds the activity by its ID
+        query.get(id).then((object) => {
+            // Updates the activity status
+            
+            object.set('state', STATE_CANCEL);
+
+            // Saves the activity with the updated data
+            object.save().then((response) => {
+                console.log('Updated status on activity', response);
+                async.resolve(new Activity(response));
+            }).catch((error) => {
+                console.error('Error while updating activity status', error);
+            });
+        });
+        return async.promise;
+    }
+
+    function updateActivityTrainer(id, trainerId){
+        let  async = $q.defer();
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
+
+        // Finds the Activity by its ID
+        query.get(id).then((object) => {
+            // Updates the trainer ID
+            let trainer = new Parse.Object("Trainer");
+            trainer.id =  trainerId;
+            object.set('trainerId', trainer);
+
+            // Saves the event with the updated data
+            object.save().then((response) => {
+                console.log('Updated trainer on activity', response);
+                async.resolve(new Activity(response));
+            }).catch((error) => {
+                console.error('Error while updating trainer on the event', error);
+            });
+        });
+        return async.promise;
+
+    }
+
+    function getActivityById(id)
+    { 
+        let  async = $q.defer();
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
+        query.include("trainerId");
+        
+        query.get(id).then((result) => {
+          console.log('Activity found', result);
+          async.resolve(new Activity(result));
+        }, (error) => {
+          console.error('Error while fetching activity', error);
+        });
+        return async.promise;
+    }
 
     return {
         createActivityforEvent: createActivityforEvent,
         createAllActivityforEvent: createAllActivityforEvent, 
         getActivitiesByDateRange: getActivitiesByDateRange,
         getActivitiesAndEventByTrainer: getActivitiesAndEventByTrainer, 
-        getActivitiesAndEventForAll: getActivitiesAndEventForAll
+        getActivitiesAndEventForAll: getActivitiesAndEventForAll, 
+        cancelActivity: cancelActivity, 
+        updateActivityTrainer: updateActivityTrainer,
+        getActivityById: getActivityById
     }
 });

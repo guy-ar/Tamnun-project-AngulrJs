@@ -2,9 +2,9 @@ scheduleApp.factory("alertSrv", function($q, $log) {
     const STATE_ACTIVE = "Active";
     const STATE_HANDLED = "Handled";
     
-    function Alert(plainActivityOrId, trainerId, activityId, name, description, state, resolutionDtls, resolutionType) {
+    function Alert(plainAlertOrId, trainerId, activityId, name, description, state, resolutionDtls, resolutionType) {
         if (arguments.length > 1) {
-            this.id = plainActivityOrId;            
+            this.id = plainAlertOrId;            
             this.trainerId = trainerId;
             this.activityId = activityId;
             this.name = name;
@@ -14,27 +14,27 @@ scheduleApp.factory("alertSrv", function($q, $log) {
             this.resolutionType = resolutionType;
             
         } else {
-            this.id = plainActivityOrId.id;
-            if (plainActivityOrId.get("trainerId") != null){
-                this.trainerId = plainActivityOrId.get("trainerId").id;
+            this.id = plainAlertOrId.id;
+            if (plainAlertOrId.get("trainerId") != null){
+                this.trainerId = plainAlertOrId.get("trainerId").id;
                 this.trainerDtls = {};
-                this.trainerDtls.userName = plainActivityOrId.get("trainerId").get("userName");
-                this.trainerDtls.fname = plainActivityOrId.get("trainerId").get("fname");
-                this.trainerDtls.lname = plainActivityOrId.get("trainerId").get("lname");
+                this.trainerDtls.userName = plainAlertOrId.get("trainerId").get("userName");
+                this.trainerDtls.fname = plainAlertOrId.get("trainerId").get("fname");
+                this.trainerDtls.lname = plainAlertOrId.get("trainerId").get("lname");
             }
-            if (plainActivityOrId.get("activityId") != null){
-                this.activityId = plainActivityOrId.get("activityId").id;
+            if (plainAlertOrId.get("activityId") != null){
+                this.activityId = plainAlertOrId.get("activityId").id;
             }
-            this.name = plainActivityOrId.get("name");
-            this.description = plainActivityOrId.get("description");
-            this.state = plainActivityOrId.get("state");
-            this.resolutionDtls = plainActivityOrId.get("resolutionDtls");
-            this.resolutionType = plainActivityOrId.get("resolutionType");
-            if (plainActivityOrId.get("activityId") != null){
+            this.name = plainAlertOrId.get("name");
+            this.description = plainAlertOrId.get("description");
+            this.state = plainAlertOrId.get("state");
+            this.resolutionDtls = plainAlertOrId.get("resolutionDtls");
+            this.resolutionType = plainAlertOrId.get("resolutionType");
+            if (plainAlertOrId.get("activityId") != null){
                 this.activityDtls = {};
-                this.activityDtls.activityName = plainActivityOrId.get("activityId").get("name");
-                this.activityDtls.activityDate = plainActivityOrId.get("activityId").get("activityDate");
-                this.activityDtls.activityTime = plainActivityOrId.get("activityId").get("activityTime");
+                this.activityDtls.activityName = plainAlertOrId.get("activityId").get("name");
+                this.activityDtls.activityDate = plainAlertOrId.get("activityId").get("activityDate");
+                this.activityDtls.activityTime = plainAlertOrId.get("activityId").get("activityTime");
             }
         }
     }

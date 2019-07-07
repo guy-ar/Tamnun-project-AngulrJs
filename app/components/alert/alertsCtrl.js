@@ -120,5 +120,10 @@ scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, u
       return "";
     }
   }
+
+  $scope.openActicity = function(activityId) {
+    $location.path("/activity/" + activityId);
+    
+  }
 })
 

@@ -1,0 +1,43 @@
+
+<div class="container container-page">
+        <h1>Activity Details</h1>
+
+        <p>
+                Activity Date: <strong>{{formatDate(activity.activityDate)}}</strong>
+        </p>
+        <p>
+                Activity Date: <strong>{{activity.activityTime}}</strong>
+        </p>
+            
+        <form name="activityForm">
+        <div class="form-row">
+                <label for="trainerSearch">search for Trainer</label>
+        </div>
+        <div class="form-row">
+                <div class="form-group col-md-4">
+                        <input type="text" class="form-control search-box" id="trainerSearch"  placeholder="Filter by trainer name" ng-model="queryTrainer">
+                </div>
+                <div class="form-group col-md-1">
+                        <button type="button" class="btn btn-primary" ng-click="updateTrainerSearchResults()"><span><i class="fas fa-search"></i></span></button>
+                </div>
+                <div class="form-group col-md-4">
+                        <input type="text" readonly class="form-control" id="trainer"  ng-value="selectedTrainer">
+                </div>
+        </div>
+        
+        <div class="search-results" ng-show="searchTrainerResults.length > 0">
+                <ul class="list-group">
+                
+                <a href="javascript:void(0)" ng-repeat="result in searchTrainerResults | filter : filterTrainer as filteredTrainers"
+                class="list-group-item list-group-item-action" ng-click="setTrainerForEvent(result)">{{result.fname + " " + result.lname}}</a>
+                </ul>
+        </div>
+        
+        <div class="row justify-content-end">
+                <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="cancelActivity()">Cancel Activity</button>
+                <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="updateActivityTrainer()">Update Trainer</button>
+        
+        </div>
+        </form>
+
+</div>
