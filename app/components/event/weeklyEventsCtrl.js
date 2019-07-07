@@ -1,4 +1,4 @@
-scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, utilSrv, $uibModal) {
+scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, utilSrv, $rootScope, $uibModal) {
   
     $scope.weeklyEvents = [];
     $scope.trainer = userSrv.getLoginTrainer();
@@ -91,7 +91,8 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
         modalInstance.result.then(function(newAlert) {
           $log.info("need to send the new alert to the dashboard - HOW???");
           // Guy to ask how to do it - send messages between controllers
-          
+          $rootScope.$broadcast('alertCreatedEvent', newAlert);
+          //$scope.$emit('alertCreatedEvent', newAlert);
           
         }, function() {
             // this will wake up in case the user canceled the new work hours
