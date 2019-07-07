@@ -28,7 +28,9 @@
                     
                     <div class="col-md-9">
                         <p>
-                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> State: <strong>{{activity.state}}</strong>
+                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> State: 
+                            <strong ng-class="{'text-danger': activity.state == 'Cancel','text-success': activity.state == 'Handled' }">
+                            {{activity.state}}</strong>
                         </p>
                         <p>
                             Date: <strong> {{formatDate(activity.activityDate)}}</strong>, Time: <strong>{{activity.activityTime}}</strong> 

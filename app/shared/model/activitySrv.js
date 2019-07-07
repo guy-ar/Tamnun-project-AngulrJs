@@ -203,7 +203,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
 
     }
     
-    function cancelActivity() {
+    function cancelActivity(id) {
         let  async = $q.defer();
         const ActivityObj = Parse.Object.extend('Activity');
         const query = new Parse.Query(ActivityObj);

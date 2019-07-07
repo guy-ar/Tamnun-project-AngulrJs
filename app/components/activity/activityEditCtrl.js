@@ -23,7 +23,7 @@ scheduleApp.controller("activityEditCtrl", function($scope, $log, activitySrv, u
     
   
     $scope.cancelActivity = function(){
-        activitySrv.cancelActivity($scope.activity).then( function(result){
+        activitySrv.cancelActivity($scope.activity.id).then( function(result){
         // sucess in cancel the activity
         $log.info("update activity status to be cancelled", result)
         $location.path("/dashboard");
