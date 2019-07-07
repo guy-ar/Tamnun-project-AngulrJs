@@ -2,6 +2,8 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
   
     $scope.weeklyEvents = [];
     $scope.trainer = userSrv.getLoginTrainer();
+    $scope.isAdmin = userSrv.isLoggedAdmion();
+    $scope.isTrainer = userSrv.isLoggedTrainer();
 
     $scope.getSunday = function(d) {
         d = new Date(d);
@@ -58,15 +60,25 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
         $scope.weeklyEvents = [];
         // get the events per selected week
     
+        if ($scope.isTrainer){
+            activitySrv.getActivitiesAndEventByTrainer($scope.trainer.id, $scope.startDay, $scope.endDay).then(function(result){
+                $log.info(JSON.stringify(result));
+                $scope.weeklyEvents = result;
 
-        activitySrv.getActivitiesAndEventByTrainer($scope.trainer.id, $scope.startDay, $scope.endDay).then(function(result){
-            $log.info(JSON.stringify(result));
-            $scope.weeklyEvents = result;
+            }, function(error){
+                $log.error(error);
 
-        }, function(error){
-            $log.error(error);
+            });
+        } else if ($scope.isAdmin){
+            activitySrv.getActivitiesAndEventForAll($scope.startDay, $scope.endDay).then(function(result){
+                $log.info(JSON.stringify(result));
+                $scope.weeklyEvents = result;
 
-        });
+            }, function(error){
+                $log.error(error);
+
+            });
+        }
         
 
     }
@@ -74,31 +86,58 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     $scope.showEvents();
 
     $scope.addAlertModal = function(activity) {
+        var modalInstance = null;
         
-        var modalInstance = $uibModal.open({
-            templateUrl: "app/components/alert/alertNew.html",
-            controller: "alertNewCtrl",
-            resolve: {
-              params: function () {
-                return {
-                  uId: $scope.trainer.id,
-                  activity: activity
-                };
-              }
-            }
-        });
-        
-        modalInstance.result.then(function(newAlert) {
-          $log.info("need to send the new alert to the dashboard - HOW???");
-          // Guy to ask how to do it - send messages between controllers
-          $rootScope.$broadcast('alertCreatedEvent', newAlert);
-          //$scope.$emit('alertCreatedEvent', newAlert);
-          
-        }, function() {
-            // this will wake up in case the user canceled the new work hours
-            console.log("user canceled add alert");
-        })
-      }
+        if ($scope.isTrainer) {
+
+            modalInstance = $uibModal.open({
+                templateUrl: "app/components/alert/alertNew.html",
+                controller: "alertNewCtrl",
+                resolve: {
+                params: function () {
+                    return {
+                    uId: $scope.trainer.id,
+                    activity: activity
+                    };
+                }
+                }
+            });
+            
+            modalInstance.result.then(function(newAlert) {
+            $log.info("need to send the new alert to the dashboard - HOW???");
+            // Guy to ask how to do it - send messages between controllers
+            $rootScope.$broadcast('alertCreatedEvent', newAlert);
+            //$scope.$emit('alertCreatedEvent', newAlert);
+            
+            }, function() {
+                // this will wake up in case the user canceled the new work hours
+                console.log("user canceled add alert");
+            })
+        } else if ($scope.isAdmin) {
+            modalInstance = $uibModal.open({
+                templateUrl: "app/components/alert/alertNew.html",
+                controller: "alertNewCtrl",
+                resolve: {
+                params: function () {
+                    return {
+                        activity: activity
+                    };
+                }
+                }
+            });
+            
+            modalInstance.result.then(function(newAlert) {
+            $log.info("need to send the new alert to the dashboard - HOW???");
+            // Guy to ask how to do it - send messages between controllers
+            $rootScope.$broadcast('alertCreatedEvent', newAlert);
+            //$scope.$emit('alertCreatedEvent', newAlert);
+            
+            }, function() {
+                // this will wake up in case the user canceled the new work hours
+                console.log("user canceled add alert");
+            })
+        }
+    } 
 
     
 })

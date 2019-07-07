@@ -169,11 +169,43 @@ scheduleApp.factory("activitySrv", function($q, $log) {
 
     }
 
+    function getActivitiesAndEventForAll(effDate, expDate) {
+        let eventActivities = [];
+        let async = $q.defer(); 
+        
+        const ActivityObj = new Parse.Object("Activity");
+        const queryActByTrainer = new Parse.Query(ActivityObj);
+
+        queryActByTrainer.greaterThanOrEqualTo("activityDate", effDate);
+        queryActByTrainer.lessThanOrEqualTo("activityDate", expDate);
+       
+        queryActByTrainer.include("eventId");
+
+        
+        queryActByTrainer.find().then(function(results) {
+            // build activity entity + related linked event
+            for (let index = 0; index < results.length; index++) {
+                eventActivities.push(new Activity(results[index]));
+            }
+            async.resolve(eventActivities);
+
+        
+        }, function(error){
+            console.error('Error while fetching Activity', error);
+            async.reject(error);
+        });
+
+        return async.promise;
+
+    }
+    
+
 
     return {
         createActivityforEvent: createActivityforEvent,
         createAllActivityforEvent: createAllActivityforEvent, 
         getActivitiesByDateRange: getActivitiesByDateRange,
-        getActivitiesAndEventByTrainer: getActivitiesAndEventByTrainer
+        getActivitiesAndEventByTrainer: getActivitiesAndEventByTrainer, 
+        getActivitiesAndEventForAll: getActivitiesAndEventForAll
     }
 });

@@ -47,10 +47,11 @@ scheduleApp.factory("alertSrv", function($q, $log) {
         const AlertObj = Parse.Object.extend('Alert');
         const myNewObject = new AlertObj();
 
-        
-        trainer = new Parse.Object("Trainer");
-        trainer.id =  trainerId;
-        myNewObject.set('trainerId', trainer);
+        if (trainerId!=null && trainerId!=undefined && trainerId!=""){
+            trainer = new Parse.Object("Trainer");
+            trainer.id =  trainerId;
+            myNewObject.set('trainerId', trainer);
+        }
        
         
         activity = new Parse.Object("Activity");
@@ -118,6 +119,38 @@ scheduleApp.factory("alertSrv", function($q, $log) {
 
     }
 
+    // get alerts that match the trainer
+    function getOpenAlertsForAll(){
+        var async = $q.defer(); 
+        let alerts = [];
+        $log.info("get Alert for trainer call");               
+
+        // Preparing the new parse event object to save
+        const AlertObj = Parse.Object.extend('Alert');
+        const myNewObject = new AlertObj();
+
+        
+        const query = new Parse.Query(myNewObject);
+       
+        query.equalTo("state", STATE_ACTIVE);
+
+        query.include("activityId");
+
+        query.find().then((results) => {
+            console.log('Alerts found for trainer', results);
+            for (let index = 0; index < results.length; index++) {
+                alerts.push(new Alert(results[index]));
+            }
+            async.resolve(alerts);
+        }, (error) => {
+            console.error('Error while fetching alerts for all', error);
+            async.reject(error);
+        });
+        return async.promise;
+
+    }
+
+
     function editAlertByTrainer(id, alertName, description){
         let  async = $q.defer();
         const AlertObj = Parse.Object.extend('Alert');
@@ -165,6 +198,7 @@ scheduleApp.factory("alertSrv", function($q, $log) {
         createAlert: createAlert,
         getAlertsForTrainer: getAlertsForTrainer, 
         editAlertByTrainer: editAlertByTrainer,
-        deleteAlert: deleteAlert
+        deleteAlert: deleteAlert,
+        getOpenAlertsForAll: getOpenAlertsForAll
     }
 });

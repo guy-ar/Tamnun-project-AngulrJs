@@ -1,6 +1,7 @@
 scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, utilSrv, $location, $uibModal) {
   $scope.trainer = userSrv.getLoginTrainer();
-
+  $scope.isAdmin = userSrv.isLoggedAdmion();
+  $scope.isTrainer = userSrv.isLoggedTrainer();
   $scope.alerts = [];
 
   // if user is not logged in - go to home
@@ -9,15 +10,25 @@ scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, u
     return;
   }
 
-  // keep alsp the trainer work hours on the Ctrl
-  alertSrv.getAlertsForTrainer($scope.trainer.id).then(function(trainerAlerts) {
-      $scope.alerts = trainerAlerts;
+  if ($scope.isTrainer) {
+    // keep alsp the trainer work hours on the Ctrl
+    alertSrv.getAlertsForTrainer($scope.trainer.id).then(function(trainerAlerts) {
+        $scope.alerts = trainerAlerts;
+        $log.info(JSON.stringify($scope.alerts));
+
+    }, function(err) {
+        $log.error(err);
+    })
+  } else if ($scope.isAdmin) {
+    // keep alsp the trainer work hours on the Ctrl
+    alertSrv.getOpenAlertsForAll().then(function(openAlerts) {
+      $scope.alerts = openAlerts;
       $log.info(JSON.stringify($scope.alerts));
 
-  }, function(err) {
+    }, function(err) {
       $log.error(err);
-  })
-
+    })
+  }
   
   
 
