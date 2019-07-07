@@ -49,6 +49,8 @@ scheduleApp.controller("alertsCtrl", function($scope, $log, userSrv, alertSrv, u
   $scope.$on('alertCreatedEvent', function(event, data) { 
     console.log("New Alert was created: " + data); 
     $scope.alerts.push(data);
+    // need to clean the rootscope - how???
+
   });
  
   
