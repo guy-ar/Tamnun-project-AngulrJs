@@ -9,91 +9,96 @@
     <uib-accordion close-others="true"> 
         <div uib-accordion-group class="mt-1" heading="{{alert.name}}" ng-repeat="alert in alerts">          
             <div class="row justify-content-start">
-                <div class="col col-md-6">
-                    <div class="row justify-content-start">
-                        <div class="col col-md-12">
-                            <h4><small>Event Inforamtion:</small></h4>
+                <div class="card col-md-6">
+                    <!-- <div class="card-body" tooltip-placement="top" uib-tooltip="Click to add Alert" ng-click="addAlertModal(activity)"> -->
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            <div class="col-md-8">
+                                <h5 class="card-title">Event Inforamtion</h5>
+                            </div>
+                            <div class="col-md-2">
+                                    <small ng-class="{'text-muted': alert.activityDtls.activityState == 'Active', 'text-danger': alert.activityDtls.activityState == 'Cancel','text-success': alert.activityDtls.activityState == 'Handled' }">                                        
+                                            {{alert.activityDtls.activityState}}</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row justify-content-between">
-                        <div class="col">
-                            Event Name:
-                            <span class="font-weight-bold">
-                                {{alert.activityDtls.activityName}}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row justify-content-between">
-                        <div class="col">
-                            Event Date and Time:
-                            
-                            <span class="font-weight-bold">
-                                {{formatDate(alert.activityDtls.activityDate)}}
-                            </span>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{alert.activityDtls.activityName}}
+                        </h6>
                         
-                            <span class="font-weight-bold">
-                                {{alert.activityDtls.activityTime}}
+                                    
+                        <p class="card-text">
+                            <span ng-show="isAdmin">
+                                <strong>Trainer:</strong> {{ alert.trainerDtls.fname + " " + alert.trainerDtls.lname }} 
+                                <br>
                             </span>
+                            <strong>Date & Time:</strong> {{formatDate(alert.activityDtls.activityDate) + " " + alert.activityDtls.activityTime}}
+                        </p>
+                        
+                    </div>
+                </div>
+
+                <div class="card col-md-6">
+                    <!-- <div class="card-body" tooltip-placement="top" uib-tooltip="Click to add Alert" ng-click="addAlertModal(activity)"> -->
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            <div class="col-md-8">
+                                <h5 class="card-title">Alert Inforamtion</h5>
+                            </div>
+                            <div class="col-md-2">
+                                <small ng-class="{'text-muted': alert.state == 'Active', 'text-danger': alert.state == 'Cancel','text-success': alert.state == 'Handled' }">                                        
+                                        {{alert.state}}</small>
+                            </div>
+                            <div class="col col-md-2">
+                                <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-edit"
+                                    tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
+                                <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteAlertModal(alert)"><i class="far fa-times-circle"
+                                    tooltip-placement="top" uib-tooltip="Delete Alert"></i></a></span>
+                            </div>
+                        </div>
+                        <!-- <h6 class="card-subtitle mb-2 text-muted" ng-show="isAdmin">
+                            {{alert.activityDtls.activityName}}
+                        </h6> -->
+                                
+                                    
+                        <p class="card-text"><strong>Description:</strong> <br>
+                            {{alert.description}} <br>
+                            <span ng-show="isTrainer">
+                                <strong>Resolution:</strong>                          
+                                <span class="font-italic font-weight-bold">
+                                    {{formatResolution(alert.resolutionType)}}
+                                </span><br>
+                                <strong>Comments:</strong>
+                                <span class="font-weight-bold">
+                                    {{alert.resolutionDtls}}
+                                </span><br>
+                            </span>
+                            <!-- <span ng-show="isAdmin">
+                                Trainer Name:
+                                <span class="font-weight-bold">
+                                    {{alert.trainerDtls.fname + " " + alert.trainerDtls.lname}} 
+                                </span>
+                            </span> -->
+
+                        </p>
+                        <div class="row justify-content-end" ng-show="isAdmin">
+                            <button type="button" class="btn btn-success btn-sm" ng-click="openActicity(alert.activityId)">Edit Activity</button>
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-6">
-                    <div class="row justify-content-between">
 
-                        <div class="col">
-                            <h4><small>Alert Inforamtion:</small></h4>
-                            
-                            
-                        </div>
-                        <div class="col" ng-class="{'text-warnning': alert.state == 'Active','text-success': alert.state == 'Handled' }">
-                            {{alert.state}}
-                        </div>
+
+                
+                                        
+                       
+                        
+                        
                         
                         <div class="col col-sm-2">
-                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="editAlertModal(alert)"><i class="fas fa-edit"
-                                tooltip-placement="top" uib-tooltip="Edit Alert"></i></a></span>
-                            <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteAlertModal(alert)"><i class="far fa-times-circle"
-                                tooltip-placement="top" uib-tooltip="Delete Alert"></i></a></span>
-                        </div>
-                        <div class="col col-sm-2">
-                                <a href="javascript:void(0)" ng-click="openActicity(alert.activityId)">Edit Activity</a>
+                                
                         </div>
                         
                     </div>
-                    <div class="row justify-content-between">
-                        <div class="col col-md-12">
-                            Description:
-                            <br>
-                            <span class="font-weight-bold">
-                                {{alert.description}}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row justify-content-between" ng-show="isTrainer">
-                        <div class="col col-md-6">
-                            Resolution:
-                            
-                            <span class="font-italic font-weight-bold">
-                                {{formatResolution(alert.resolutionType)}}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row justify-content-between" ng-show="isTrainer">
-                        <div class="col">
-                            Comments:
-                            <span class="font-weight-bold">
-                                {{alert.resolutionDtls}}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row justify-content-between" ng-show="isAdmin">
-                        <div class="col">
-                            Trainer Name:
-                            <span class="font-weight-bold">
-                                {{alert.trainerDtls.fname + " " + alert.trainerDtls.lname}} 
-                            </span>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
