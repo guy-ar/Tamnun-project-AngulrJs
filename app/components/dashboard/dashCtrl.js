@@ -10,4 +10,7 @@ scheduleApp.controller("dashCtrl", function($scope, userSrv, $location) {
     $scope.isAdmin = userSrv.isLoggedAdmion();
     $scope.isTrainer = userSrv.isLoggedTrainer();
     $scope.activeUser = userSrv.getActiveUser();
+    // releveant only if trainer logged in
+    $scope.trainer = userSrv.getLoginTrainer();
+    $scope.$emit('trainerAddedEvent', $scope.trainer);
 });

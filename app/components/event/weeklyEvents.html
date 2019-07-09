@@ -42,10 +42,10 @@
                             </h6>
                                     
                                        
-                            <p class="card-text">Date & Time: <strong> {{formatDate(activity.activityDate) + " " + activity.activityTime}}</strong>
+                            <p class="card-text"><strong>Date & Time: </strong> {{formatDate(activity.activityDate) + " " + activity.activityTime}}
                             </p>
                             <div class="row justify-content-around">
-                                <div class="col"> Duration: {{activity.eventDtls.eventDuration}} Minutes</div>
+                                <div class="col"><strong>Duration:</strong> {{activity.eventDtls.eventDuration}} Minutes</div>
                                 <div class="col-md-2">
                                         <small ng-class="{'text-muted': activity.state == 'Active', 'text-danger': activity.state == 'Cancel','text-success': activity.state == 'Handled' }">                                        
                                                 {{activity.state}}</small>

@@ -1,7 +1,7 @@
 scheduleApp.controller("activityEditCtrl", function($scope, $log, activitySrv, userSrv, $routeParams, $location, trainerSrv, utilSrv) {
   
     // if user is not logged in - go to home
-    if (!userSrv.isLoggedIn()) {
+    if (!userSrv.isLoggedIn() || !userSrv.isAdmin) {
       $location.path("/");
       return;
     }

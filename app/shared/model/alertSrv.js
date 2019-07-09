@@ -35,6 +35,7 @@ scheduleApp.factory("alertSrv", function($q, $log) {
                 this.activityDtls.activityName = plainAlertOrId.get("activityId").get("name");
                 this.activityDtls.activityDate = plainAlertOrId.get("activityId").get("activityDate");
                 this.activityDtls.activityTime = plainAlertOrId.get("activityId").get("activityTime");
+                this.activityDtls.activityState = plainAlertOrId.get("activityId").get("state");
             }
         }
     }

@@ -1,5 +1,13 @@
 scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $location, userSrv, $uibModal) {
-  $scope.trainer = userSrv.getLoginTrainer();
+  //expect to get the trainer if from the external scope as directive param
+  //$scope.trainer = userSrv.getLoginTrainer();
+  
+  $scope.$on('trainerAddedEvent', function(event, data) { 
+    console.log("trainer in scope: " + data); 
+    $scope.trainer = data;
+    // need to clean the rootscope - how???
+
+  });
 
   $scope.trainerWh = [];
 
@@ -9,7 +17,8 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $loc
   }
 
   // keep alsp the trainer work hours on the Ctrl
-  workHourSrv.getWHForTrainer($scope.trainer.id).then(function(WorkHours) {
+  
+  workHourSrv.getWHForTrainer($scope.trainer.id).then(function(WorkHours) { 
       $scope.trainerWh = WorkHours;
       $log.info(JSON.stringify($scope.trainerWh));
 
