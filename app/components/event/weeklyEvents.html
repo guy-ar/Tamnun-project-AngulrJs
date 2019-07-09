@@ -1,6 +1,6 @@
 <div>
     <div class="row justify-content-start">
-        <div class="col col-md-12">
+        <div class="col">
             <h4 ng-show="isAdmin"><small>Weekly Events:</small></h4>
             <h4 ng-show="isTrainer"><small>My Weekly Events:</small></h4>
         </div>
@@ -25,22 +25,41 @@
         <ul class="col-md-12 list-group list-group-flush">
             <li class="list-group-item"ng-repeat="activity in weeklyEvents">
                 <div class="row justify-content-around">
+                    <div class="card col-md-12">
+                        <!-- <div class="card-body" tooltip-placement="top" uib-tooltip="Click to add Alert" ng-click="addAlertModal(activity)"> -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">{{activity.eventDtls.eventName}}</h5>
+                                </div>
+                                <div class="col-md-4">
+                                        <button type="button" class="btn btn-link" ng-click="addAlertModal(activity)">
+                                                Create Alert<i class="fas fa-exclamation-triangle"></i></button>
+                                </div>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted" ng-show="isAdmin">
+                                Trainer: {{ activity.trainerDtls.fname + " " + activity.trainerDtls.lname }} 
+                            </h6>
+                                    
+                                       
+                            <p class="card-text">Date & Time: <strong> {{formatDate(activity.activityDate) + " " + activity.activityTime}}</strong>
+                            </p>
+                            <div class="row justify-content-around">
+                                <div class="col"> Duration: {{activity.eventDtls.eventDuration}} Minutes</div>
+                                <div class="col-md-2">
+                                        <small ng-class="{'text-muted': activity.state == 'Active', 'text-danger': activity.state == 'Cancel','text-success': activity.state == 'Handled' }">                                        
+                                                {{activity.state}}</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     
-                    <div class="col-md-9">
-                        <p>
-                            Event Name: <strong>{{activity.eventDtls.eventName}}</strong> State: 
-                            <strong ng-class="{'text-danger': activity.state == 'Cancel','text-success': activity.state == 'Handled' }">
-                            {{activity.state}}</strong>
-                        </p>
-                        <p>
-                            Date: <strong> {{formatDate(activity.activityDate)}}</strong>, Time: <strong>{{activity.activityTime}}</strong> 
-                            Duration: <strong>{{activity.eventDtls.eventDuration}} Min'</strong>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                            <button type="button" class="btn btn-link text-danger" ng-click="addAlertModal(activity)">
-                            New <i class="fas fa-exclamation-triangle"></i></button>
-                    </div>
+                    
+                    <!-- <div class="col-md-1">
+                        <button type="button" class="btn btn-link text-danger" ng-click="addAlertModal(activity)">
+                        New <i class="fas fa-exclamation-triangle"></i></button>
+                    </div> -->
                 </div>
             </li>
         </ul>

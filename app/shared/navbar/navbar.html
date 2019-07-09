@@ -50,6 +50,10 @@
                             <a class="nav-link" href="#!/login" ng-hide="isLoggedIn()">Login</a>
                         </li>
                         <li class="nav-item">
+                                <!-- <a class="nav-link" href="javascript:void(0)" ng-show="isLoggedIn()">User: {{activeUser.userName}}<i class="fas fa-user"></i></a> -->
+                                <span class="nav-link" ng-show="isLoggedIn()">User: {{activeUser.userName}} <i class="fas fa-user"></i></span>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#" ng-show="isLoggedIn()" ng-click="logout()">Logout</a>
                         </li>
                         

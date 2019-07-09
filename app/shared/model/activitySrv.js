@@ -154,6 +154,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         queryActByTrainer.lessThanOrEqualTo("activityDate", expDate);
        
         queryActByTrainer.include("eventId");
+        queryActByTrainer.include("trainerId");
 
         
         queryActByTrainer.find().then(function(results) {
@@ -178,15 +179,15 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         let async = $q.defer(); 
         
         const ActivityObj = new Parse.Object("Activity");
-        const queryActByTrainer = new Parse.Query(ActivityObj);
+        const queryActByAll = new Parse.Query(ActivityObj);
 
-        queryActByTrainer.greaterThanOrEqualTo("activityDate", effDate);
-        queryActByTrainer.lessThanOrEqualTo("activityDate", expDate);
+        queryActByAll.greaterThanOrEqualTo("activityDate", effDate);
+        queryActByAll.lessThanOrEqualTo("activityDate", expDate);
        
-        queryActByTrainer.include("eventId");
-
+        queryActByAll.include("eventId");
+        queryActByAll.include("trainerId");
         
-        queryActByTrainer.find().then(function(results) {
+        queryActByAll.find().then(function(results) {
             // build activity entity + related linked event
             for (let index = 0; index < results.length; index++) {
                 eventActivities.push(new Activity(results[index]));

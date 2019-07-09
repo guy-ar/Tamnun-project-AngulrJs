@@ -16,8 +16,19 @@ scheduleApp.controller("navbarCtrl", function($scope, userSrv, $location, $log) 
     }
     $scope.logout = function() {
         userSrv.logout();
+        $scope.activeUser="";
         $location.path("/");
     }
+
+    $scope.activeUser = null;
+    $scope.$on('loginEvent', function(event, data) { 
+        console.log("New login was created: " + data); 
+        $scope.activeUser = data;
+        // need to clean the rootscope - how???
+    
+    });
+    
+
 
     // navbar will not be presetned on login/sign-up pages
     $scope.isShowMenu = function() {
