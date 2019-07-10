@@ -1,4 +1,4 @@
-scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, utilSrv, $rootScope, $uibModal) {
+scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activitySrv, utilSrv, $rootScope, $uibModal, $routeParams, $location) {
   
     $scope.weeklyEvents = [];
     $scope.trainer = userSrv.getLoginTrainer();
@@ -70,14 +70,33 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
 
             });
         } else if ($scope.isAdmin){
-            activitySrv.getActivitiesAndEventForAll($scope.startDay, $scope.endDay).then(function(result){
-                $log.info(JSON.stringify(result));
-                $scope.weeklyEvents = result;
+            // need to check if the page is trainer dtls - so only trainer hours will be presetned
+            // else hours for all trainers will be presennted
 
-            }, function(error){
-                $log.error(error);
+            var location = $location.path();
+            if (location == "/dashboard") {
+                // need to retrieve events for all trainers
+                        
+                activitySrv.getActivitiesAndEventForAll($scope.startDay, $scope.endDay).then(function(result){
+                    $log.info(JSON.stringify(result));
+                    $scope.weeklyEvents = result;
 
-            });
+                }, function(error){
+                    $log.error(error);
+
+                });
+            } else if (location.substring(0,9) =='/trainer/') {
+                //get WH for specific trainer
+                var id = $routeParams.id;
+                activitySrv.getActivitiesAndEventByTrainer(id, $scope.startDay, $scope.endDay).then(function(result){
+                    $log.info(JSON.stringify(result));
+                    $scope.weeklyEvents = result;
+    
+                }, function(error){
+                    $log.error(error);
+    
+                });
+            }
         }
         
 
