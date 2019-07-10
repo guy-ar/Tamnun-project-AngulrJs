@@ -1,6 +1,15 @@
 scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv,  eventSrv, utilSrv) { 
 
   $scope.events = [];
+  $scope.filterSite = "-1";
+
+
+  $scope.isfilterSun=false;
+  $scope.isfilterMon=false;
+  $scope.isfilterTus=false;
+  $scope.isfilterWed=false;
+  $scope.isfilterThu=false;
+  $scope.isfilterFri=false;
   
   // if user is not logged in - go to home
   if (!userSrv.isLoggedIn()) {
@@ -22,14 +31,38 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv, 
   $scope.filterEvent = function(event) {    
     // converting to lower case to do a case insensitive comparison
     if (event.name.toLowerCase().includes($scope.query.toLowerCase()) ) {
-          // check if need to filter by state
-          /*if (($scope.isCancel) && (trainer.state=="Cancel")){
+          // check if need to present cancel
+          if (($scope.isCancel) && (event.state=="Cancel")){
             // check the state
             return false;
-          }*/
-          // check if need to filter by date range
-          //TODO
-      return true;
+          }
+          
+          // check if need to filter by site
+          if ($scope.filterSite == "-1") {
+            // check the filter by day
+            if (($scope.isfilterSun && event.day == '0') || ($scope.isfilterMon && event.day == '1') ||  ($scope.isfilterTus && event.day == '2')
+            || ($scope.isfilterWed && event.day == '3') || ($scope.isfilterThu && event.day == '4') || ($scope.isfilterFri && event.day == '5')
+            || (!$scope.isfilterSun && !$scope.isfilterMon && !$scope.isfilterTus && !$scope.isfilterWed && !$scope.isfilterThu && !$scope.isfilterFri)) {
+              // day was not selected or selected day match the entry
+              return true
+                
+            }
+          } else {
+            // check if trainer site match the selected site
+            if (event.siteId == $scope.filterSite){
+            // check the filter by day
+              if (($scope.isfilterSun && event.day == '0') || ($scope.isfilterMon && event.day == '1') ||  ($scope.isfilterTus && event.day == '2')
+              || ($scope.isfilterWed && event.day == '3') || ($scope.isfilterThu && event.day == '4') || ($scope.isfilterFri && event.day == '5')
+              || (!$scope.isfilterSun && !$scope.isfilterMon && !$scope.isfilterTus && !$scope.isfilterWed && !$scope.isfilterThu && !$scope.isfilterFri)) {
+                // day was not selected or selected day match the entry
+                return true
+                  
+              }
+            } else {
+              return false;
+            }
+
+          }
     } else {
       return false;
     }
@@ -55,4 +88,31 @@ scheduleApp.controller("eventsCtrl", function($scope, $log, $location, userSrv, 
     
   }
 
+  $scope.formatDayOfWeek = function(day){
+    switch (day) {
+      case 0:
+        return "Sunday";
+
+      case 1:
+        return "Monday";
+
+      case 2:
+        return "Tuesday";
+
+      case 3:
+        return "Wednesday";
+
+      case 4:
+        return "Thursday";
+
+      case 5:
+        return "Friday";
+
+      case 6:
+        return "Saturday";
+      
+      default:
+        return day;
+    }
+  }
 })
