@@ -96,6 +96,11 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
         }
         myNewObject.set('activityNum', eventInputObj.activityNum);
         myNewObject.set('startDate', eventInputObj.startDate); 
+        if (eventInputObj.day == null || eventInputObj.day == undefined || eventInputObj.day == ""){
+            myNewObject.set('day', eventInputObj.startDate.getDay()); 
+        } else {
+            myNewObject.set('day', eventInputObj.day); 
+        }
 
         myNewObject.save().then(
             (result) => {;
