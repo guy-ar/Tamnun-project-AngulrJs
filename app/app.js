@@ -13,7 +13,7 @@ scheduleApp.config(function($routeProvider) {
     }).when("/resetPass", {
         templateUrl: "app/components/resetPass/resetPass.html",
         controller: "resetPassCtrl"
-    }).when("/dashboard/", {
+    }).when("/dashboard", {
         templateUrl: "app/components/dashboard/dashboard.html",
         controller: "dashCtrl"
     }).when("/trainers", {
@@ -37,6 +37,8 @@ scheduleApp.config(function($routeProvider) {
     }).when("/activity/:id", {
         templateUrl: "app/components/activity/activityEdit.html",
         controller: "activityEditCtrl" 
+    }).when("/user", {
+        templateUrl: "app/components/user/userDtls.html"
     }).when("/error", {
         templateUrl: "app/shared/navbar/error.html"
     }).otherwise({
