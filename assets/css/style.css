@@ -169,3 +169,8 @@ padding: 15px;
 body .fc {
   font-size: 0.7em;
 }
+
+.avatar > img {
+  height: 150px;
+  object-fit: cover;
+}

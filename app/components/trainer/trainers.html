@@ -1,136 +1,96 @@
 <div class="container container-page">
-    <h1>Trainers in Site: ###{{ }} <span class="badge badge-primary badge-pill">{{trainers.length}}</span></h1>
-    
-    <div class="form-group search-container">
-        <div class="search-query ">
-            <input class="form-control my-3" placeholder="Filter Trainers by Name" ng-model="query">
+    <div class="row justify-content-around">
+        <div class="col-md-8">
+            <h1>Trainers <span ng-show="filterSite=='1' || filterSite=='2'">
+                in Site: {{filterSite==1?'Pardesia':'Yoqneam'}}</span>
+                <span class="badge badge-primary badge-pill">{{trainers.length}}</span></h1>
         </div>
-        <!-- <div class="search-button "> -->
-            <!-- <button type="button" class="btn btn-primary"><span><i class="fas fa-search"></i></span></button> -->
-        <div class="custom-control custom-checkbox search-button">
-            <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="isCancel">
-            <label class="custom-control-label" for="customCheck">filter Cancel?</label>
-        </div>
-        <!-- </div> -->
-        <div class="btn-add col-sm-3">
+        
+        <div class="btn-add col-md-2">
             <button type="button" class="btn btn-link" ng-click="openNewTrainerModal()">
                 <i class="fas fa-user-plus"></i> Add Trainer</button>
         </div>
-        
     </div>
     
-    <uib-accordion close-others="true"> 
-        <div uib-accordion-group class="mt-1" heading="{{'Trainer Name: ' + trainer.fname + ' ' + trainer.lname}}" 
-                     ng-repeat="trainer in trainers | filter : filterTrainer as filteredTrainers">
-            <div class="row">
-                <div class="col col-md-6">
-                    <div class="row justify-content-between">
-                        <div class="col col-md-8">
-                            <h4>
-                                <small>Contact Inforamtion:</small>
-                                <span ng-show="trainer.isSigned" tooltip-placement="top" uib-tooltip="Trainer Signed-Up!">
-                                <img src="assets/img/iconfinder_User_Like_1084550_med.png" alt=""></span>
-                            </h4>
-                        </div>
-                        <!-- <div class="col col-md-4">
-                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEditTrainerModal(trainer)"><i class="fas fa-user-edit" 
-                                tooltip-placement="top" uib-tooltip="Edit Trainer"></i></a></span>
-                            <span class="icon text-danger"><a href="javascript:void(0)" ng-click="openCancelTrainerModal(trainer)"><i class="fas fa-user-times"
-                                tooltip-placement="top" uib-tooltip="Cancel Trainer"></i></a></span>
-                        </div> -->
-                        <hr>
-                    </div>
-                    <div class="row justify-content-around">
-                        <div class="col col-md-5">
-                            <span>
-                                <i class="fas fa-phone text-info"></i>
-                            </span>
-                            <span class="text-info">
-                                #:
-                            </span>
-                            <span class="font-weight-bold">
-                                {{trainer.phone}}
-                            </span>
-                        </div>
-                        <div class="col col-md-7">
-                            <span class="text-info">
-                                <i class="fas fa-at"></i>:
-                            </span>
-                            <span class="font-italic font-weight-bold">
-                                {{trainer.email}}
-                            </span>
-                        </div>
+    <div class="form-group search-container">
+        <div class="search-query col-md-6 ">
+            <input class="form-control my-3" placeholder="Filter Trainers by Name" ng-model="query">
+        </div>
+        
+        <div class="custom-control custom-checkbox search-button col-md-2">
+            <input type="checkbox" class="custom-control-input" id="customCheck" name="filterCancel" ng-model="isCancel">
+            <label class="custom-control-label" for="customCheck">filter Cancel?</label>
+        </div>
+        
+        <div class="form-group col-md-4">
+            <div>
+                Filter by Site:
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="siteRadio0" name="siteradio" ng-value="-1" ng-model="filterSite">
+                <label class="custom-control-label" for="siteRadio0">Both</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="siteRadio1" name="siteradio" ng-value="1" ng-model="filterSite">
+                <label class="custom-control-label" for="siteRadio1">Pardesia</label>
+                
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="siteRadio2" name="siteradio" ng-value="2" ng-model="filterSite">
+                <label class="custom-control-label" for="siteRadio2">Yoqneam</label>
+            </div>
+        </div>
+        
+    </div>
+        
+    
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-5" ng-repeat="trainer in trainers | filter : filterTrainer as filteredTrainers">
+            <div class="card recipe h-100">
+                <!-- <img class="card-img-top avatar" ng-src="{{trainer.img}}" alt="Trainer image"> -->
+                <img class="card-img-top avatar" ng-src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                <div class="card-body">
+                    <h4 class="card-title">{{trainer.fname + ' ' + trainer.lname}}
+                            <span ng-show="trainer.isSigned" tooltip-placement="top" uib-tooltip="Trainer Signed-Up!">
+                                    <img src="assets/img/iconfinder_User_Like_1084550_med.png" alt=""></span>
+                    </h4>
+                    <p class="card-text">
+                        <span>
+                            <i class="fas fa-phone text-info"></i>
+                        </span>
+                        <span class="text-info">
+                            #:
+                        </span>
+                        <span class="font-weight-bold">
+                            {{trainer.phone}}
+                        </span>
                         <br>
-                    </div>
-                    <div class="row">
-                        <br><br>
-                        <div class="col col-md-5">
-                            <span class="text-info">
-                                <i class="fas fa-swimmer"></i>
-                            </span>
-                            <span class="font-weight-bold">
-                                {{trainer.siteId==1?'Pardesia':'Yoqneam'}}
-                            </span>
-                        </div>
-                        <div class="col col-md-4" ng-class="{'text-success': trainer.state=='Active', 'text-danger': trainer.state=='Cancel'}">
-                                {{trainer.state}}
-                        </div>
-                    </div>
+                        <span class="text-info">
+                            <i class="fas fa-at"></i>:
+                        </span>
+                        <span class="font-italic font-weight-bold">
+                            {{trainer.email}}
+                        </span>
+                        <br>
+                        <span class="text-info">
+                            <i class="fas fa-swimmer"></i>
+                        </span>
+                        <span class="font-weight-bold">
+                            {{trainer.siteId==1?'Pardesia':'Yoqneam'}}
+                        </span>
+                        <br>
+                        <span ng-class="{'text-success': trainer.state=='Active', 'text-danger': trainer.state=='Cancel'}">
+                            {{trainer.state}}
+                        </span>
+                    </p>
                     <div class="row justify-content-end">
-                        <div class="col col-md-4">
-                            <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEditTrainerModal(trainer)"><i class="fas fa-user-edit" 
-                                tooltip-placement="top" uib-tooltip="Edit Trainer"></i></a></span>
-                            <span class="icon text-danger"><a href="javascript:void(0)" ng-click="openCancelTrainerModal(trainer)"><i class="fas fa-user-times"
-                                tooltip-placement="top" uib-tooltip="Cancel Trainer"></i></a></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-md-6">
-                    <!-- <my-work-hours></my-work-hours> -->
-               
-                    <div class="row justify-content-around">
-                        <div class="col col-md-7">
-                            <h4><small>Available Working Hours:</small></h4>
-                        </div>
-                        <div class="col col-md-5">
-                            <div class="btn-add ">
-                                <button type="button" class="btn btn-link" ng-click="addTrainerWorkHoursModal(trainer)">
-                                    <i class="far fa-clock"></i> + Work Hours</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <table class="work-hours table table-hover" ng-show="getTrainerWH(trainer.id).length">
-                            <thead class="bg-red">
-                                <tr>
-                                    <th>Work Day</th>
-                                    <th>Start Hour</th>
-                                    <th>Till</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="workHour in getTrainerWH(trainer.id)">
-                                        
-                                    <td>{{workHour.day}}</td>
-                                    <td>{{workHour.startHour}}</td>
-                                    <td>{{workHour.endHour}}</td>
-                                    <td><span class="text-success"><a href="javascript:void(0)" ng-click="editTrainerWorkHoursModal(workHour)"><i class="fas fa-edit"></i></a></span>
-                                        <span class="text-danger"><a href="javascript:void(0)" ng-click="deleteTrainerWorkHoursModal(trainer, workHour)"><i class="far fa-times-circle"></i></a></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <Small ng-hide="getTrainerWH(trainer.id).length">No Data found.</small>
+                        <button type="button" class="btn btn-primary btn-sm mr-3" ng-click="openTrainer(trainer.id)">Edit Trainer</button>
                     </div>
                 </div>
             </div>
         </div>
-         
-    </uib-accordion>
-    <!-- <h4><small>No Trainers match the Filter criteria</small></h4> -->
-   
-    
-    
+    </div>
     
   </div>
+
+  

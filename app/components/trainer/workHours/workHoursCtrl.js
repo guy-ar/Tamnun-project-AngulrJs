@@ -5,7 +5,13 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $loc
   $scope.$on('trainerAddedEvent', function(event, data) { 
     console.log("trainer in scope: " + data); 
     $scope.trainer = data;
-    // need to clean the rootscope - how???
+    workHourSrv.getWHForTrainer($scope.trainer.id).then(function(WorkHours) { 
+      $scope.trainerWh = WorkHours;
+      $log.info(JSON.stringify($scope.trainerWh));
+
+    }, function(err) {
+        $log.error(err);
+    })
 
   });
 
@@ -16,16 +22,9 @@ scheduleApp.controller("workHoursCtrl", function($scope, workHourSrv, $log, $loc
     return;
   }
 
-  // keep alsp the trainer work hours on the Ctrl
   
-  workHourSrv.getWHForTrainer($scope.trainer.id).then(function(WorkHours) { 
-      $scope.trainerWh = WorkHours;
-      $log.info(JSON.stringify($scope.trainerWh));
-
-  }, function(err) {
-      $log.error(err);
-  })
-
+  
+  
   $scope.getTrainerWH = function(id) { 
     // return the work hours of the specific trainer
     return $scope.trainerWh;

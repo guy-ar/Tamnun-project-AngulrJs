@@ -221,6 +221,21 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
 
         return async.promise;
     }
+
+    function getTrainerById(id)
+    { 
+        let  async = $q.defer();
+        const TrainerObj = Parse.Object.extend('Trainer');
+        const query = new Parse.Query(TrainerObj);
+        
+        query.get(id).then((result) => {
+          console.log('Trainer found', result);
+          async.resolve(new Trainer(result));
+        }, (error) => {
+          console.error('Error while fetching trainer', error);
+        });
+        return async.promise;
+    }
     return {
         getTrainers: getTrainers,
         addTrainer: addTrainer,
@@ -228,7 +243,8 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
         cancelTrainer: cancelTrainer,
         getTrainersBySite: getTrainersBySite,
         getTrainersByUserName: getTrainersByUserName, 
-        updateRegisterUser: updateRegisterUser
+        updateRegisterUser: updateRegisterUser, 
+        getTrainerById: getTrainerById
 
         
     }

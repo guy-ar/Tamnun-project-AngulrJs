@@ -19,6 +19,9 @@ scheduleApp.config(function($routeProvider) {
     }).when("/trainers", {
         templateUrl: "app/components/trainer/trainers.html",
         controller: "trainersCtrl"
+    }).when("/trainer/:id", {
+        templateUrl: "app/components/trainer/trainerDtls.html",
+        controller: "trainerDtlsCtrl"
     }).when("/events", {
         templateUrl: "app/components/event/events.html",
         controller: "eventsCtrl"        

@@ -1,0 +1,81 @@
+<div class="container container-page">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="row justify-content-between">
+                <div class="col col-md-12">
+                    <div class="card-body">
+                            <div class="row justify-content-between">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">Trainer Inforamtion</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <span ng-show="trainer.isSigned" tooltip-placement="top" uib-tooltip="Trainer Signed-Up!">
+                                            <img src="assets/img/iconfinder_User_Like_1084550_med.png" alt=""></span>
+                                </div>
+                                <div class="col col-md-2">
+                                    <span class="icon text-success"><a href="javascript:void(0)" ng-click="openEditTrainerModal(trainer)"><i class="fas fa-user-edit" 
+                                        tooltip-placement="top" uib-tooltip="Edit Trainer"></i></a></span>
+                                    <span class="icon text-danger"><a href="javascript:void(0)" ng-click="openCancelTrainerModal(trainer)"><i class="fas fa-user-times"
+                                        tooltip-placement="top" uib-tooltip="Cancel Trainer"></i></a></span>
+                                </div>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{trainer.fname + " " + trainer.lname}}
+                            </h6>
+                                                                    
+                                        
+                            <p class="card-text">
+                                <div class="row justify-content-between">
+                                    <div class="col-md-4">
+                                        <span>
+                                            <i class="fas fa-phone text-info"></i>
+                                        </span>
+                                        <span class="text-info">
+                                            #:
+                                        </span>
+                                        <span class="font-weight-bold">
+                                            {{trainer.phone}}
+                                        </span>
+                                        <br>
+                                        <span class="text-info">
+                                                <i class="fas fa-at"></i>:
+                                            </span>
+                                            <span class="font-italic font-weight-bold">
+                                                {{trainer.email}}
+                                            </span>
+                                            <br>
+                                            <span class="text-info">
+                                                    <i class="fas fa-swimmer"></i>
+                                                </span>
+                                                <span class="font-weight-bold">
+                                                    {{trainer.siteId==1?'Pardesia':'Yoqneam'}}
+                                                </span>
+                                                <br>
+                                                <small ng-class="{'text-muted': trainer.state == 'Active', 'text-danger': trainer.state == 'Cancel','text-success': trainer.state == 'Handled' }">                                        
+                                                        {{trainer.state}}</small>
+                                    </div>
+                                    
+                                    <div class="col-md-4 avatar">
+                                        <img src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                                    </div>
+                                </div>
+                                
+                            </p>
+                            <div class="row justify-content-end" ng-show="isAdmin">
+                                <button type="button" class="btn btn-success btn-sm" ng-click="openActicity(alert.activityId)">Edit Activity</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+                <!-- need to present graph with mothly activities -->
+            <!-- <my-weekly-events><my-weekly-events> -->
+        </div>
+                       
+        <div class="col-md-6">
+            <my-work-hours></my-work-hours>
+        </div>
+    </div>
+</div>
