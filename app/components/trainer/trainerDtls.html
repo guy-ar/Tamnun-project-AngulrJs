@@ -61,21 +61,20 @@
                                 </div>
                                 
                             </p>
-                            <div class="row justify-content-end" ng-show="isAdmin">
-                                <button type="button" class="btn btn-success btn-sm" ng-click="openActicity(alert.activityId)">Edit Activity</button>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col col-md-6">
-                <!-- need to present graph with mothly activities -->
-            <!-- <my-weekly-events><my-weekly-events> -->
-        </div>
-                       
-        <div class="col-md-6">
-            <my-work-hours></my-work-hours>
+        <div class="row">
+            <div class="col col-md-6">
+                <my-weekly-events><my-weekly-events>
+            </div>
+        
+
+            <div class="col-md-6">
+                <my-work-hours></my-work-hours>
+            </div>
         </div>
     </div>
 </div>
