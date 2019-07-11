@@ -4,10 +4,10 @@
 
 scheduleApp.controller('calendarCtrl',
 function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
-  var date = new Date();
-  var d = date.getDate();
-  var m = date.getMonth();
-  var y = date.getFullYear();
+  // var date = new Date();
+  // var d = date.getDate();
+  // var m = date.getMonth();
+  // var y = date.getFullYear();
 
  
   $scope.eventSource = {
@@ -22,7 +22,7 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
     // {id: 1, title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
     // {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
     // {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-    {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false}//,
+   // {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false}//,
     // the below was example for all day event - and with URL that was removed
     //{title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
   ];
@@ -51,10 +51,10 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
       let startDate = $scope.constructDate(activities[i].activityDate, activities[i].activityTime );
       let endDate = $scope.constructDate(activities[i].activityDate, activities[i].activityTime, 45 );
       // GUY Need to bring the event attributes as well...id, name, duration
-      $timeout(function() {
+      //$timeout(function() {
         $scope.addEvent1(1111, "Event Title", startDate, endDate, false);
        
-      }, 1000);
+      //}, 1000);
     
     }
     // $scope.renderCalendar();
@@ -108,39 +108,42 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
   /* add event*/
  
   $scope.addEvent1 = function(idNum, titleSrc, startDate, endDate, allDayInd) {
-    // $scope.events.push({
+     $scope.events.push({
     //   // id: idNum,
-    //   title: titleSrc,
-    //   start: new Date(y, m, 28),//startDate,
-    //   end: new Date(y, m, 29),//endDate,
-    //   // allDay: allDayInd  
-    //   className: ['openSesame']
+       title: titleSrc,
+      //  start: new Date(y, m, 28),//startDate,
+      //  end: new Date(y, m, 29),//endDate,
+    //   // allDay: allDayInd
+      start: startDate,
+      end: endDate,
+  
+       className: ['openSesame']
 
     // });
     // $scope.$apply();
     // $scope.$digest();
     // $log.info("Content of $scope.events " + JSON.stringify($scope.events));
 
-    $scope.events.push({
-      title: 'Open Sesame Guy',
-      start: new Date(y, m, 28),
-      end: new Date(y, m, 29),
-      className: ['openSesame']
+    // $scope.events.push({
+    //   title: 'Open Sesame Guy',
+    //   start: new Date(y, m, 28),
+    //   end: new Date(y, m, 29),
+    //   className: ['openSesame']
     });
   };
 
-  $timeout(function() {
-    $scope.addEvent1();
-  }, 5000);
+  // $timeout(function() {
+  //   $scope.addEvent1();
+  // }, 5000);
 
-  $timeout(function() {
-    $scope.renderCalendar();
-  }, 7000);
+  // $timeout(function() {
+  //   $scope.renderCalendar();
+  // }, 7000);
  
-  $timeout(function() {
+  //$timeout(function() {
     // Guy call events from DB
     $scope.getActivitiesFromDb();
-  }, 5000);
+  //}, 5000);
   /* remove event */
   $scope.remove = function(index) {
     $scope.events.splice(index,1);
@@ -176,7 +179,7 @@ function($scope, $compile, $timeout, uiCalendarConfig, activitySrv, $log) {
         right: 'today prev,next'
       },
       /* changed the defalut view to week */
-      defaultView: 'agendaWeek',
+     // defaultView: 'agendaWeek',
       eventClick: $scope.alertOnEventClick,
       eventDrop: $scope.alertOnDrop,
       eventResize: $scope.alertOnResize,
