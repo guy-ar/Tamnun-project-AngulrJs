@@ -16,52 +16,64 @@
                     <option value="2">Yoqneam</option>  
                 </select>
             </div> -->
-            <div class="form-group col-md-3">
-                Select Site for Event:
-            </div>
-            <div class="form-group col-md-3">
-                
-                <div class="form-check-inline col-md-5">
-                    <label class="form-check-label">
-                       
-                        <input type="radio" class="form-check-input disabled" name="roleradio" ng-value="'1'" ng-model="event.siteId">Pardesia
-                    </label>
+            <div class="col col-md-3">
+                <div class="form-group">
+                    Select Site for Event:
                 </div>
-                <div class="form-check-inline col-md-5">
-                    <label class="form-check-label">
-                        <input type="radio" class="form-check-input" name="roleradio" ng-value="'2'" ng-model="event.siteId">Yoqneam
-                    </label>
+                <div class="form-group">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="siteRadio0" name="siteradio" ng-value="1" ng-model="event.siteId">
+                        <label class="custom-control-label" for="siteRadio0">Pardesia</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="siteRadio1" name="siteradio" ng-value="2" ng-model="event.siteId">
+                        <label class="custom-control-label" for="siteRadio1">Yoqneam</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-md-4">
+                <div class="form-group">
+                    Select Event Type:
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="typeRadio0" name="type" ng-value="1" ng-model="event.type">
+                        <label class="custom-control-label" for="typeRadio0">Private Lesson</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="typeRadio1" name="type" ng-value="2" ng-model="event.type">
+                        <label class="custom-control-label" for="typeRadio1">Group Class</label>
+                    </div>
                 </div>
             </div>
             <div class="form-group col-md-2">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck" name="repeat" ng-model="event.isRepeat">
-                        <label class="custom-control-label" for="customCheck">Repeat Every Week?</label>
-                    </div>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="activityNum">End After # Ocuurences:</label>
-                    <input type="number" name="quantity" min="1" max="50" class="form-control" id="activityNum"  placeholder="Enter number of Occurrances" 
-                    ng-model="event.activityNum">
-                </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                    <label for="type">Select Type</label>
-                    <select class="form-control" id="classType" name="type" ng-model="event.type" required>
-                        <option value="1">Private Lesson</option>
-                        <option value="2">Group Class</option>  
-                    </select>
-                </div>
-            <div class="form-group col-md-3">
                 <label for="day">Duration</label>
                 <select class="form-control" id="day" name="day" ng-model="event.duration" required>
                     <option value=30>30 Min.</option>
                     <option value=45>45 Min.</option>
                     <option value=60>1 Hour</option>
                 </select>
-            </div>        
+            </div>      
+            
+            <div class="col col-md-3">
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck" name="repeat" ng-model="event.isRepeat">
+                        <label class="custom-control-label" for="customCheck">Repeat Every Week?</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="activityNum">End After # Ocuurences:</label>
+                    <input type="number" name="quantity" min="1" max="50" class="form-control" id="activityNum"  placeholder="Enter number of Occurrances" 
+                    ng-model="event.activityNum">
+                </div>
+            </div>
+            
+            
         </div>
+                
     
         <div class="form-row">
             <div class="form-group col-md-4">
