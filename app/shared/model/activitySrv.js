@@ -45,12 +45,14 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         // call createActivityforEvent for each instance of requested activity
         $log.info("Create Activities call");
         var current = new Date();
-        current.setDate(eventInputObj.startDate.getDate())
+        current = eventInputObj.startDate;
+        
+        var dateCopy = new Date(current.getTime());
         
         for (i=0; i<eventInputObj.activityNum ;i++ )
-        {
-            nextWeek = new Date();
-            nextWeek.setDate(current.getDate()+i*7);
+        {   
+            var nextWeek = new Date(current.getTime());
+            nextWeek.setDate(dateCopy.getDate()+i*7);
             
             async = $q.defer(); 
             $log.info("lop with activity on :" + eventInputObj.startDate);

@@ -40,10 +40,6 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
         $scope.endDayStr = moment($scope.endDay).format('DD-MM-YYYY');
         return;
     }
-
-    $scope.nextWeek = function(){
-        return;
-    }
     
     $scope.startDay = $scope.getSunday(new Date());
     $scope.startDayStr = moment($scope.startDay).format('DD-MM-YYYY');
@@ -59,11 +55,11 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     $scope.showEvents = function(){
         $scope.weeklyEvents = [];
         // get the events per selected week
-    
         if ($scope.isTrainer){
             activitySrv.getActivitiesAndEventByTrainer($scope.trainer.id, $scope.startDay, $scope.endDay).then(function(result){
                 $log.info(JSON.stringify(result));
                 $scope.weeklyEvents = result;
+                
 
             }, function(error){
                 $log.error(error);
