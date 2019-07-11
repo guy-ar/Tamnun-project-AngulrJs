@@ -174,3 +174,9 @@ body .fc {
   height: 150px;
   object-fit: cover;
 }
+
+/*********** Chart JS  ***************/
+.my-pie {
+  width: 70%;
+  margin: auto;
+}

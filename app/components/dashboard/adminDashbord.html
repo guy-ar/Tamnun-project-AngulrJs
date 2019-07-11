@@ -10,7 +10,11 @@
                 <my-weekly-events><my-weekly-events>
             </div>
             <div class="col-md-6">
-                My Messages - to be developped
+                <div class="my-pie">
+                    <canvas id="pie" class="chart chart-pie"
+                        chart-data="getChartData()" chart-labels="labels" chart-options="options">
+                    </canvas> 
+                </div>
             </div>
         </div>
     
