@@ -5,6 +5,8 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     $scope.isAdmin = userSrv.isLoggedAdmion();
     $scope.isTrainer = userSrv.isLoggedTrainer();
 
+    $scope.calEevents = [];
+
     $scope.getSunday = function(d) {
         d = new Date(d);
         var day = d.getDay(),
@@ -154,5 +156,31 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
         }
     } 
 
-    
+    $scope.showEventsInCalendar = function() {
+        
+        var modalInstance = $uibModal.open({
+            templateUrl: "app/shared/calendar/calendarModal.html",
+            controller: "calendarModalCtrl",
+            size: 'lg',
+                resolve: {
+                  params: function () {
+                    return {
+                        events: $scope.weeklyEvents,
+                        defaultView: 'agendaWeek'
+                    };
+                  }
+                }
+            });
+            
+        modalInstance.result.then(function(alertRes) {
+            
+            // do nothing
+            
+        }, function() {
+            // this will wake up in case the user close the calendar
+            //do nothing 
+        });
+          
+    }
+
 })
