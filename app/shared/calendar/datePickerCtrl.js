@@ -93,4 +93,13 @@ scheduleApp.controller("datePickerCtrl", function($scope, $log) {
         time = h + ":" + m;
         return time;
     }
+
+    $scope.setTimeFromStr = function(timeStr){
+        var date = new Date();
+        var timeArr = timeStr.split(":");
+        date.setHours(timeArr[0]);
+        date.setMinutes(timeArr[1]);
+        return date;
+    }
+
 })

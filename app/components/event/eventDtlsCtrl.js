@@ -10,6 +10,8 @@ scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv
   // Notice how we are accessing $routeParams.id to get the dynamic part in the URL
   eventSrv.getEventById($routeParams.id).then(function(event) {
     $scope.event = event;
+    $scope.startHourDt = new Date($scope.setTimeFromStr($scope.event.startTime).getTime());
+    // need to set the hour based on $scope.event.startTime
     $scope.selectedTrainer = event.trainerDtls.fname + " " + event.trainerDtls.lname;
     $scope.event.trainerId = event.trainerId;
 
@@ -26,6 +28,8 @@ scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv
 
   $scope.updateEventDtls = function(){
     $scope.event.duration = parseInt($scope.event.duration);
+    $scope.event.startTime = $scope.getTimeFromDate($scope.startHourDt);
+    $scope.event.activityNum = parseInt($scope.event.activityNum);
     eventSrv.updateEventDtls($scope.event).then( function(result){
       // sucess in update trainer
       $log.info("saved trainer on event", result)
