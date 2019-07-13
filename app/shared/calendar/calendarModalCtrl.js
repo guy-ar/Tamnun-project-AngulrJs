@@ -60,6 +60,7 @@ scheduleApp.controller("calendarModalCtrl", function($scope, $timeout, $compile,
     };
      
     $scope.view = params.defaultView;
+    $scope.startDateStr = params.startDateStr;
 
     $scope.populateEvents(params.events);
 
@@ -105,6 +106,7 @@ scheduleApp.controller("calendarModalCtrl", function($scope, $timeout, $compile,
         },
         /* changed the defalut view to week */
         defaultView: $scope.view,
+        defaultDate: moment($scope.startDateStr),
         eventClick: $scope.alertOnEventClick,
         eventRender: $scope.eventRender
     }

@@ -157,7 +157,7 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
     } 
 
     $scope.showEventsInCalendar = function() {
-        
+    
         var modalInstance = $uibModal.open({
             templateUrl: "app/shared/calendar/calendarModal.html",
             controller: "calendarModalCtrl",
@@ -166,7 +166,8 @@ scheduleApp.controller("weeklyEventsCtrl", function($scope, $log, userSrv, activ
                   params: function () {
                     return {
                         events: $scope.weeklyEvents,
-                        defaultView: 'agendaWeek'
+                        defaultView: 'agendaWeek',
+                        startDateStr: moment($scope.startDay).format('YYYY-MM-DD')
                     };
                   }
                 }
