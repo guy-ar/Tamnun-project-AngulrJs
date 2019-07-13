@@ -9,6 +9,7 @@ scheduleApp.controller("newEditTrainerCtrl", function($scope, trainerSrv, $log, 
         $scope.phone = "";
         $scope.email = "";
         $scope.siteId = "";
+        $scope.img = {};
     } else if ( $scope.mode == "U"){
         $scope.id = params.trainer.id;
         $scope.fname = params.trainer.fname;
@@ -17,13 +18,15 @@ scheduleApp.controller("newEditTrainerCtrl", function($scope, trainerSrv, $log, 
         $scope.email = params.trainer.email;
         $scope.siteId = params.trainer.siteId;
         $scope.userName = params.trainer.userName;
+        
+        $scope.img = params.trainer.img;
     
     } else {
         // error occured - do not continue
         return;
     }
     $scope.addTrainer = function() {
-        trainerSrv.addTrainer($scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userName).then(function(newTrainer) {
+        trainerSrv.addTrainer($scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userName, $scope.img.src).then(function(newTrainer) {
             $log.info("new Trainer was added: " + JSON.stringify(newTrainer));
             // Closing the modal
             $uibModalInstance.close(newTrainer);
@@ -43,7 +46,7 @@ scheduleApp.controller("newEditTrainerCtrl", function($scope, trainerSrv, $log, 
 
     $scope.editTrainer = function() {
 
-        trainerSrv.updateTrainer($scope.id, $scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userName).then(function(updateTrainer) {
+        trainerSrv.updateTrainer($scope.id, $scope.fname, $scope.lname, $scope.phone, $scope.email, $scope.siteId, $scope.userName, $scope.img.src).then(function(updateTrainer) {
             $log.info("Trainer was updated: " + JSON.stringify(updateTrainer));
             
             // Closing the modal
