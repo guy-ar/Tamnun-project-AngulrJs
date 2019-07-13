@@ -48,7 +48,8 @@
         <div class="col-lg-3 col-md-6 mb-5" ng-repeat="trainer in trainers | filter : filterTrainer as filteredTrainers">
             <div class="card recipe h-100">
                 <!-- <img class="card-img-top avatar" ng-src="{{trainer.img}}" alt="Trainer image"> -->
-                <img class="card-img-top avatar" ng-src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                <img class="card-img-top avatar" ng-hide="trainer.img" ng-src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                <img class="card-img-top avatar" ng-show="trainer.img" ng-src="{{trainer.img}}">
                 <div class="card-body">
                     <h4 class="card-title">{{trainer.fname + ' ' + trainer.lname}}
                             <span ng-show="trainer.isSigned" tooltip-placement="top" uib-tooltip="Trainer Signed-Up!">

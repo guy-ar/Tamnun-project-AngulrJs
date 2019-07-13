@@ -55,8 +55,9 @@
                                                         {{trainer.state}}</small>
                                     </div>
                                     
-                                    <div class="col-md-4 avatar">
-                                        <img src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                                    <div class="col-md-6">
+                                        <img class="card-img-top avatar" ng-hide="trainer.img" ng-src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" alt="Person - Avatar Placeholder@seekpng.com">
+                                        <img class="img-fluid" ng-show="trainer.img" ng-src="{{trainer.img}}">
                                     </div>
                                 </div>
                                 

@@ -25,6 +25,10 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
             this.state = plainTrainOrId.get("state");
             this.siteId = plainTrainOrId.get("siteId");
             this.isSigned = plainTrainOrId.get("isSigned");
+            if (plainTrainOrId.get("img") != undefined && plainTrainOrId.get("img") !=null){
+                this.img = plainTrainOrId.get("img")._url;
+            }
+            
         }
     }
     
@@ -81,7 +85,7 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
     } 
     
 
-    function addTrainer(fname, lname, phone, email, siteId, userName){
+    function addTrainer(fname, lname, phone, email, siteId, userName, img){
         
         var async = $q.defer();
         // for now just write to log - as we do not have DB
@@ -99,6 +103,7 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
         myNewObject.set('e_mail', email);
         myNewObject.set('userName', userName);
         myNewObject.set('state', STATE_ACTIVE);
+        myNewObject.set('img', new Parse.File(userName + ".jpg", { base64: img }));
 
         myNewObject.save().then(
             (result) => {
@@ -112,7 +117,7 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
         return async.promise;
     }
 
-    function updateTrainer(id, fname, lname, phone, email, siteId, userName){
+    function updateTrainer(id, fname, lname, phone, email, siteId, userName, img){
         
         let  async = $q.defer();
         const TrainerObj = Parse.Object.extend('Trainer');
@@ -127,7 +132,8 @@ scheduleApp.factory("trainerSrv", function($q, $log) {
             object.set('lname', lname);
             object.set('phone', phone);
             object.set('siteId', siteId);
-
+            
+            object.set('img', new Parse.File(userName + "1.jpg", { base64: img }));
             // Saves the trainer with the updated data
             object.save().then((response) => {
                 console.log('Updated trainer', response);

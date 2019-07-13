@@ -51,7 +51,16 @@
                     </select>
                 </div>
             </div>
-            
+            <div class="img-browse">
+                <input type="file" accept="image/*" image-with-preview ng-model="img" accept="image/jpeg,image/png" class="form-control" id="trainer-img" ng-model="img">
+            </div>
+
+            <div>
+                <img class="img-fluid" ng-show="img.src" ng-src="{{img.src}}">
+                <div ng-hide="img.src">
+                    <img class="img-placeholder card-img-top avatar" ng-src="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png" />
+                </div>
+            </div>
         </form>
         
     </div>
