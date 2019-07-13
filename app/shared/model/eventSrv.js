@@ -143,6 +143,31 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
             // Saves the event with the updated data
             object.save().then((response) => {
                 console.log('Updated trainer on event', response);
+                // need to update the trainer on the existing events - starting from today
+                let asyncAct =  $q.defer();
+                activitySrv.getActivitiesForEventByDateRange(id, new Date()).then(function (actResult){
+                    for (var i=0; i<actResult.length; i++ )
+                    {
+                        // for each activity - update the trainer
+                        activitySrv.updateActivityTrainer(actResult[i].id, trainerId).then(function (response){
+                            // nothing to do
+                        },  
+                        function (error) {
+                            console.error('Error while updating activity trainer: ', error);
+                            async.reject(error);
+                            asyncAct.reject(error);
+                        });
+
+
+                    }
+                    asyncAct.resolve()
+                },  
+                function (error) {
+                    console.error('Error while getting  activities: ', error);
+                    async.reject(error);
+                    asyncAct.reject(error);
+                });
+
                 async.resolve(new Event(response));
             }).catch((error) => {
                 console.error('Error while updating trainer on the event', error);

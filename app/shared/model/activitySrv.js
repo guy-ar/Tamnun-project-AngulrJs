@@ -125,7 +125,9 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         const query = new Parse.Query(ActivityObj);
         
         query.greaterThanOrEqualTo("activityDate", minDate);
-        query.lessThanOrEqualTo("activityDate", maxDate);
+        if (arguments.length > 1) {
+            query.lessThanOrEqualTo("activityDate", maxDate);
+        }
         query.find().then(function(results) {
             console.log('Activity found', results);
             for (let index = 0; index < results.length; index++) {
@@ -268,6 +270,37 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         return async.promise;
     }
 
+    function getActivitiesForEventByDateRange(eventId, minDate, maxDate) {
+        let activities = [];
+        let async = $q.defer(); 
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
+
+        const EventObj = new Parse.Object("Event");
+        EventObj.id = eventId;
+        query.equalTo("eventId", EventObj);
+
+
+        
+        query.greaterThanOrEqualTo("activityDate", minDate);
+        if (arguments.length > 2) {
+            query.lessThanOrEqualTo("activityDate", maxDate);
+        }
+        query.find().then(function(results) {
+            console.log('Activity found', results);
+            for (let index = 0; index < results.length; index++) {
+                activities.push(new Activity(results[index]));
+            }
+            async.resolve(activities);
+        }, function(error) {
+            console.error('Error while fetching Activity', error);
+            async.reject(error);
+        
+        });
+        return async.promise;
+
+    }
+
     return {
         createActivityforEvent: createActivityforEvent,
         createAllActivityforEvent: createAllActivityforEvent, 
@@ -276,6 +309,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         getActivitiesAndEventForAll: getActivitiesAndEventForAll, 
         cancelActivity: cancelActivity, 
         updateActivityTrainer: updateActivityTrainer,
-        getActivityById: getActivityById
+        getActivityById: getActivityById, 
+        getActivitiesForEventByDateRange: getActivitiesForEventByDateRange
     }
 });
