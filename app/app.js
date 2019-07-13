@@ -1,4 +1,4 @@
-var scheduleApp = angular.module('scheduleApp', ['ui.calendar', 'ui.bootstrap', 'ngRoute', 'chart.js']);
+var scheduleApp = angular.module('scheduleApp', ['ui.calendar', 'ui.bootstrap', 'ngRoute', 'chart.js', "ngImageInputWithPreview"]);
 
 scheduleApp.config(function($routeProvider) {
     $routeProvider
