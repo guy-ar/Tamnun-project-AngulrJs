@@ -22,11 +22,11 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="siteRadio0" name="siteradio" ng-value="1" ng-model="event.siteId">
+                        <input type="radio" class="custom-control-input" id="siteRadio0" name="siteradio" ng-value="'1'" ng-model="event.siteId">
                         <label class="custom-control-label" for="siteRadio0">Pardesia</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="siteRadio1" name="siteradio" ng-value="2" ng-model="event.siteId">
+                        <input type="radio" class="custom-control-input" id="siteRadio1" name="siteradio" ng-value="'2'" ng-model="event.siteId">
                         <label class="custom-control-label" for="siteRadio1">Yoqneam</label>
                     </div>
                 </div>
@@ -38,11 +38,11 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="typeRadio0" name="type" ng-value="1" ng-model="event.type">
+                        <input type="radio" class="custom-control-input" id="typeRadio0" name="type" ng-value="'1'" ng-model="event.type">
                         <label class="custom-control-label" for="typeRadio0">Private Lesson</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="typeRadio1" name="type" ng-value="2" ng-model="event.type">
+                        <input type="radio" class="custom-control-input" id="typeRadio1" name="type" ng-value="'2'" ng-model="event.type">
                         <label class="custom-control-label" for="typeRadio1">Group Class</label>
                     </div>
                 </div>
@@ -112,8 +112,10 @@
                 </ul>
             </div>
         
-        <div class="row justify-content-end">
-            <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="openCalendar()">Show Events</button>
+        <div class="row justify-content-end h-100">
+            <!-- <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="openCalendar()">Show Events</button> -->
+            <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="showEventsInCalendar()">Calendar Events</button>
+            
             
             
             <!-- <button type="button" class="btn btn-primary mb-2 mr-2" ng-click="addEvent(false)">Save as Draft</button> -->

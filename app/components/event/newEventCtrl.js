@@ -1,11 +1,14 @@
-scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $location, trainerSrv, userSrv) {
+scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $location, trainerSrv, userSrv, activitySrv, $uibModal) {
     
     // if user is not logged in - go to home
     if (!userSrv.isLoggedIn()) {
         $location.path("/");
         return;
     }
+
+    //moment($(this).val()).add(1,'months').startOf('month').format('M/D/YYYY'));
     
+    $scope.eventsFromDb = [];
     
     $scope.event = {};
     $scope.event.name = "";
@@ -87,6 +90,49 @@ scheduleApp.controller("newEventCtrl", function($scope, eventSrv, $log, $locatio
     }
 
     
+    $scope.showEventsInCalendar = function() {
+        // const startOfMonth = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+        // const endOfMonth   = moment().endOf('month').format('YYYY-MM-DD hh:mm');
+        if ($scope.event.startDate == null || $scope.event.startDate == undefined || $scope.event.startDate == "") {
+            var startOfMonth = moment().startOf('month').toDate();
+            var endOfMonth   = moment().endOf('month').toDate();
+        } else {
+            var startOfMonth = moment($scope.event.startDate).startOf('month').toDate();
+            var endOfMonth   = moment($scope.event.startDate).endOf('month').toDate();
+        }
+        
+        
+        activitySrv.getActivitiesByDateRange(startOfMonth, endOfMonth).then( function(activities) {
+            $log.info("Following activiites retireved per date rnage: " + JSON.stringify(activities));
+            // process the activities and push them to events scope
+        
+            var modalInstance = $uibModal.open({
+                templateUrl: "app/shared/calendar/calendarModal.html",
+                controller: "calendarModalCtrl",
+                size: 'lg',
+                    resolve: {
+                    params: function () {
+                        return {
+                            events: activities,
+                            defaultView: 'month'
+                        };
+                    }
+                    }
+                });
+                
+            modalInstance.result.then(function() {
+                
+                // do nothing
+                
+            }, function() {
+                // this will wake up in case the user close the calendar
+                //do nothing 
+            });
+        }, function(error){
+            $log.error(error);
+        });
+          
+    }
 
     
 
