@@ -184,8 +184,45 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
 
         // Finds the Event by its ID
         query.get(event.id).then((object) => {
+
+            // validations:
+            // 1. if not future data - num of activities is not less then previous
+            // GUY TODO nice to have
+
+            
+            // no option to update directly the start date - after it past, 
+            // but possible to change is as long it is future date - also possible to chagne the day 
+            // - it will impact all future activiites
+            // therefore check if day or startDate was changed - if so - need to update also the related activities          
+            if (event.day != object.get("day") || event.startTime != object.get("startTime"))  {
+                let asyncAct =  $q.defer();
+                activitySrv.getActivitiesForEventByDateRange(event.id, new Date()).then(function (actResult){
+                    for (var i=0; i<actResult.length; i++ )
+                    {
+                        // for each activity - update the trainer
+                        activitySrv.updateActivityDayAndTime(actResult[i].id, event.day, event.startTime).then(function (response){
+                            // nothing to do
+                        },  
+                        function (error) {
+                            console.error('Error while updating activity day: ', error);
+                            async.reject(error);
+                            asyncAct.reject(error);
+                        });
+
+
+                    }
+                    asyncAct.resolve()
+                },  
+                function (error) {
+                    console.error('Error while getting  activities: ', error);
+                    async.reject(error);
+                    asyncAct.reject(error);
+                });
+            }
             // Updates the event dtls
             object.set('name', event.name);
+            
+
             object.set('day', event.day);
             object.set('type', event.type);
             object.set('startTime', event.startTime);
@@ -197,6 +234,7 @@ scheduleApp.factory("eventSrv", function($q, $log, activitySrv) {
             // Saves the event with the updated data
             object.save().then((response) => {
                 console.log('Updated event details', response);
+                
                 async.resolve(new Event(response));
             }).catch((error) => {
                 console.error('Error while updating event details', error);

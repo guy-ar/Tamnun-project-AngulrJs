@@ -1,5 +1,6 @@
 scheduleApp.controller("datePickerCtrl", function($scope, $log) {
 
+    
     $scope.today = function() {
         $scope.startDate = new Date();
     };

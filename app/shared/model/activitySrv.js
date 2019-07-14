@@ -301,6 +301,35 @@ scheduleApp.factory("activitySrv", function($q, $log) {
 
     }
 
+    function updateActivityDayAndTime(id, day, startTime){
+        let  async = $q.defer();
+        const ActivityObj = Parse.Object.extend('Activity');
+        const query = new Parse.Query(ActivityObj);
+
+        // Finds the Activity by its ID
+        query.get(id).then((object) => {
+            // Updates the day of the activity - based on given day 
+            var currentDay = object.get('activityDate').getDay();
+            var delta = day-currentDay;
+            var currentDayInMonth = object.get('activityDate').getDate();
+            var newDate = new Date(object.get('activityDate').getTime());
+            newDate.setDate(currentDayInMonth + delta);
+
+            object.set('activityDate', newDate);
+            object.set('activityTime', startTime);
+
+            // Saves the event with the updated data
+            object.save().then((response) => {
+                console.log('Updated day on activity', response);
+                async.resolve(new Activity(response));
+            }).catch((error) => {
+                console.error('Error while updating day on the activity', error);
+            });
+        });
+        return async.promise;
+
+    }
+
     return {
         createActivityforEvent: createActivityforEvent,
         createAllActivityforEvent: createAllActivityforEvent, 
@@ -310,6 +339,7 @@ scheduleApp.factory("activitySrv", function($q, $log) {
         cancelActivity: cancelActivity, 
         updateActivityTrainer: updateActivityTrainer,
         getActivityById: getActivityById, 
-        getActivitiesForEventByDateRange: getActivitiesForEventByDateRange
+        getActivitiesForEventByDateRange: getActivitiesForEventByDateRange,
+        updateActivityDayAndTime: updateActivityDayAndTime
     }
 });

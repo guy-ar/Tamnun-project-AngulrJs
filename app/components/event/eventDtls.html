@@ -1,13 +1,16 @@
 
 <div class="container container-page">
         <h1>Event Details</h1>
+        <div class="alert alert-danger" role="alert" ng-show="invalidEvent">
+                <strong>{{errorType}}</strong>{{errorMsg}}
+        </div>
             
         <form name="eventForm">
         <div class="form-group">
                 <label for="eventName">Event Name:</label>
                 <input type="text" class="form-control" id="eventName"  placeholder="Enter Event Name" ng-model="event.name" required>
         </div>
-        <div class="form-row">
+        <div class="form-row align-items-end">
                 <div class="col col-md-3">
                         <div class="form-group">
                                 Select Site for Event:
@@ -49,15 +52,15 @@
                 <div class="col col-md-3">
                         <div class="form-group">
                                 <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck" name="repeat" ng-model="event.isRepeat">
+                                <input type="checkbox" class="custom-control-input" id="customCheck" name="repeat" ng-model="event.isRepeat" disabled>
                                 <label class="custom-control-label" for="customCheck">Repeat Every Week?</label>
                                 </div>
                         </div>
         
                         <div class="form-group">
-                                <label for="activityNum">End After # Ocuurences:</label>
-                                <input type="number" name="quantity" min="1" max="50" class="form-control" id="activityNum"  placeholder="Enter number of Occurrances" 
-                                ng-model="event.activityNum">
+                                <label for="activityNum">End After # Ocurrances:</label>
+                                <input type="number" name="quantity" min={{event.activityNum}} max="50" class="form-control" id="activityNum" disabled
+                                         placeholder="Enter number of Occurrances" ng-model="event.activityNum">
                         </div>
                 </div>
         </div>
@@ -66,6 +69,18 @@
                         <label for="eventDate">Effective Date</label>
                         <tamnun-date-picker></tamnun-date-picker>
                 </div>
+                
+                <div class="form-group col-md-2" >
+                        <label for="day">Activity Day</label>
+                        <select class="form-control" id="day" name="day" ng-model="event.day" required>
+                                <option ng-value=0>Sunday</option>
+                                <option ng-value=1>Monday</option>
+                                <option ng-value=2>Tuesday</option>
+                                <option ng-value=3>Wednesday</option>
+                                <option ng-value=4>Thursday</option>
+                                <option ng-value=5>Friday</option>
+                        </select>
+                </div>
         
                 <div class="form-group col-md-4">
                         <div uib-timepicker ng-model="startHourDt"  hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
@@ -73,17 +88,16 @@
         
         </div>      
         
-        <div class="form-row">
-                <label for="trainerSearch">search for Trainer</label>
-        </div>
-        <div class="form-row">
+        <div class="form-row align-items-end">
                 <div class="form-group col-md-4">
+                        <label for="trainerSearch">search for Trainer</label>
                         <input type="text" class="form-control search-box" id="trainerSearch"  placeholder="Filter by trainer name" ng-model="queryTrainer">
                 </div>
                 <div class="form-group col-md-1">
                         <button type="button" class="btn btn-primary" ng-click="updateTrainerSearchResults(event.siteId)"><span><i class="fas fa-search"></i></span></button>
                 </div>
                 <div class="form-group col-md-4">
+                        <label for="trainer">Selected Trainer</label>
                         <input type="text" readonly class="form-control" id="trainer"  ng-value="selectedTrainer">
                 </div>
         </div>

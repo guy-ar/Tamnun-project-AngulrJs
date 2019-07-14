@@ -2,6 +2,9 @@ scheduleApp.controller("calendarModalCtrl", function($scope, $timeout, $compile,
     // guy TODO - might need new service for work hours instead userSrv
     let  params = $scope.$resolve.params;
     $scope.events = [];
+    if (!$scope.startDateStr) {
+        $scope.startDateStr = moment(new Date()).format("DD-MM-YYYY");
+    }
 
     //** to move weekly events for calendar events */
     $scope.populateEvents = function(activities) {

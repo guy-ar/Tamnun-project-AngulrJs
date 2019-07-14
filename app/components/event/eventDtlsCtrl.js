@@ -5,6 +5,11 @@ scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv
     $location.path("/");
     return;
   }
+  // not possible to update the start date
+  $scope.isDatePickerDisabled = true;
+  $scope.invalidEvent = false;
+  $scope.errorType = "";
+  $scope.errorMsg = "";
 
   // Calling the service to get the event with the key
   // Notice how we are accessing $routeParams.id to get the dynamic part in the URL
@@ -14,6 +19,9 @@ scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv
     // need to set the hour based on $scope.event.startTime
     $scope.selectedTrainer = event.trainerDtls.fname + " " + event.trainerDtls.lname;
     $scope.event.trainerId = event.trainerId;
+    $scope.event.day = parseInt($scope.event.day);
+    
+    $scope.effectiveDateStr = moment($scope.event.startDate).format("DD-MM-YYYY");
 
   }, function(err) {
     $log.error(err);
@@ -27,7 +35,8 @@ scheduleApp.controller("eventDtlsCtrl", function($scope, $log, eventSrv, userSrv
   
 
   $scope.updateEventDtls = function(){
-    $scope.event.duration = parseInt($scope.event.duration);
+    //$scope.event.duration = ($scope.event.duration).toString();
+    $scope.event.day = ($scope.event.day).toString();
     $scope.event.startTime = $scope.getTimeFromDate($scope.startHourDt);
     $scope.event.activityNum = parseInt($scope.event.activityNum);
     eventSrv.updateEventDtls($scope.event).then( function(result){
